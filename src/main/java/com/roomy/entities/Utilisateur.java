@@ -1,0 +1,25 @@
+package com.roomy.entities;
+
+import lombok.Getter;
+import lombok.Setter;
+
+import java.time.LocalDateTime;
+
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+import java.time.LocalDateTime;
+
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+public abstract class Utilisateur {
+    protected int id;
+    protected String nom;
+    protected String prenom;
+    protected String email;
+    protected String motDePasseHash;
+    protected String telephone;
+    protected LocalDateTime dateInscription;
+}

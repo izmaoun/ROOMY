@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+
+<VBox spacing="15" alignment="CENTER"
+      xmlns="http://javafx.com/javafx/17.0.6"
+      xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="com.roomy.Controller.SignupController"
+      style="
+          -fx-background-color: #f1f3f6;
+          -fx-padding: 40;
+      ">
+
+    <Label text="Inscription" fx:id="msg"
+           style="
+              -fx-font-size: 24px;
+              -fx-font-weight: bold;
+           "/>
+
+    <ComboBox fx:id="typeBox" promptText="Type de compte"
+              style="
+                 -fx-pref-width: 250;
+                 -fx-padding: 8 10;
+                 -fx-background-radius: 5;
+                 -fx-border-color: #b5b5b5;
+                 -fx-border-radius: 5;
+              "/>
+
+    <TextField promptText="Nom d'utilisateur" fx:id="userField"
+               style="
+                   -fx-pref-width: 250;
+                   -fx-padding: 8 10;
+                   -fx-background-radius: 5;
+                   -fx-border-color: #b5b5b5;
+                   -fx-border-radius: 5;
+               "/>
+
+    <PasswordField promptText="Mot de passe" fx:id="passField"
+                   style="
+                       -fx-pref-width: 250;
+                       -fx-padding: 8 10;
+                       -fx-background-radius: 5;
+                       -fx-border-color: #b5b5b5;
+                       -fx-border-radius: 5;
+                   "/>
+
+    <Button text="S'inscrire" onAction="#handleSignup"
+            style="
+                -fx-background-color: #3b82f6;
+                -fx-text-fill: white;
+                -fx-font-weight: bold;
+                -fx-padding: 8 18;
+                -fx-background-radius: 5;
+                -fx-cursor: hand;
+            "/>
+
+    <Button text="Retour" onAction="#handleBack"
+            style="
+                -fx-background-color: #6b7280;
+                -fx-text-fill: white;
+                -fx-font-weight: bold;
+                -fx-padding: 8 18;
+                -fx-background-radius: 5;
+                -fx-cursor: hand;
+            "/>
+
+</VBox>
+
