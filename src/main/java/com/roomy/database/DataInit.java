@@ -1,28 +1,40 @@
 package com.roomy.database;
 
-import com.roomy.entities.Admin;
-import com.roomy.entities.Hotelier;
-import com.roomy.Dao.AdminDAO;
+import com.roomy.Dao.ClientDAO;
 import com.roomy.Dao.HotelierDAO;
+import com.roomy.entities.Client;
+import com.roomy.entities.Hotelier;
 import org.mindrot.jbcrypt.BCrypt;
 
 public class DataInit {
-    public static void insertDefaultAdminAndHotelier() {
-        AdminDAO adminDAO = new AdminDAO();
-        HotelierDAO hotelierDAO = new HotelierDAO();
 
-        Admin admin = new Admin();
-        admin.setUsername("admin");
-        admin.setPassword(BCrypt.hashpw("adminpass", BCrypt.gensalt()));
-        adminDAO.signup(admin);
+    private static final ClientDAO clientDAO = new ClientDAO();
+    private static final HotelierDAO hotelierDAO = new HotelierDAO();
 
-        Hotelier hotelier = new Hotelier();
-        hotelier.setUsername("hotelier");
-        hotelier.setPassword(BCrypt.hashpw("hotelierpass", BCrypt.gensalt()));
-        hotelierDAO.signup(hotelier);
-    }
+    public static void init() {
+        // Client de test
+        if (clientDAO.findByEmail("admin@roomy.com") == null) {
+            Client adminClient = new Client();
+            adminClient.setNom("Admin");
+//            adminClient.setPrenom("Client");
+            adminClient.setEmail("admin@roomy.com");
+            adminClient.setTelephone("0600000000");
+            adminClient.setPassword(BCrypt.hashpw("123456", BCrypt.gensalt()));
+            clientDAO.signup(adminClient);
+            System.out.println("Client admin créé : admin@roomy.com / 123456");
+        }
 
-    public static void main(String[] args) {
-        insertDefaultAdminAndHotelier();
+        // Hôtelier de test
+        if (hotelierDAO.findByEmail("hotel@roomy.com") == null) {
+            Hotelier hotelier = new Hotelier();
+            hotelier.setNom("Hôtel Casablanca Palace");     // nom de l'hôtel
+            hotelier.setVille("Casablanca");
+            hotelier.setEmail("hotel@roomy.com");
+            hotelier.setPassword(BCrypt.hashpw("hotel123", BCrypt.gensalt()));
+            hotelier.setIce("A123BC456");
+
+            hotelierDAO.signup(hotelier);
+            System.out.println("Hôtelier créé : hotel@roomy.com / hotel123");
+        }
     }
 }

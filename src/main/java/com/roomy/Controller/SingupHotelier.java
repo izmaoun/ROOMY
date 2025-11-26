@@ -1,7 +1,9 @@
 package com.roomy.Controller;
 
 import com.roomy.Dao.ClientDAO;
+import com.roomy.Dao.HotelierDAO;
 import com.roomy.entities.Client;
+import com.roomy.entities.Hotelier;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -15,14 +17,14 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.PasswordField;
 
 
-public class SignupController {
-    @FXML private TextField usernameField;
-    @FXML private TextField prenomField;
-    @FXML private TextField emailField;
-    @FXML private TextField telephoneField;
-    @FXML private PasswordField passwordField;
-    @FXML private PasswordField confirmPasswordField;
-    private ClientDAO clientDAO=new  ClientDAO();
+public class SingupHotelier {
+    private HotelierDAO hotelierDAO=new HotelierDAO();
+    @FXML private TextField nomHotelierId;
+    @FXML private TextField villeId;
+    @FXML private TextField emailId;
+    @FXML private PasswordField passwordId;
+    @FXML private PasswordField confirmPasswordId;
+    @FXML private TextField iceId;
 
 
     @FXML
@@ -42,39 +44,25 @@ public class SignupController {
 
 
     @FXML
-    private void handleInscription(ActionEvent event) {
-        //je veux afficher ce qui est dans les champs de texte , ce qui est venu dans les champs de texte
-        String nom = usernameField.getText();
-        String prenom = prenomField.getText();
-        String email = emailField.getText();
-        String telephone = telephoneField.getText();
-        String password = passwordField.getText();
-        String confirmPassword = confirmPasswordField.getText();
-
-        System.out.println("Nom : " + nom);
-        System.out.println("Prénom : " + prenom);
-        System.out.println("Email : " + email);
-        System.out.println("Téléphone : " + telephone);
-        System.out.println("Mot de passe : " + password);
-        System.out.println("Confirmation : " + confirmPassword);
-
-        if(this.clientDAO.findByEmail(email)==null){
-            Client client=new Client();
-            client.setNom(nom);
-            client.setPrenom(prenom);
-            client.setEmail(email);
-            client.setTelephone(telephone);
-            client.setPassword(password);
-            boolean res=this.clientDAO.signup(client);
-            if(res){
-                System.out.println("Inscription réussie pour l'email : " + email);
-            }else{
-                System.out.println("Échec de l'inscription pour l'email : " + email);
-            }
-        }else{
-            System.out.println("L'email " + email + " est déjà utilisé.");
+    private void handleInscription(ActionEvent event){
+        System.out.println("Nom de l'hôtel : " + nomHotelierId.getText());
+        System.out.println("Ville : " + villeId.getText());
+        System.out.println("Email : " + emailId.getText());
+        System.out.println("Mot de passe : " + passwordId.getText());
+        System.out.println("Confirmation : " + confirmPasswordId.getText());
+        System.out.println("ICE : " + iceId.getText());
+        if(this.hotelierDAO.findByEmail(emailId.getText())!=null){
+            System.out.println("Cet email existe déjà !");
+        }else {
+            Hotelier hotelier=new Hotelier();
+            hotelier.setNom(nomHotelierId.getText());
+            hotelier.setVille(villeId.getText());
+            hotelier.setEmail(emailId.getText());
+            hotelier.setPassword(passwordId.getText());
+            hotelier.setIce(iceId.getText());
+            this.hotelierDAO.signup(hotelier);
+            System.out.println("Inscription réussie !");
         }
-        System.out.println("Traitement de l'inscription inchaalah...");
     }
 
     @FXML
@@ -99,4 +87,5 @@ public class SignupController {
             e.printStackTrace();
         }
     }
+
 }

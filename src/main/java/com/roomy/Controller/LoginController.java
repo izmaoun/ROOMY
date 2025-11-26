@@ -2,59 +2,68 @@ package com.roomy.Controller;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
-import javafx.scene.Scene;
-import javafx.stage.Stage;
-import javafx.fxml.FXMLLoader;
-import com.roomy.service.AuthService;
+//import javafx.scene.Scene;
+//import javafx.stage.Stage;
+//import javafx.fxml.FXMLLoader;
+//import com.roomy.service.AuthService;
 
-public class LoginController {
+import com.roomy.Dao.ClientDAO;
+import com.roomy.Dao.HotelierDAO;
+import com.roomy.entities.Client;
+import com.roomy.entities.Hotelier;
+import org.mindrot.jbcrypt.BCrypt;
 
-    @FXML
-    private TextField userField;
-    @FXML
-    private PasswordField passField;
-    @FXML
-    private Label msg;
+    public class LoginController {
 
-    private final AuthService auth = new AuthService();
+        @FXML private TextField txtEmail;
+        @FXML private PasswordField txtPassword;
+        @FXML private Label lblError;
 
-    @FXML
-    public void handleLogin() {
-        String u = userField.getText();
-        String p = passField.getText();
+        private ClientDAO clientDAO = new ClientDAO();
+        private HotelierDAO hotelierDAO = new HotelierDAO();
 
-        String role = auth.authenticate(u, p);
+        @FXML
+        private void handleLogin() {
+            String email = txtEmail.getText().trim();
+            String password = txtPassword.getText();
 
-        switch (role) {
-            case "CLIENT" -> load("/fxml/dash_client.fxml");
-            case "HOTELIER" -> load("/fxml/dash_hotelier.fxml");
-            case "ADMIN" -> load("/fxml/dash_admin.fxml");
-            default -> msg.setText("Invalid credentials!");
+            if (email.isEmpty() || password.isEmpty()) {
+                lblError.setText("Veuillez remplir tous les champs");
+                return;
+            }
+
+            // Essai comme Client
+            Client client = clientDAO.findByEmail(email);
+            if (client != null && BCrypt.checkpw(password, client.getPassword())) {
+                lblError.setText("Connexion Client réussie !");
+                // → ouvrir dash_client.fxml
+                return;
+            }
+
+            // Essai comme Hôtelier
+            Hotelier hotelier = hotelierDAO.findByEmail(email);
+            if (hotelier != null && BCrypt.checkpw(password, hotelier.getPassword())) {
+                lblError.setText("Connexion Hôtelier réussie !");
+                // → ouvrir dash_hotelier.fxml
+                return;
+            }
+
+            lblError.setText("Email ou mot de passe incorrect");
+        }
+
+        @FXML
+        private void handleBack() {
+            // Logique pour revenir à la page précédente
+            System.out.println("Retour à la page précédente...");
+        }
+        @FXML
+        private void handleForgotPassword() {
+            // Logique pour gérer le mot de passe oublié
+            System.out.println("Redirection vers la récupération de mot de passe...");
+        }
+        @FXML
+        private void handleSignupNav() {
+            // Logique pour gérer l'inscription
+            System.out.println("Redirection vers la page d'inscription...");
         }
     }
-
-    @FXML
-    public void handleSignupNav() {
-        try {
-            Stage stage = (Stage) userField.getScene().getWindow();
-            stage.setScene(new Scene(FXMLLoader.load(getClass().getResource("/fxml/signup.fxml"))));
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    @FXML
-    public void handleBack() {
-        Stage stage = (Stage) userField.getScene().getWindow();
-        stage.close();
-    }
-
-    private void load(String fxml) {
-        try {
-            Stage stage = (Stage) userField.getScene().getWindow();
-            stage.setScene(new Scene(FXMLLoader.load(getClass().getResource(fxml))));
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-}

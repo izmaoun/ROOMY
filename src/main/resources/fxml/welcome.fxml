@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.image.Image?>
+<?import javafx.geometry.Insets?>
+
+<AnchorPane xmlns="http://javafx.com/javafx/17"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.roomy.Controller.WelcomeController"
+            style="-fx-background-color: #380F17;"
+            prefWidth="800" prefHeight="600">
+
+    <VBox alignment="CENTER"
+          spacing="50"
+          AnchorPane.topAnchor="0"
+          AnchorPane.bottomAnchor="0"
+          AnchorPane.leftAnchor="0"
+          AnchorPane.rightAnchor="0"
+          style="-fx-background-color: #380F17;">
+
+        <!-- Espace au-dessus du logo -->
+        <VBox prefHeight="50"/>
+
+        <!-- ROOMY logo -->
+        <HBox alignment="CENTER">
+            <ImageView fitWidth="200"
+                       fitHeight="80"
+                       preserveRatio="true">
+                <Image url="@../images/logo.png"/>
+            </ImageView>
+        </HBox>
+
+        <!-- Espace entre le logo et les boutons -->
+        <VBox prefHeight="80"/>
+
+        <!-- Buttons Section -->
+        <VBox alignment="CENTER"
+              spacing="25">
+
+            <Button text="Je suis un client"
+                    prefWidth="300"
+                    prefHeight="45"
+                    onAction="#goClient"
+                    style="-fx-background-color: #A59090;
+                           -fx-background-radius: 15;
+                           -fx-text-fill: #380F17;
+                           -fx-font-size: 16;
+                           -fx-font-weight: bold;"/>
+
+            <Button text="Je suis un collaborateur (hôtel)"
+                    prefWidth="300"
+                    prefHeight="45"
+                    onAction="#goCollaborateur"
+                    style="-fx-background-color: #A59090;
+                           -fx-background-radius: 15;
+                           -fx-text-fill: #380F17;
+                           -fx-font-size: 16;
+                           -fx-font-weight: bold;"/>
+        </VBox>
+
+        <!-- Espace en bas -->
+        <VBox prefHeight="50"/>
+
+    </VBox>
+
+</AnchorPane>

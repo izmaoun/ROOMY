@@ -18,13 +18,13 @@ public class AuthService {
     public String authenticate(String username, String password) {
 
         // Check Client
-        Client cl = clientDAO.find(username);
+        Client cl = clientDAO.findByEmail(username);
         if (cl != null && BCrypt.checkpw(password, cl.getPassword())) {
             return "CLIENT";
         }
 
         // Check Hotelier
-        Hotelier h = hotelierDAO.find(username);
+        Hotelier h = hotelierDAO.findByEmail(username);
         if (h != null && BCrypt.checkpw(password, h.getPassword())) {
             return "HOTELIER";
         }
