@@ -6,24 +6,23 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import javafx.event.ActionEvent;
 import javafx.scene.Node;
-import javafx.scene.control.TextField;
-import javafx.scene.control.PasswordField;
-
+import org.mindrot.jbcrypt.BCrypt;
 
 public class SignupController {
-    @FXML private TextField usernameField;
+    @FXML private TextField nomField;
     @FXML private TextField prenomField;
     @FXML private TextField emailField;
     @FXML private TextField telephoneField;
     @FXML private PasswordField passwordField;
     @FXML private PasswordField confirmPasswordField;
-    private ClientDAO clientDAO=new  ClientDAO();
 
+    private ClientDAO clientDAO = new ClientDAO();
 
     @FXML
     private void goBack(ActionEvent event) {
@@ -34,61 +33,52 @@ public class SignupController {
             stage.setScene(scene);
             stage.setMaximized(false);
             stage.show();
-            System.out.println("Retour à la page d'accueil...");
         } catch (Exception e) {
-            e.printStackTrace();
+            showAlert("Erreur", "Erreur lors du retour: " + e.getMessage());
         }
     }
 
-
     @FXML
     private void handleInscription(ActionEvent event) {
-        //je veux afficher ce qui est dans les champs de texte , ce qui est venu dans les champs de texte
-        String nom = usernameField.getText();
-        String prenom = prenomField.getText();
-        String email = emailField.getText();
-        String telephone = telephoneField.getText();
+        String nom = nomField.getText().trim();
+        String prenom = prenomField.getText().trim();
+        String email = emailField.getText().trim();
+        String telephone = telephoneField.getText().trim();
         String password = passwordField.getText();
         String confirmPassword = confirmPasswordField.getText();
 
-        System.out.println("Nom : " + nom);
-        System.out.println("Prénom : " + prenom);
-        System.out.println("Email : " + email);
-        System.out.println("Téléphone : " + telephone);
-        System.out.println("Mot de passe : " + password);
-        System.out.println("Confirmation : " + confirmPassword);
-
-        if(this.clientDAO.findByEmail(email)==null){
-            Client client=new Client();
-            client.setNom(nom);
-            client.setPrenom(prenom);
-            client.setEmail(email);
-            client.setTelephone(telephone);
-            client.setPassword(password);
-            boolean res=this.clientDAO.signup(client);
-            if(res){
-                System.out.println("Inscription réussie pour l'email : " + email);
-            }else{
-                System.out.println("Échec de l'inscription pour l'email : " + email);
-            }
-        }else{
-            System.out.println("L'email " + email + " est déjà utilisé.");
+        // Validation
+        if (!validateInputs(nom, prenom, email, telephone, password, confirmPassword)) {
+            return;
         }
-        System.out.println("Traitement de l'inscription inchaalah...");
+
+        // Vérifier si l'email existe déjà
+        if (this.clientDAO.findByEmail(email) != null) {
+            showAlert("Erreur", "Cet email est déjà utilisé.");
+            return;
+        }
+
+        try {
+            // Hasher le mot de passe
+            String hashedPassword = BCrypt.hashpw(password, BCrypt.gensalt());
+
+            Client client = new Client(nom, prenom, email, telephone, hashedPassword);
+            boolean res = this.clientDAO.signup(client);
+
+            if (res) {
+                showAlert("Succès", "Inscription réussie !");
+                clearFields();
+                goToLogin(event);
+            } else {
+                showAlert("Erreur", "Échec de l'inscription.");
+            }
+        } catch (Exception e) {
+            showAlert("Erreur", "Erreur lors de l'inscription: " + e.getMessage());
+        }
     }
 
     @FXML
     private void goToLogin(ActionEvent event) {
-//        try {
-//            Parent root = FXMLLoader.load(getClass().getResource("/fxml/login.fxml")); // ← Créez ce fichier
-//            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-//            Scene scene = new Scene(root, 800, 600);
-//            stage.setScene(scene);
-//
-//            stage.show();
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/login.fxml"));
             Parent root = loader.load();
@@ -96,7 +86,50 @@ public class SignupController {
             stage.setScene(new Scene(root, 800, 600));
             stage.show();
         } catch (Exception e) {
-            e.printStackTrace();
+            showAlert("Erreur", "Erreur lors de la navigation: " + e.getMessage());
         }
+    }
+
+    private boolean validateInputs(String nom, String prenom, String email, String telephone,
+                                   String password, String confirmPassword) {
+        if (nom.isEmpty() || prenom.isEmpty() || email.isEmpty() ||
+                telephone.isEmpty() || password.isEmpty()) {
+            showAlert("Erreur", "Veuillez remplir tous les champs.");
+            return false;
+        }
+
+        if (!password.equals(confirmPassword)) {
+            showAlert("Erreur", "Les mots de passe ne correspondent pas.");
+            return false;
+        }
+
+        if (password.length() < 6) {
+            showAlert("Erreur", "Le mot de passe doit contenir au moins 6 caractères.");
+            return false;
+        }
+
+        if (!email.matches("^[A-Za-z0-9+_.-]+@(.+)$")) {
+            showAlert("Erreur", "Format d'email invalide.");
+            return false;
+        }
+
+        return true;
+    }
+
+    private void clearFields() {
+        nomField.clear();
+        prenomField.clear();
+        emailField.clear();
+        telephoneField.clear();
+        passwordField.clear();
+        confirmPasswordField.clear();
+    }
+
+    private void showAlert(String title, String message) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        alert.showAndWait();
     }
 }

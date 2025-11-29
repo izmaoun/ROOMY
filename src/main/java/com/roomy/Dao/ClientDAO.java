@@ -1,10 +1,9 @@
 package com.roomy.Dao;
 
 import com.roomy.entities.Client;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
+import java.util.List;
+import java.util.Optional;
 
     public class ClientDAO {
 
@@ -19,38 +18,57 @@ import java.sql.SQLException;
 
                 if (rs.next()) {
                     Client client = new Client();
-                    client.setId(rs.getInt("id"));
-                    client.setNom(rs.getString("username"));
-//                    client.setPrenom(rs.getString("prenom"));
+                    client.setIdClient(rs.getInt("id_client")); // CORRECTION : id_client au lieu de id
+                    client.setNom(rs.getString("nom")); // CORRECTION : nom au lieu de username
+                    client.setPrenom(rs.getString("prenom")); // CORRECTION : ajout du prénom
                     client.setEmail(rs.getString("email"));
                     client.setTelephone(rs.getString("telephone"));
-                    client.setPassword(rs.getString("password")); // déjà hashé
+                    client.setPassword(rs.getString("password"));
+                    client.setDateInscription(rs.getTimestamp("date_inscription").toLocalDateTime());
+                    client.setEstBloque(rs.getBoolean("est_bloque"));
                     return client;
                 }
             } catch (SQLException e) {
+                System.err.println("Erreur lors de la recherche par email: " + e.getMessage());
                 e.printStackTrace();
             }
             return null;
         }
 
         // Inscription client
+        // Inscription client - CORRIGÉ
         public boolean signup(Client client) {
-            String sql = "INSERT INTO clients (username, email, telephone, password) VALUES (?, ?, ?, ?)";
-            try (Connection c = DBConnection.getConnection();
-                 PreparedStatement ps = c.prepareStatement(sql)) {
-                ps.setString(1, client.getNom());
-//                ps.setString(2, client.getPrenom());Erreur inscription clien
-                ps.setString(2, client.getEmail());
-                ps.setString(3, client.getTelephone());
-                ps.setString(4, client.getPassword()); // déjà hashé avec BCrypt
-                System.out.println("voila inscrription client");
-
-                ps.executeUpdate();
-                System.out.println("inscription client réussie");
-                return true;
-            } catch (SQLException e) {
-                System.out.println("Erreur inscription client : " + e.getMessage());
+            if (findByEmail(client.getEmail()) != null) {
+                System.err.println("ERREUR: Email déjà utilisé - " + client.getEmail());
                 return false;
             }
+
+            String sql = "INSERT INTO clients (nom, prenom, email, telephone, password) VALUES (?, ?, ?, ?, ?)";
+            try (Connection c = DBConnection.getConnection();
+                 PreparedStatement ps = c.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+
+                ps.setString(1, client.getNom());
+                ps.setString(2, client.getPrenom()); // CORRECTION : ajout du prénom
+                ps.setString(3, client.getEmail());
+                ps.setString(4, client.getTelephone());
+                ps.setString(5, client.getPassword()); // déjà hashé avec BCrypt
+
+                int affectedRows = ps.executeUpdate();
+
+                if (affectedRows > 0) {
+                    // Récupérer l'ID généré
+                    try (ResultSet generatedKeys = ps.getGeneratedKeys()) {
+                        if (generatedKeys.next()) {
+                            client.setIdClient(generatedKeys.getInt(1));
+                        }
+                    }
+                    System.out.println("Inscription client réussie - ID: " + client.getIdClient());
+                    return true;
+                }
+            } catch (SQLException e) {
+                System.err.println("Erreur inscription client : " + e.getMessage());
+                e.printStackTrace();
+            }
+            return false;
         }
     }

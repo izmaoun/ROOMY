@@ -13,11 +13,11 @@ public class DataInit {
 
     public static void init() {
         // Client de test
-        if (clientDAO.findByEmail("admin@roomy.com") == null) {
+        /*if (clientDAO.findByEmail("admin@roomy.com") == null) {
             Client adminClient = new Client();
             adminClient.setNom("Admin");
-//            adminClient.setPrenom("Client");
-            adminClient.setEmail("admin@roomy.com");
+            adminClient.setPrenom("Client");
+            adminClient.setEmail("testo@roomy.com");
             adminClient.setTelephone("0600000000");
             adminClient.setPassword(BCrypt.hashpw("123456", BCrypt.gensalt()));
             clientDAO.signup(adminClient);
@@ -27,14 +27,17 @@ public class DataInit {
         // Hôtelier de test
         if (hotelierDAO.findByEmail("hotel@roomy.com") == null) {
             Hotelier hotelier = new Hotelier();
-            hotelier.setNom("Hôtel Casablanca Palace");     // nom de l'hôtel
+            hotelier.setNomEtablissement("Hôtel Casablanca Palace");     // nom de l'hôtel
             hotelier.setVille("Casablanca");
-            hotelier.setEmail("hotel@roomy.com");
+            hotelier.setNomGerant("test");
+            hotelier.setPrenomGerant("Abd Allah");
+            hotelier.setEmailGerant("hotel@roomy.com");
+            hotelier.setTelephone("0622222222");
             hotelier.setPassword(BCrypt.hashpw("hotel123", BCrypt.gensalt()));
             hotelier.setIce("A123BC456");
 
             hotelierDAO.signup(hotelier);
             System.out.println("Hôtelier créé : hotel@roomy.com / hotel123");
-        }
+        }*/
     }
 }

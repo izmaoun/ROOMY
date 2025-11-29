@@ -45,7 +45,7 @@
                     <!-- Form -->
                     <VBox alignment="CENTER" spacing="15" prefWidth="350">
 
-                        <TextField fx:id="usernameField" promptText="Nom"
+                        <TextField fx:id="nomField" promptText="Nom"
                                    prefWidth="350" prefHeight="40"
                                    style="-fx-background-color: #EFDFC5;
                                       -fx-prompt-text-fill: #000000;

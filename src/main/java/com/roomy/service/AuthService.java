@@ -15,22 +15,22 @@ public class AuthService {
     private final HotelierDAO hotelierDAO = new HotelierDAO();
     private final AdminDAO adminDAO = new AdminDAO();
 
-    public String authenticate(String username, String password) {
+    public String authenticate(String login, String password) {
 
         // Check Client
-        Client cl = clientDAO.findByEmail(username);
+        Client cl = clientDAO.findByEmail(login);
         if (cl != null && BCrypt.checkpw(password, cl.getPassword())) {
             return "CLIENT";
         }
 
         // Check Hotelier
-        Hotelier h = hotelierDAO.findByEmail(username);
+        Hotelier h = hotelierDAO.findByEmail(login);
         if (h != null && BCrypt.checkpw(password, h.getPassword())) {
             return "HOTELIER";
         }
 
         // Check Admin
-        Admin a = adminDAO.find(username);
+        Admin a = adminDAO.findByUsername(login);
         if (a != null && BCrypt.checkpw(password, a.getPassword())) {
             return "ADMIN";
         }

@@ -1,56 +1,79 @@
 package com.roomy.entities;
 
-import lombok.Data;
+import java.time.LocalDateTime;
 
-@Data
 public class Hotelier {
-    private int id;
-
-    // Infos hôtel
-    private String nom;           // Nom de l'hôtel
+    private int idHotelier;
+    private String nomEtablissement;
+    private String nomGerant;
+    private String prenomGerant;
     private String ville;
-
-    // Infos gérant + authentification
-    private String email;
-    private String password;      // déjà hashé en BCrypt
+    private String emailGerant;
+    private String telephone;
+    private String password;
     private String ice;
-    // Constructeur vide
+    private LocalDateTime dateInscription;
+    private String statutVerification; // "en_attente", "verifie", "rejete"
+
+    // Constructeurs
     public Hotelier() {}
 
-    // Constructeur utilisé lors de l'inscription hôtel
-    public Hotelier(String nom, String ville, String email, String password, String ice) {
-        this.nom = nom;
+    public Hotelier(String nomEtablissement, String nomGerant, String prenomGerant,
+                    String ville, String emailGerant, String telephone,
+                    String password, String ice) {
+        this.nomEtablissement = nomEtablissement;
+        this.nomGerant = nomGerant;
+        this.prenomGerant = prenomGerant;
         this.ville = ville;
-        this.email = email;
+        this.emailGerant = emailGerant;
+        this.telephone = telephone;
         this.password = password;
         this.ice = ice;
+        this.dateInscription = LocalDateTime.now();
+        this.statutVerification = "en_attente";
     }
 
-    // Getters & Setters
-    public int getId() { return id; }
-    public void setId(int id) { this.id = id; }
+    // Getters et Setters
+    public int getIdHotelier() { return idHotelier; }
+    public void setIdHotelier(int idHotelier) { this.idHotelier = idHotelier; }
 
-    public String getNom() { return nom; }
-    public void setNom(String nom) { this.nom = nom; }
+    public String getNomEtablissement() { return nomEtablissement; }
+    public void setNomEtablissement(String nomEtablissement) { this.nomEtablissement = nomEtablissement; }
+
+    public String getNomGerant() { return nomGerant; }
+    public void setNomGerant(String nomGerant) { this.nomGerant = nomGerant; }
+
+    public String getPrenomGerant() { return prenomGerant; }
+    public void setPrenomGerant(String prenomGerant) { this.prenomGerant = prenomGerant; }
 
     public String getVille() { return ville; }
     public void setVille(String ville) { this.ville = ville; }
 
-    public String getEmail() { return email; }
-    public void setEmail(String email) { this.email = email; }
+    public String getEmailGerant() { return emailGerant; }
+    public void setEmailGerant(String emailGerant) { this.emailGerant = emailGerant; }
+
+    public String getTelephone() { return telephone; }
+    public void setTelephone(String telephone) { this.telephone = telephone; }
 
     public String getPassword() { return password; }
     public void setPassword(String password) { this.password = password; }
+
     public String getIce() { return ice; }
     public void setIce(String ice) { this.ice = ice; }
 
+    public LocalDateTime getDateInscription() { return dateInscription; }
+    public void setDateInscription(LocalDateTime dateInscription) { this.dateInscription = dateInscription; }
+
+    public String getStatutVerification() { return statutVerification; }
+    public void setStatutVerification(String statutVerification) { this.statutVerification = statutVerification; }
+
     @Override
     public String toString() {
-        return "Hotelier{" +
-                "id=" + id +
-                ", nomHotel='" + nom + '\'' +
+        return "Hotelier{id=" + idHotelier +
+                ", établissement='" + nomEtablissement + '\'' +
+                ", gérant='" + prenomGerant + " " + nomGerant + '\'' +
                 ", ville='" + ville + '\'' +
-                ", email='" + email + '\'' +
-                '}';
-    }
+                ", email='" + emailGerant + '\'' +
+                ", statut='" + statutVerification + '\'' +
+                '}';    }
 }

@@ -4,92 +4,161 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.text.*?>
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.image.Image?>
 
-<AnchorPane xmlns="http://javafx.com/javafx/17"
+<BorderPane xmlns="http://javafx.com/javafx/17"
             xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="com.roomy.Controller.SingupHotelier"
+            fx:controller="com.roomy.Controller.SingupHotelierController"
             style="-fx-background-color: #380F17;"
-            prefHeight="600" prefWidth="800">
+            prefHeight="600" prefWidth="800"
+            AnchorPane.topAnchor="0"
+            AnchorPane.bottomAnchor="0"
+            AnchorPane.leftAnchor="0"
+            AnchorPane.rightAnchor="0">
 
-    <VBox alignment="CENTER" spacing="30" prefWidth="400"
-          AnchorPane.topAnchor="50.0" AnchorPane.bottomAnchor="50.0"
-          AnchorPane.leftAnchor="200.0" AnchorPane.rightAnchor="200.0">
+    <center>
+        <ScrollPane fitToWidth="true" hbarPolicy="NEVER" vbarPolicy="AS_NEEDED"
+                    style="-fx-background: transparent; -fx-background-color: transparent;">
 
-        <!-- Titre -->
-        <Text text="Inscription Hôtel"
-              style="-fx-fill: #EFDFC5; -fx-font-size: 28; -fx-font-weight: bold;"/>
+            <StackPane>
+                <VBox alignment="CENTER" spacing="30" prefWidth="400" maxWidth="400" BorderPane.alignment="CENTER">
 
-        <!-- Formulaire -->
-        <VBox alignment="CENTER_LEFT" spacing="15" prefWidth="350">
+                    <VBox prefHeight="30"/>
 
-            <!-- Nom de l'Hôtel -->
-            <VBox spacing="5">
-                <Label text="Nom de l'Hôtel" style="-fx-text-fill: #EFDFC5; -fx-font-size: 14;"/>
-                <TextField fx:id="nomHotelierId" prefWidth="350" prefHeight="40"
-                           style="-fx-background-radius: 5; -fx-border-radius: 5;"/>
-            </VBox>
+                    <HBox alignment="CENTER">
+                        <ImageView fitWidth="200"
+                                   fitHeight="80"
+                                   preserveRatio="true">
+                            <Image url="@../images/logo.png"/>
+                        </ImageView>
+                    </HBox>
 
+                    <VBox prefHeight="40"/>
 
-            <!-- Ville -->
-            <VBox spacing="5">
-                <Label text="Ville"
-                       style="-fx-text-fill: #EFDFC5; -fx-font-size: 14;"/>
-                <TextField fx:id="villeId" prefWidth="350" prefHeight="40"
-                           style="-fx-background-radius: 5; -fx-border-radius: 5;"/>
-            </VBox>
+                    <Text text="Inscription Hôtelier"
+                          style="-fx-fill: #EFDFC5; -fx-font-size: 28; -fx-font-weight: bold;"/>
 
-            <VBox spacing="5">
-                <Label text="E-mail du Gérant"
-                       style="-fx-text-fill: #EFDFC5; -fx-font-size: 14;"/>
-                <TextField fx:id="emailId" prefWidth="350" prefHeight="40"
-                           style="-fx-background-radius: 5; -fx-border-radius: 5;"/>
-            </VBox>
+                    <VBox alignment="CENTER" spacing="15" prefWidth="350">
 
-            <!-- Mot de passe -->
-            <VBox spacing="5">
-                <Label text="Mot de passe" style="-fx-text-fill: #EFDFC5; -fx-font-size: 14;"/>
-                <PasswordField fx:id="passwordId" prefWidth="350" prefHeight="40"
-                               style="-fx-background-radius: 5; -fx-border-radius: 5;"/>
-            </VBox>
+                        <TextField fx:id="nomEtablissementField" promptText="Nom de l'établissement"
+                                   prefWidth="350" prefHeight="40"
+                                   style="-fx-background-color: #EFDFC5;
+                                      -fx-prompt-text-fill: #666666;
+                                      -fx-background-radius: 10;
+                                      -fx-padding: 10;
+                                      -fx-border-radius: 10;
+                                      -fx-font-size: 14;"/>
 
+                        <TextField fx:id="nomGerantField" promptText="Nom du gérant"
+                                   prefWidth="350" prefHeight="40"
+                                   style="-fx-background-color: #EFDFC5;
+                                      -fx-prompt-text-fill: #666666;
+                                      -fx-background-radius: 10;
+                                      -fx-padding: 10;
+                                      -fx-border-radius: 10;
+                                      -fx-font-size: 14;"/>
 
-            <!-- Confirmer le Mot de passe -->
-            <VBox spacing="5">
-                <Label text="Confirmer le Mot de passe"
-                       style="-fx-text-fill: #EFDFC5; -fx-font-size: 14;"/>
-                <PasswordField fx:id="confirmPasswordId" prefWidth="350" prefHeight="40"
-                               style="-fx-background-radius: 5; -fx-border-radius: 5;"/>
-            </VBox>
+                        <TextField fx:id="prenomGerantField" promptText="Prénom du gérant"
+                                   prefWidth="350" prefHeight="40"
+                                   style="-fx-background-color: #EFDFC5;
+                                      -fx-prompt-text-fill: #666666;
+                                      -fx-background-radius: 10;
+                                      -fx-padding: 10;
+                                      -fx-border-radius: 10;
+                                      -fx-font-size: 14;"/>
 
-            <VBox spacing="5">
-                <Label text="ICE (Identifiant Commun de l'Entreprise)"
-                       style="-fx-text-fill: #EFDFC5; -fx-font-size: 14;"/>
-                <TextField fx:id="iceId" prefWidth="350" prefHeight="40"
-                           style="-fx-background-radius: 5; -fx-border-radius: 5;"/>
-            </VBox>
+                        <TextField fx:id="villeField" promptText="Ville"
+                                   prefWidth="350" prefHeight="40"
+                                   style="-fx-background-color: #EFDFC5;
+                                      -fx-prompt-text-fill: #666666;
+                                      -fx-background-radius: 10;
+                                      -fx-padding: 10;
+                                      -fx-border-radius: 10;
+                                      -fx-font-size: 14;"/>
 
-        </VBox>
+                        <TextField fx:id="emailField" promptText="E-mail du gérant"
+                                   prefWidth="350" prefHeight="40"
+                                   style="-fx-background-color: #EFDFC5;
+                                      -fx-prompt-text-fill: #666666;
+                                      -fx-background-radius: 10;
+                                      -fx-padding: 10;
+                                      -fx-border-radius: 10;
+                                      -fx-font-size: 14;"/>
 
-        <!-- Bouton S'inscrire -->
-        <Button text="S'inscrire"
-                prefWidth="350" prefHeight="45"
-                onAction="#handleInscription"
-                style="-fx-background-color: #A59090; -fx-background-radius: 20; -fx-text-fill: #380F17; -fx-font-size: 16; -fx-font-weight: bold;"/>
+                        <TextField fx:id="telephoneField" promptText="Téléphone"
+                                   prefWidth="350" prefHeight="40"
+                                   style="-fx-background-color: #EFDFC5;
+                                      -fx-prompt-text-fill: #666666;
+                                      -fx-background-radius: 10;
+                                      -fx-padding: 10;
+                                      -fx-border-radius: 10;
+                                      -fx-font-size: 14;"/>
 
-        <!-- Lien de connexion -->
-        <HBox alignment="CENTER" spacing="5">
-            <Text text="Déjà un compte ?"
-                  style="-fx-fill: #EFDFC5; -fx-font-size: 14;"/>
-            <Button text="Se connecter"
-                    onAction="#goToLogin"
-                    style="-fx-background-color: transparent; -fx-text-fill: #A59090; -fx-underline: true; -fx-font-size: 14;"/>
-        </HBox>
+                        <PasswordField fx:id="passwordField" promptText="Mot de passe"
+                                       prefWidth="350" prefHeight="40"
+                                       style="-fx-background-color: #EFDFC5;
+                                          -fx-prompt-text-fill: #666666;
+                                          -fx-background-radius: 10;
+                                          -fx-padding: 10;
+                                          -fx-border-radius: 10;
+                                          -fx-font-size: 14;"/>
 
-        <!-- Bouton Retour -->
-        <Button text="Retour"
-                onAction="#goBack"
-                style="-fx-background-color: transparent; -fx-text-fill: #A59090; -fx-font-size: 14;"/>
+                        <PasswordField fx:id="confirmPasswordField" promptText="Confirmer le mot de passe"
+                                       prefWidth="350" prefHeight="40"
+                                       style="-fx-background-color: #EFDFC5;
+                                          -fx-prompt-text-fill: #666666;
+                                          -fx-background-radius: 10;
+                                          -fx-padding: 10;
+                                          -fx-border-radius: 10;
+                                          -fx-font-size: 14;"/>
 
-    </VBox>
+                        <TextField fx:id="iceField" promptText="ICE (15 chiffres)"
+                                   prefWidth="350" prefHeight="40"
+                                   style="-fx-background-color: #EFDFC5;
+                                      -fx-prompt-text-fill: #666666;
+                                      -fx-background-radius: 10;
+                                      -fx-padding: 10;
+                                      -fx-border-radius: 10;
+                                      -fx-font-size: 14;"/>
 
-</AnchorPane>
+                    </VBox>
+
+                    <Button text="S'inscrire"
+                            prefWidth="350" prefHeight="45"
+                            onAction="#handleInscription"
+                            style="-fx-background-color: #A59090;
+                               -fx-background-radius: 20;
+                               -fx-text-fill: #380F17;
+                               -fx-font-size: 16;
+                               -fx-font-weight: bold;
+                               -fx-cursor: hand;"/>
+
+                    <HBox alignment="CENTER" spacing="5">
+                        <Text text="Déjà un compte ?"
+                              style="-fx-fill: #EFDFC5; -fx-font-size: 14;"/>
+                        <Button text="Se connecter"
+                                onAction="#goToLogin"
+                                style="-fx-background-color: transparent;
+                                   -fx-text-fill: #A59090;
+                                   -fx-underline: true;
+                                   -fx-font-size: 14;
+                                   -fx-cursor: hand;"/>
+                    </HBox>
+
+                    <Button text="Retour"
+                            onAction="#goBack"
+                            style="-fx-background-color: transparent;
+                               -fx-text-fill: #A59090;
+                               -fx-font-size: 14;
+                               -fx-cursor: hand;"/>
+
+                    <VBox prefHeight="20"/>
+
+                </VBox>
+            </StackPane>
+        </ScrollPane>
+    </center>
+
+</BorderPane>
