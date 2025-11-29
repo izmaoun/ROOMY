@@ -18,8 +18,7 @@ public class HelloApplication extends Application {
         stage.setTitle("Roomy - Réservation Hôtels");
         stage.setResizable(false);
         stage.setScene(scene);
-        stage.centerOnScreen();
-        stage.show();
+        stage.centerOnScreen();        stage.show();
     }
 
     public static void main(String[] args) {

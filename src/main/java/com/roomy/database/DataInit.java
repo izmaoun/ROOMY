@@ -1,43 +1,31 @@
+// java
 package com.roomy.database;
 
-import com.roomy.Dao.ClientDAO;
-import com.roomy.Dao.HotelierDAO;
-import com.roomy.entities.Client;
-import com.roomy.entities.Hotelier;
+import com.roomy.Dao.AdminDAO;
+import com.roomy.entities.Admin;
 import org.mindrot.jbcrypt.BCrypt;
 
 public class DataInit {
 
-    private static final ClientDAO clientDAO = new ClientDAO();
-    private static final HotelierDAO hotelierDAO = new HotelierDAO();
+    private static final AdminDAO adminDAO = new AdminDAO();
 
     public static void init() {
-        // Client de test
-        /*if (clientDAO.findByEmail("admin@roomy.com") == null) {
-            Client adminClient = new Client();
-            adminClient.setNom("Admin");
-            adminClient.setPrenom("Client");
-            adminClient.setEmail("testo@roomy.com");
-            adminClient.setTelephone("0600000000");
-            adminClient.setPassword(BCrypt.hashpw("123456", BCrypt.gensalt()));
-            clientDAO.signup(adminClient);
-            System.out.println("Client admin créé : admin@roomy.com / 123456");
+        String adminEmail = "admin1@roomy.com";
+        // adapte le check selon la méthode disponible dans AdminDAO (findByEmail / findByUsername)
+        if (adminDAO.findByEmail(adminEmail) == null) {
+            Admin admin = new Admin();
+            admin.setUsername("admin1");
+            admin.setEmail(adminEmail);
+            admin.setPassword(BCrypt.hashpw("123456", BCrypt.gensalt()));
+            // utiliser la méthode create (alias de signup) disponible dans AdminDAO
+            adminDAO.create(admin);
+            System.out.println("Admin créé : " + adminEmail + " / 123456");
+        } else {
+            System.out.println("Admin déjà présent : " + adminEmail);
         }
+    }
 
-        // Hôtelier de test
-        if (hotelierDAO.findByEmail("hotel@roomy.com") == null) {
-            Hotelier hotelier = new Hotelier();
-            hotelier.setNomEtablissement("Hôtel Casablanca Palace");     // nom de l'hôtel
-            hotelier.setVille("Casablanca");
-            hotelier.setNomGerant("test");
-            hotelier.setPrenomGerant("Abd Allah");
-            hotelier.setEmailGerant("hotel@roomy.com");
-            hotelier.setTelephone("0622222222");
-            hotelier.setPassword(BCrypt.hashpw("hotel123", BCrypt.gensalt()));
-            hotelier.setIce("A123BC456");
-
-            hotelierDAO.signup(hotelier);
-            System.out.println("Hôtelier créé : hotel@roomy.com / hotel123");
-        }*/
+    public static void main(String[] args) {
+        init();
     }
 }

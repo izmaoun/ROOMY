@@ -131,4 +131,35 @@ public class HotelierDAO {
     public boolean existsByIce(String ice) {
         return findByIce(ice) != null;
     }
+
+    // Lister les hoteliers en attente de validation
+    public java.util.List<Hotelier> findAllEnAttente() {
+        String sql = "SELECT * FROM hoteliers WHERE statut_verification = 'en_attente'";
+        java.util.List<Hotelier> result = new java.util.ArrayList<>();
+        try (Connection c = DBConnection.getConnection();
+             PreparedStatement ps = c.prepareStatement(sql)) {
+
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                Hotelier hotelier = new Hotelier();
+                hotelier.setIdHotelier(rs.getInt("id_hotelier"));
+                hotelier.setNomEtablissement(rs.getString("nom_etablissement"));
+                hotelier.setNomGerant(rs.getString("nom_gerant"));
+                hotelier.setPrenomGerant(rs.getString("prenom_gerant"));
+                hotelier.setVille(rs.getString("ville"));
+                hotelier.setEmailGerant(rs.getString("email_gerant"));
+                hotelier.setTelephone(rs.getString("telephone"));
+                hotelier.setPassword(rs.getString("password"));
+                hotelier.setIce(rs.getString("ice"));
+                java.sql.Timestamp ts = rs.getTimestamp("date_inscription");
+                if (ts != null) hotelier.setDateInscription(ts.toLocalDateTime());
+                hotelier.setStatutVerification(rs.getString("statut_verification"));
+                result.add(hotelier);
+            }
+        } catch (SQLException e) {
+            System.err.println("Erreur lors de la récupération des hoteliers en attente: " + e.getMessage());
+            e.printStackTrace();
+        }
+        return result;
+    }
 }

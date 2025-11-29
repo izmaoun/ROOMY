@@ -1,2 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
-<Label text="Bienvenue Admin !" />
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<BorderPane fx:controller="com.roomy.Controller.DashAdminController" xmlns:fx="http://javafx.com/fxml">
+    <!-- Top bar -->
+    <top>
+        <HBox style="-fx-background-color: #5a1d22; -fx-padding: 10; -fx-alignment: center-right;" spacing="12">
+            <HBox style="-fx-alignment: center-left; -fx-spacing: 10; -fx-pref-width: 400;">
+                <ImageView fx:id="logo" fitHeight="36" fitWidth="120" pickOnBounds="true" preserveRatio="true" />
+            </HBox>
+
+            <Label fx:id="lblAdminName" style="-fx-text-fill: white; -fx-font-weight: bold;" />
+            <Button fx:id="btnLogout" text="Déconnexion" style="-fx-background-color: #f2d6c6; -fx-text-fill: #5a1d22; -fx-font-weight: bold;"/>
+            <Button fx:id="btnMenu" text="☰" style="-fx-background-radius: 30; -fx-background-color: #8a272c; -fx-text-fill: white;" />
+        </HBox>
+    </top>
+
+    <!-- Left navigation -->
+    <left>
+        <VBox fx:id="leftMenu" spacing="12" style="-fx-background-color: #2f3939; -fx-padding: 20;" prefWidth="220">
+            <Button fx:id="btnValidation" text="validation des établissements" />
+            <Button fx:id="btnUsers" text="gestion utilisateurs" />
+            <Button fx:id="btnStats" text="Statistiques" />
+        </VBox>
+    </left>
+
+    <!-- Center content area -->
+    <center>
+        <StackPane fx:id="centerStack" style="-fx-background-color: #0b0b0b; -fx-padding: 24;">
+            <!-- Validation pane -->
+            <AnchorPane fx:id="validationPane">
+                <Label text="validation des demandes de collaboration des hôtels" style="-fx-font-size: 24; -fx-text-fill: #f2d6c6; -fx-background-color: transparent; -fx-padding: 8 12; -fx-border-radius: 10; -fx-background-radius: 10; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.6), 8,0,0,2);" layoutX="20" layoutY="10" />
+                <ScrollPane layoutX="20" layoutY="70" prefWidth="900" prefHeight="420">
+                    <VBox fx:id="validationList" spacing="12" style="-fx-padding: 12;">
+                        <!-- Placeholder table rows -->
+                        <Label text="Tableau des demandes (placeholder)" style="-fx-text-fill: white;" />
+                    </VBox>
+                </ScrollPane>
+            </AnchorPane>
+
+            <!-- Users pane -->
+            <AnchorPane fx:id="usersPane" visible="false">
+                <Label text="Gestion des utilisateurs" style="-fx-font-size: 24; -fx-text-fill: #f2d6c6;" layoutX="20" layoutY="10" />
+                <ScrollPane layoutX="20" layoutY="70" prefWidth="900" prefHeight="420">
+                    <VBox fx:id="usersList" spacing="12" style="-fx-padding: 12;">
+                        <Label text="Liste utilisateurs (placeholder)" style="-fx-text-fill: white;" />
+                    </VBox>
+                </ScrollPane>
+            </AnchorPane>
+
+            <!-- Stats pane -->
+            <AnchorPane fx:id="statsPane" visible="false">
+                <Label text="Statistiques" style="-fx-font-size: 24; -fx-text-fill: #f2d6c6;" layoutX="20" layoutY="10" />
+                <ScrollPane layoutX="20" layoutY="70" prefWidth="900" prefHeight="420">
+                    <VBox fx:id="statsList" spacing="12" style="-fx-padding: 12;">
+                        <Label text="Graphiques (placeholder)" style="-fx-text-fill: white;" />
+                    </VBox>
+                </ScrollPane>
+            </AnchorPane>
+        </StackPane>
+    </center>
+</BorderPane>

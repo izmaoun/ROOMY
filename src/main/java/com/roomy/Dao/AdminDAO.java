@@ -54,7 +54,7 @@ public class AdminDAO {
     }
 
     // Créer un nouvel administrateur
-    /*public boolean create(Admin admin) {
+    public boolean signup(Admin admin) {
         String sql = "INSERT INTO administrateurs (username, password, email) VALUES (?, ?, ?)";
         try (Connection c = DBConnection.getConnection();
              PreparedStatement ps = c.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
@@ -80,7 +80,12 @@ public class AdminDAO {
             e.printStackTrace();
         }
         return false;
-    }*/
+    }
+
+    // Alias create -> signup pour compatibilité
+    public boolean create(Admin admin) {
+        return signup(admin);
+    }
 
     // Mettre à jour un administrateur
     public boolean update(Admin admin) {
