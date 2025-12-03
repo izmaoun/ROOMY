@@ -1,5 +1,6 @@
 package com.roomy.Dao;
 
+import com.roomy.ENUMS.StatutVerification;
 import com.roomy.entities.Hotelier;
 import java.sql.*;
 
@@ -26,7 +27,7 @@ public class HotelierDAO {
                 hotelier.setPassword(rs.getString("password"));
                 hotelier.setIce(rs.getString("ice"));
                 hotelier.setDateInscription(rs.getTimestamp("date_inscription").toLocalDateTime());
-                hotelier.setStatutVerification(rs.getString("statut_verification"));
+                hotelier.setStatutVerification(StatutVerification.valueOf(rs.getString("statut_verification")));
                 return hotelier;
             }
         } catch (SQLException e) {
@@ -57,7 +58,7 @@ public class HotelierDAO {
                 hotelier.setPassword(rs.getString("password"));
                 hotelier.setIce(rs.getString("ice"));
                 hotelier.setDateInscription(rs.getTimestamp("date_inscription").toLocalDateTime());
-                hotelier.setStatutVerification(rs.getString("statut_verification"));
+                hotelier.setStatutVerification(StatutVerification.valueOf(rs.getString("statut_verification")));
                 return hotelier;
             }
         } catch (SQLException e) {
@@ -153,7 +154,7 @@ public class HotelierDAO {
                 hotelier.setIce(rs.getString("ice"));
                 java.sql.Timestamp ts = rs.getTimestamp("date_inscription");
                 if (ts != null) hotelier.setDateInscription(ts.toLocalDateTime());
-                hotelier.setStatutVerification(rs.getString("statut_verification"));
+                hotelier.setStatutVerification(StatutVerification.valueOf(rs.getString("statut_verification")));
                 result.add(hotelier);
             }
         } catch (SQLException e) {

@@ -1,6 +1,10 @@
 package com.roomy.entities;
 
+import com.roomy.ENUMS.StatutVerification;
+
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Hotelier {
     private int idHotelier;
@@ -13,7 +17,8 @@ public class Hotelier {
     private String password;
     private String ice;
     private LocalDateTime dateInscription;
-    private String statutVerification; // "en_attente", "verifie", "rejete"
+    private StatutVerification statutVerification;// "en_attente", "verifie", "rejete"
+    private List<Hotel> Hotels;
 
     // Constructeurs
     public Hotelier() {}
@@ -30,7 +35,8 @@ public class Hotelier {
         this.password = password;
         this.ice = ice;
         this.dateInscription = LocalDateTime.now();
-        this.statutVerification = "en_attente";
+        this.statutVerification = StatutVerification.en_attente;
+        this.Hotels = new ArrayList<>();
     }
 
     // Getters et Setters
@@ -64,8 +70,31 @@ public class Hotelier {
     public LocalDateTime getDateInscription() { return dateInscription; }
     public void setDateInscription(LocalDateTime dateInscription) { this.dateInscription = dateInscription; }
 
-    public String getStatutVerification() { return statutVerification; }
-    public void setStatutVerification(String statutVerification) { this.statutVerification = statutVerification; }
+    public StatutVerification getStatutVerification() { return statutVerification; }
+    public void setStatutVerification(StatutVerification statutVerification) { this.statutVerification = statutVerification; }
+
+    public List<Hotel> getHotels() { return Hotels == null ? List.of() : List.copyOf(Hotels); }
+    public void addHotel (Hotel hotel){
+        if(hotel == null) return;
+        if(Hotels == null) Hotels = new ArrayList<>();
+        Hotels.add(hotel);
+        hotel.setHotelier(this);
+    }
+    public void removehotel (Hotel hotel){  // wa7ed bwa7ed
+        if (Hotels != null && hotel != null ){
+            Hotels.remove(hotel);
+            hotel.setHotelier(null);
+        }
+    }
+
+    public void clearhotels(){  //da9a wa7da
+        if (Hotels != null){
+            Hotels.forEach(h -> h.setHotelier(null));
+            Hotels.clear();
+        }
+    }
+
+
 
     @Override
     public String toString() {
@@ -76,4 +105,12 @@ public class Hotelier {
                 ", email='" + emailGerant + '\'' +
                 ", statut='" + statutVerification + '\'' +
                 '}';    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (obj == null || getClass() != obj.getClass()) return false;
+        Hotelier hotelier = (Hotelier) obj;
+        return idHotelier == hotelier.idHotelier;
+    }
 }
