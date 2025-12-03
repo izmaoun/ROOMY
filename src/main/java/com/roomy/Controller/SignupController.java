@@ -9,10 +9,13 @@ import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import javafx.scene.control.TextInputDialog;
 import javafx.stage.Stage;
 import javafx.event.ActionEvent;
 import javafx.scene.Node;
 import org.mindrot.jbcrypt.BCrypt;
+
+import static com.roomy.Controller.VerificationController.sendOtpEmail;
 
 public class SignupController {
     @FXML private TextField nomField;
@@ -55,6 +58,25 @@ public class SignupController {
         // Vérifier si l'email existe déjà
         if (this.clientDAO.findByEmail(email) != null) {
             showAlert("Erreur", "Cet email est déjà utilisé.");
+            return;
+        }
+        String otp = generateOTP();
+        try{
+            sendOtpEmail(email, otp);
+
+        }catch(Exception e) {
+            showAlert("Erreur", "Erreur lors de l'envvoie du code OTP: " + e.getMessage());
+            return;
+        }
+        //entrer OTP par l'utilisateur
+        TextInputDialog otpDialog = new TextInputDialog();
+        otpDialog.setTitle("Vérification OTP");
+        otpDialog.setHeaderText("Un code OTP a été envoyé à votre email.");
+        otpDialog.setContentText("Veuillez entrer le code OTP :");
+
+        String userInputOtp = otpDialog.showAndWait().orElse("");
+        if (!userInputOtp.equals(otp)) {
+            showAlert("Erreur", "Code OTP incorrect.");
             return;
         }
 
@@ -132,4 +154,10 @@ public class SignupController {
         alert.setContentText(message);
         alert.showAndWait();
     }
+
+    private static String generateOTP(){
+        int OTP = (int)(Math.random() * 900000) + 100000;
+        return String.valueOf(OTP);
+    }
+
 }

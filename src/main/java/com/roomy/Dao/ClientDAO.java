@@ -71,4 +71,17 @@ import java.util.Optional;
             }
             return false;
         }
+        public boolean updatePassword(String email, String hashedPassword) {
+            try (Connection conn = DBConnection.getConnection()) {
+                String sql = "UPDATE client SET password = ? WHERE email = ?";
+                PreparedStatement stmt = conn.prepareStatement(sql);
+                stmt.setString(1, hashedPassword);
+                stmt.setString(2, email);
+                stmt.executeUpdate();
+                return true;
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            return false;
+        }
     }
