@@ -62,7 +62,7 @@ public class LoginController {
                     return;
                 }
                 if ("en_attente".equals(hotelier.getStatutVerification())) {
-                    lblError.setText("Votre compte est en attente de vérification.");
+                    openDashboard(event, "en_attente_verification.fxml", "En attente");
                     return;
                 }
                 showAlert("Succès", "Connexion Hôtelier réussie !");
@@ -128,8 +128,18 @@ public class LoginController {
 
     @FXML
     private void handleForgotPassword(ActionEvent event) {
-        showAlert("Information", "Fonctionnalité en cours de développement.");
-    }
+        try {
+            Parent root = FXMLLoader.load(getClass().getResource("/fxml/forgot_password.fxml"));
+            // Récupérer la fenêtre actuelle
+            Stage stage = (Stage)((Node)event.getSource()).getScene().getWindow();
+            // Remplacer la scène
+            stage.setTitle("mot de passe oublié");
+            stage.setScene(new Scene(root));
+
+            stage.show();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }    }
 
     @FXML
     private void handleSignupNav(ActionEvent event) {

@@ -5,24 +5,22 @@ module com.roomy {
 
     // Java SE
     requires java.sql;
-
-    // jBCrypt automatic module
-    requires jbcrypt;
+    requires java.mail;
 
     // Lombok est utilisé seulement à la compilation
     requires static lombok;
 
+    // Ajout du module jbcrypt pour accès à BCrypt
+    requires jbcrypt;
+
     // Open packages used by JavaFX FXMLLoader (reflection)
     opens com.roomy.Controller to javafx.fxml;
-    opens com.roomy.service to javafx.fxml;
-    opens com.roomy.database to javafx.fxml;
-    opens com.roomy.entities to javafx.fxml;
-    opens com.roomy.Dao to javafx.fxml;
+    opens com.roomy.entities to javafx.base;
+    opens com.roomy.service to javafx.graphics;
 
-    // Export packages that may be used across modules (optional but safe)
+    // Export packages that may be utilisés par d'autres modules
+    exports com.roomy;
     exports com.roomy.Controller;
-    exports com.roomy.service;
-    exports com.roomy.database;
     exports com.roomy.entities;
-    exports com.roomy.Dao;
+    exports com.roomy.service;
 }

@@ -9,12 +9,12 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<BorderPane fx:controller="com.roomy.Controller.DashAdminController" xmlns:fx="http://javafx.com/fxml">
+<BorderPane fx:controller="com.roomy.Controller.DashAdminController" xmlns:fx="http://javafx.com/fxml" style="-fx-background-color: #181818;">
     <!-- Top bar -->
     <top>
         <HBox style="-fx-background-color: #5a1d22; -fx-padding: 10; -fx-alignment: center-right;" spacing="12">
             <HBox style="-fx-alignment: center-left; -fx-spacing: 10; -fx-pref-width: 400;">
-                <ImageView fx:id="logo" fitHeight="36" fitWidth="120" pickOnBounds="true" preserveRatio="true" />
+                <ImageView fx:id="logo" fitHeight="36" fitWidth="120" pickOnBounds="true" preserveRatio="true" style="-fx-translate-x: -10; -fx-translate-y: -10;" />
             </HBox>
 
             <Label fx:id="lblAdminName" style="-fx-text-fill: white; -fx-font-weight: bold;" />
@@ -34,12 +34,12 @@
 
     <!-- Center content area -->
     <center>
-        <StackPane fx:id="centerStack" style="-fx-background-color: #0b0b0b; -fx-padding: 24;">
+        <StackPane fx:id="centerStack" style="-fx-background-color: #181818; -fx-padding: 24;">
             <!-- Validation pane -->
-            <AnchorPane fx:id="validationPane">
+            <AnchorPane fx:id="validationPane" style="-fx-background-color: #181818;">
                 <Label text="validation des demandes de collaboration des hôtels" style="-fx-font-size: 24; -fx-text-fill: #f2d6c6; -fx-background-color: transparent; -fx-padding: 8 12; -fx-border-radius: 10; -fx-background-radius: 10; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.6), 8,0,0,2);" layoutX="20" layoutY="10" />
-                <ScrollPane layoutX="20" layoutY="70" prefWidth="900" prefHeight="420">
-                    <VBox fx:id="validationList" spacing="12" style="-fx-padding: 12;">
+                <ScrollPane layoutX="20" layoutY="70" prefWidth="900" prefHeight="420" style="-fx-background: #181818; -fx-background-color: #181818;">
+                    <VBox fx:id="validationList" spacing="12" style="-fx-padding: 12; -fx-background-color: #181818;">
                         <!-- Placeholder table rows -->
                         <Label text="Tableau des demandes (placeholder)" style="-fx-text-fill: white;" />
                     </VBox>
@@ -47,20 +47,20 @@
             </AnchorPane>
 
             <!-- Users pane -->
-            <AnchorPane fx:id="usersPane" visible="false">
+            <AnchorPane fx:id="usersPane" visible="false" style="-fx-background-color: #181818;">
                 <Label text="Gestion des utilisateurs" style="-fx-font-size: 24; -fx-text-fill: #f2d6c6;" layoutX="20" layoutY="10" />
-                <ScrollPane layoutX="20" layoutY="70" prefWidth="900" prefHeight="420">
-                    <VBox fx:id="usersList" spacing="12" style="-fx-padding: 12;">
+                <ScrollPane layoutX="20" layoutY="70" prefWidth="900" prefHeight="420" style="-fx-background: #181818; -fx-background-color: #181818;">
+                    <VBox fx:id="usersList" spacing="12" style="-fx-padding: 12; -fx-background-color: #181818;">
                         <Label text="Liste utilisateurs (placeholder)" style="-fx-text-fill: white;" />
                     </VBox>
                 </ScrollPane>
             </AnchorPane>
 
             <!-- Stats pane -->
-            <AnchorPane fx:id="statsPane" visible="false">
+            <AnchorPane fx:id="statsPane" visible="false" style="-fx-background-color: #181818;">
                 <Label text="Statistiques" style="-fx-font-size: 24; -fx-text-fill: #f2d6c6;" layoutX="20" layoutY="10" />
-                <ScrollPane layoutX="20" layoutY="70" prefWidth="900" prefHeight="420">
-                    <VBox fx:id="statsList" spacing="12" style="-fx-padding: 12;">
+                <ScrollPane layoutX="20" layoutY="70" prefWidth="900" prefHeight="420" style="-fx-background: #181818; -fx-background-color: #181818;">
+                    <VBox fx:id="statsList" spacing="12" style="-fx-padding: 12; -fx-background-color: #181818;">
                         <Label text="Graphiques (placeholder)" style="-fx-text-fill: white;" />
                     </VBox>
                 </ScrollPane>

@@ -83,7 +83,10 @@ public class SingupHotelierController {
                 if (res) {
                     showAlert("Succès", "Inscription réussie ! Votre compte est en attente de vérification.");
                     clearFields();
-                    goToLogin(event);
+                    Parent root = FXMLLoader.load(getClass().getResource("/fxml/en_attente_verification.fxml"));
+                    Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+                    stage.setScene(new Scene(root));
+                    stage.show();
                 } else {
                     showAlert("Erreur", "Échec de l'inscription.");
                 }
