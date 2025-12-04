@@ -45,7 +45,7 @@ public class Hotel {
     public List<Chambre> getChambres(){
         return chambres == null ? List.of() : List.copyOf(chambres);
     }
-
+    // btw hado li lta7t (add, remove) ghadi ndirhom f les controllers je pense pour l'instant ma5asnix ndorhom hna mais ktebthom bax mansahomx :)
     public void addChambre(Chambre ch){
         if (ch == null) return;
         if (chambres == null) chambres = new ArrayList<>();
