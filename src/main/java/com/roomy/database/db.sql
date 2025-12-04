@@ -61,3 +61,23 @@ CREATE TABLE chambres (
                           FOREIGN KEY (id_hotel) REFERENCES hotels(id_hotel)
 );
 
+CREATE TABLE hotel_images (
+                              id_image INT AUTO_INCREMENT PRIMARY KEY,
+                              id_hotel INT NOT NULL,
+                              url VARCHAR(500) NOT NULL,
+                              description VARCHAR(255),
+                              FOREIGN KEY (id_hotel) REFERENCES hotels(id_hotel)
+                                  ON DELETE CASCADE
+);
+
+CREATE TABLE chambre_images (
+                                id_image INT AUTO_INCREMENT PRIMARY KEY,
+                                id_chambre INT NOT NULL,
+                                url VARCHAR(500) NOT NULL,
+                                description VARCHAR(255),
+                                FOREIGN KEY (id_chambre) REFERENCES chambres(id_chambre)
+                                    ON DELETE CASCADE
+);
+
+
+
