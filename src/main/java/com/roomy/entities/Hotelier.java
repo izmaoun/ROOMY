@@ -6,17 +6,10 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Hotelier {
-    private int idHotelier;
+public class Hotelier extends Utilisateur {
     private String nomEtablissement;
-    private String nomGerant;
-    private String prenomGerant;
     private String ville;
-    private String emailGerant;
-    private String telephone;
-    private String password;
     private String ice;
-    private LocalDateTime dateInscription;
     private StatutVerification statutVerification;// "en_attente", "verifie", "rejete"
     private List<Hotel> Hotels;
 
@@ -27,12 +20,12 @@ public class Hotelier {
                     String ville, String emailGerant, String telephone,
                     String password, String ice) {
         this.nomEtablissement = nomEtablissement;
-        this.nomGerant = nomGerant;
-        this.prenomGerant = prenomGerant;
+        this.nom = nomGerant;
+        this.prenom = prenomGerant;
         this.ville = ville;
-        this.emailGerant = emailGerant;
+        this.email = emailGerant;
         this.telephone = telephone;
-        this.password = password;
+        this.motDePasseHash = password;
         this.ice = ice;
         this.dateInscription = LocalDateTime.now();
         this.statutVerification = StatutVerification.en_attente;
@@ -40,29 +33,29 @@ public class Hotelier {
     }
 
     // Getters et Setters
-    public int getIdHotelier() { return idHotelier; }
-    public void setIdHotelier(int idHotelier) { this.idHotelier = idHotelier; }
+    public int getIdHotelier() { return id; }
+    public void setIdHotelier(int idHotelier) { this.id = idHotelier; }
 
     public String getNomEtablissement() { return nomEtablissement; }
     public void setNomEtablissement(String nomEtablissement) { this.nomEtablissement = nomEtablissement; }
 
-    public String getNomGerant() { return nomGerant; }
-    public void setNomGerant(String nomGerant) { this.nomGerant = nomGerant; }
+    public String getNomGerant() { return nom; }
+    public void setNomGerant(String nomGerant) { this.nom = nomGerant; }
 
-    public String getPrenomGerant() { return prenomGerant; }
-    public void setPrenomGerant(String prenomGerant) { this.prenomGerant = prenomGerant; }
+    public String getPrenomGerant() { return prenom; }
+    public void setPrenomGerant(String prenomGerant) { this.prenom = prenomGerant; }
 
     public String getVille() { return ville; }
     public void setVille(String ville) { this.ville = ville; }
 
-    public String getEmailGerant() { return emailGerant; }
-    public void setEmailGerant(String emailGerant) { this.emailGerant = emailGerant; }
+    public String getEmailGerant() { return email; }
+    public void setEmailGerant(String emailGerant) { this.email = emailGerant; }
 
     public String getTelephone() { return telephone; }
     public void setTelephone(String telephone) { this.telephone = telephone; }
 
-    public String getPassword() { return password; }
-    public void setPassword(String password) { this.password = password; }
+    public String getPassword() { return motDePasseHash; }
+    public void setPassword(String password) { this.motDePasseHash = password; }
 
     public String getIce() { return ice; }
     public void setIce(String ice) { this.ice = ice; }
@@ -98,11 +91,11 @@ public class Hotelier {
 
     @Override
     public String toString() {
-        return "Hotelier{id=" + idHotelier +
+        return "Hotelier{id=" + id +
                 ", établissement='" + nomEtablissement + '\'' +
-                ", gérant='" + prenomGerant + " " + nomGerant + '\'' +
+                ", gérant='" + prenom + " " + nom + '\'' +
                 ", ville='" + ville + '\'' +
-                ", email='" + emailGerant + '\'' +
+                ", email='" + email + '\'' +
                 ", statut='" + statutVerification + '\'' +
                 '}';    }
 
@@ -111,6 +104,6 @@ public class Hotelier {
         if (this == obj) return true;
         if (obj == null || getClass() != obj.getClass()) return false;
         Hotelier hotelier = (Hotelier) obj;
-        return idHotelier == hotelier.idHotelier;
+        return id == hotelier.id;
     }
 }

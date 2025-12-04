@@ -1,36 +1,34 @@
 package com.roomy.entities;
 
-public class Admin {
-    private int idAdmin;
+import java.time.LocalDateTime;
+
+public class Admin extends Utilisateur {
     private String username;
-    private String password;
-    private String email;
 
     // Constructeurs
     public Admin() {}
 
-    public Admin(String username, String password, String email) {
+    public Admin(String nom, String prenom, String email, String motDePasseHash, String username, String telephone, LocalDateTime dateInscription) {
+        super(nom, prenom, email, telephone, motDePasseHash, dateInscription);
         this.username = username;
-        this.password = password;
-        this.email = email;
     }
 
     // Getters et Setters
-    public int getIdAdmin() { return idAdmin; }
-    public void setIdAdmin(int idAdmin) { this.idAdmin = idAdmin; }
+    public int getIdAdmin() { return id; }
+    public void setIdAdmin(int idAdmin) { this.id = idAdmin; }
 
     public String getUsername() { return username; }
     public void setUsername(String username) { this.username = username; }
 
-    public String getPassword() { return password; }
-    public void setPassword(String password) { this.password = password; }
+    public String getPassword() { return motDePasseHash; }
+    public void setPassword(String password) { this.motDePasseHash = password; }
 
     public String getEmail() { return email; }
     public void setEmail(String email) { this.email = email; }
 
     @Override
     public String toString() {
-        return "Administrateur{idAdmin=" + idAdmin +
+        return "Administrateur{idAdmin=" + id +
                 ", username='" + username + '\'' +
                 ", email='" + email + '\'' +
                 '}';

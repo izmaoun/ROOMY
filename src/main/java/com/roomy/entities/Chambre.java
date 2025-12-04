@@ -2,10 +2,10 @@ package com.roomy.entities;
 
 import com.roomy.ENUMS.Statut_technique_Chambre;
 import com.roomy.ENUMS.TypeChambre;
+import com.roomy.ENUMS.StatutReservation;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 public class Chambre {
@@ -20,9 +20,12 @@ public class Chambre {
     private Hotel hotel;
     private List<Image_chambre> imgs;
 
-    public Chambre (){}
-    public Chambre(int id, int numchambre, TypeChambre t,double prix, int capacity, int surface,
-                   Statut_technique_Chambre statut,String description, Hotel h ) {
+    public Chambre () {
+        this.imgs = new ArrayList<>();
+    }
+
+    public Chambre(int id, int numchambre, TypeChambre t, double prix, int capacity, int surface,
+                   Statut_technique_Chambre statut, String description, Hotel h ) {
         this.id = id;
         this.numchambre = numchambre;
         this.type = t;
@@ -35,9 +38,7 @@ public class Chambre {
         this.imgs = new ArrayList<>();
     }
 
-    //getters, setters
-
-
+    // Getters et setters
     public int getId() { return id; }
     public void setId(int id) { this.id = id; }
     public int getNumchambre() { return numchambre; }
@@ -56,25 +57,45 @@ public class Chambre {
     public void setDescription(String description) { this.description = description; }
     public Hotel getHotel() { return hotel; }
     public void setHotel(Hotel hotel) { this.hotel = hotel; }
+    public List<Image_chambre> getImgs() { return imgs; }
 
-    public List<Image_chambre> getImgs(){ return imgs; }
-
-    //public boolean estDisponible(LocalDate datedebut, LocalDate datefin){
-            //li xadin lblan ta3 reservation hadi raha en relation avec reservation class
-    //}
-    public void addImg (Image_chambre img){
+    public void addImg(Image_chambre img){
         if (img == null) return;
-        if (imgs == null) imgs = new ArrayList<>();
         imgs.add(img);
         img.setChambre(this);
     }
 
-    public void rmvImg (Image_chambre img){
+    public void rmvImg(Image_chambre img){
         if(img == null) return;
-        if (imgs != null && img != null){
-            imgs.remove(img);
-            img.setChambre(null);
+        imgs.remove(img);
+        img.setChambre(null);
+    }
+
+    /**
+     * Vérifie si la chambre est disponible pour la période demandée.
+     * @param dateDebut début du séjour
+     * @param dateFin fin du séjour
+     * @param reservations liste de toutes les réservations du système
+     * @return true si la chambre est disponible, false sinon
+     */
+    public boolean estDisponible(LocalDate dateDebut, LocalDate dateFin, List<Reservation> reservations) {
+        if (reservations == null || reservations.isEmpty()) {
+            return true;
         }
+
+        for (Reservation r : reservations) {
+            // Vérifie uniquement les réservations confirmées pour cette chambre
+            if (r.getChambre().equals(this) && r.getStatut() == StatutReservation.CONFIRMEE) {
+                LocalDate debutRes = r.getDateDebutSejour().toLocalDate();
+                LocalDate finRes = r.getDateFinSejour().toLocalDate();
+
+                // Si les dates se chevauchent, la chambre n'est pas disponible
+                if (!(dateFin.isBefore(debutRes) || dateDebut.isAfter(finRes))) {
+                    return false;
+                }
+            }
+        }
+        return true;
     }
 
     @Override
@@ -97,6 +118,6 @@ public class Chambre {
         if(this == obj) return true;
         if(obj == null || getClass() != obj.getClass()) return false;
         Chambre ch = (Chambre) obj;
-        return (id == ch.id )&& (numchambre == ch.numchambre);
+        return id == ch.id && numchambre == ch.numchambre;
     }
 }

@@ -2,33 +2,21 @@ package com.roomy.entities;
 
 import java.time.LocalDateTime;
 
-public class Client {
-    private int idClient;
-    private String nom;
-    private String prenom;
-    private String email;
-    private String telephone;
-    private String password; // Hash BCrypt
-    private LocalDateTime dateInscription;
+public class Client extends Utilisateur {
     private boolean estBloque;
 
     // Constructeur vide (obligatoire pour JDBC)
     public Client() {}
 
     // Constructeur pour l'inscription
-    public Client(String nom, String prenom, String email, String telephone, String password) {
-        this.nom = nom;
-        this.prenom = prenom;
-        this.email = email;
-        this.telephone = telephone;
-        this.password = password;
-        this.dateInscription = LocalDateTime.now();
+    public Client(String nom, String prenom, String email, String telephone, String motDePasseHash) {
+        super(nom, prenom, email, motDePasseHash, telephone, LocalDateTime.now());
         this.estBloque = false;
     }
 
     // Getters et Setters
-    public int getIdClient() { return idClient; }
-    public void setIdClient(int idClient) { this.idClient = idClient; }
+    public int getIdClient() { return this.id; }
+    public void setIdClient(int idClient) { this.id = idClient; }
 
     public String getNom() { return nom; }
     public void setNom(String nom) { this.nom = nom; }
@@ -42,8 +30,8 @@ public class Client {
     public String getTelephone() { return telephone; }
     public void setTelephone(String telephone) { this.telephone = telephone; }
 
-    public String getPassword() { return password; }
-    public void setPassword(String password) { this.password = password; }
+    public String getPassword() { return this.motDePasseHash; }
+    public void setPassword(String password) { this.motDePasseHash = password; }
 
     public LocalDateTime getDateInscription() { return dateInscription; }
     public void setDateInscription(LocalDateTime dateInscription) { this.dateInscription = dateInscription; }
@@ -53,7 +41,7 @@ public class Client {
 
     @Override
     public String toString() {
-        return "Client{idClient=" + idClient +
+        return "Client{idClient=" + id +
                 ", nom='" + nom + '\'' +
                 ", prenom='" + prenom + '\'' +
                 ", email='" + email + '\'' +
