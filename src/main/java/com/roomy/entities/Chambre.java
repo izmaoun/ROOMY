@@ -4,7 +4,9 @@ import com.roomy.ENUMS.Statut_technique_Chambre;
 import com.roomy.ENUMS.TypeChambre;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 public class Chambre {
     private int id;
@@ -16,6 +18,7 @@ public class Chambre {
     private Statut_technique_Chambre statut;
     private String description;
     private Hotel hotel;
+    private List<Image_chambre> imgs;
 
     public Chambre (){}
     public Chambre(int id, int numchambre, TypeChambre t,double prix, int capacity, int surface,
@@ -29,6 +32,7 @@ public class Chambre {
         this.statut = statut;
         this.description = description;
         this.hotel = h;
+        this.imgs = new ArrayList<>();
     }
 
     //getters, setters
@@ -53,9 +57,25 @@ public class Chambre {
     public Hotel getHotel() { return hotel; }
     public void setHotel(Hotel hotel) { this.hotel = hotel; }
 
+    public List<Image_chambre> getImgs(){ return imgs; }
+
     //public boolean estDisponible(LocalDate datedebut, LocalDate datefin){
             //li xadin lblan ta3 reservation hadi raha en relation avec reservation class
     //}
+    public void addImg (Image_chambre img){
+        if (img == null) return;
+        if (imgs == null) imgs = new ArrayList<>();
+        imgs.add(img);
+        img.setChambre(this);
+    }
+
+    public void rmvImg (Image_chambre img){
+        if(img == null) return;
+        if (imgs != null && img != null){
+            imgs.remove(img);
+            img.setChambre(null);
+        }
+    }
 
     @Override
     public String toString() {

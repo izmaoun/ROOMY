@@ -11,6 +11,7 @@ public class Hotel {
     private int etoiles;
     private Hotelier hotelier;
     private List<Chambre> chambres;
+    private List<Image_hotel> imgs;
 
     public Hotel(){}
 
@@ -21,6 +22,7 @@ public class Hotel {
         this.etoiles = e;
         this.hotelier = hotelier;
         this.chambres = new ArrayList<>();
+        this.imgs = new ArrayList<>();
     }
 
     //getters, setters
@@ -45,6 +47,9 @@ public class Hotel {
     public List<Chambre> getChambres(){
         return chambres == null ? List.of() : List.copyOf(chambres);
     }
+
+    public List<Image_hotel> getImgs() { return imgs; }
+
     // btw hado li lta7t (add, remove) ghadi ndirhom f les controllers je pense pour l'instant ma5asnix ndorhom hna mais ktebthom bax mansahomx :)
     public void addChambre(Chambre ch){
         if (ch == null) return;
@@ -60,6 +65,22 @@ public class Hotel {
             ch.setHotel(null);
         }
     }
+
+    public void addImg (Image_hotel img){
+        if (img == null) return;
+        if (imgs == null) imgs = new ArrayList<>();
+        imgs.add(img);
+        img.setHotel(this);
+    }
+
+    public void rmvImg (Image_hotel img){
+        if(img == null) return;
+        if (imgs != null && img != null){
+            imgs.remove(img);
+            img.setHotel(null);
+        }
+    }
+
 
     @Override
     public String toString() {
