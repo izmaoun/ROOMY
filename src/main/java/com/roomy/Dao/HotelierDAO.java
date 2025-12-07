@@ -2,6 +2,8 @@ package com.roomy.Dao;
 
 import com.roomy.entities.Hotelier;
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class HotelierDAO {
 
@@ -34,6 +36,55 @@ public class HotelierDAO {
             e.printStackTrace();
         }
         return null;
+    }
+
+    /**
+     * Récupère tous les hôteliers (tous statuts confondus)
+     * Triés par statut : en_attente > verifie > rejete
+     * @return Liste de tous les hôteliers
+     */
+    public List<Hotelier> findAll() {
+        List<Hotelier> hoteliers = new ArrayList<>();
+        String query = "SELECT * FROM hoteliers ORDER BY " +
+                "CASE statut_verification " +
+                "  WHEN 'en_attente' THEN 1 " +
+                "  WHEN 'verifie' THEN 2 " +
+                "  WHEN 'rejete' THEN 3 " +
+                "  ELSE 4 " +
+                "END, " +
+                "nom_etablissement ASC";
+
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(query);
+             ResultSet rs = stmt.executeQuery()) {
+
+            while (rs.next()) {
+                Hotelier h = new Hotelier();
+                h.setIdHotelier(rs.getInt("id_hotelier"));
+                h.setNomEtablissement(rs.getString("nom_etablissement"));
+                h.setNomGerant(rs.getString("nom_gerant"));
+                h.setPrenomGerant(rs.getString("prenom_gerant"));
+                h.setVille(rs.getString("ville"));
+                h.setEmailGerant(rs.getString("email_gerant"));
+                h.setTelephone(rs.getString("telephone"));
+                h.setPassword(rs.getString("password"));
+                h.setIce(rs.getString("ice"));
+
+                Timestamp ts = rs.getTimestamp("date_inscription");
+                if (ts != null) {
+                    h.setDateInscription(ts.toLocalDateTime());
+                }
+
+                h.setStatutVerification(rs.getString("statut_verification"));
+                hoteliers.add(h);
+            }
+
+        } catch (SQLException e) {
+            System.err.println("Erreur lors de la récupération de tous les hôteliers: " + e.getMessage());
+            e.printStackTrace();
+        }
+
+        return hoteliers;
     }
 
     // Trouver un hotelier par ICE
@@ -101,7 +152,12 @@ public class HotelierDAO {
         return false;
     }
 
-    // Mettre à jour le statut de vérification
+    /**
+     * Mettre à jour le statut de vérification
+     * @param idHotelier ID de l'hôtelier
+     * @param statut Nouveau statut (verifie, rejete, en_attente)
+     * @return true si la mise à jour a réussi
+     */
     public boolean updateStatutVerification(int idHotelier, String statut) {
         String sql = "UPDATE hoteliers SET statut_verification = ? WHERE id_hotelier = ?";
         try (Connection c = DBConnection.getConnection();
@@ -112,7 +168,7 @@ public class HotelierDAO {
 
             int affectedRows = ps.executeUpdate();
             if (affectedRows > 0) {
-                System.out.println("Statut de vérification mis à jour pour l'hotelier ID: " + idHotelier);
+                System.out.println("Statut de vérification mis à jour pour l'hotelier ID: " + idHotelier + " => " + statut);
                 return true;
             }
         } catch (SQLException e) {
@@ -133,9 +189,9 @@ public class HotelierDAO {
     }
 
     // Lister les hoteliers en attente de validation
-    public java.util.List<Hotelier> findAllEnAttente() {
+    public List<Hotelier> findAllEnAttente() {
         String sql = "SELECT * FROM hoteliers WHERE statut_verification = 'en_attente'";
-        java.util.List<Hotelier> result = new java.util.ArrayList<>();
+        List<Hotelier> result = new ArrayList<>();
         try (Connection c = DBConnection.getConnection();
              PreparedStatement ps = c.prepareStatement(sql)) {
 
@@ -151,7 +207,7 @@ public class HotelierDAO {
                 hotelier.setTelephone(rs.getString("telephone"));
                 hotelier.setPassword(rs.getString("password"));
                 hotelier.setIce(rs.getString("ice"));
-                java.sql.Timestamp ts = rs.getTimestamp("date_inscription");
+                Timestamp ts = rs.getTimestamp("date_inscription");
                 if (ts != null) hotelier.setDateInscription(ts.toLocalDateTime());
                 hotelier.setStatutVerification(rs.getString("statut_verification"));
                 result.add(hotelier);

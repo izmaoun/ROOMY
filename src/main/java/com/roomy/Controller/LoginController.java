@@ -91,7 +91,7 @@ public class LoginController {
                     Scene scene = new Scene(root);
                     stage.setScene(scene);
                     stage.setMaximized(true);
-                    stage.setTitle("Dashboard Admin");
+                    stage.setTitle("ROOMY - Dashboard Admin");
                     stage.show();
                 } catch (IOException e) {
                     logError(e, "Erreur lors du chargement du fichier FXML dash_admin.fxml");
