@@ -5,6 +5,37 @@ import com.roomy.entities.Hotelier;
 import java.sql.*;
 
 public class HotelierDAO {
+    public Hotelier findById(int idHotelier) {
+        String sql = "SELECT * FROM hoteliers WHERE id_hotelier = ?";
+        try (Connection c = DBConnection.getConnection();
+             PreparedStatement ps = c.prepareStatement(sql)) {
+
+            ps.setInt(1, idHotelier);
+            ResultSet rs = ps.executeQuery();
+
+            if (rs.next()) {
+                Hotelier hotelier = new Hotelier();
+                hotelier.setIdHotelier(rs.getInt("id_hotelier"));
+                hotelier.setNomEtablissement(rs.getString("nom_etablissement"));
+                hotelier.setNomGerant(rs.getString("nom_gerant"));
+                hotelier.setPrenomGerant(rs.getString("prenom_gerant"));
+                hotelier.setVille(rs.getString("ville"));
+                hotelier.setEmailGerant(rs.getString("email_gerant"));
+                hotelier.setTelephone(rs.getString("telephone"));
+                hotelier.setPassword(rs.getString("password"));
+                hotelier.setIce(rs.getString("ice"));
+                hotelier.setDateInscription(rs.getTimestamp("date_inscription").toLocalDateTime());
+                hotelier.setStatutVerification(
+                        StatutVerification.valueOf(rs.getString("statut_verification"))
+                );
+                return hotelier;
+            }
+
+        } catch (SQLException e) {
+            System.err.println("Erreur Hotelier findById : " + e.getMessage());
+        }
+        return null;
+    }
 
     // Trouver un hotelier par email (pour le login)
     public Hotelier findByEmail(String email) {

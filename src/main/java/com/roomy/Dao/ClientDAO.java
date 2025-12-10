@@ -6,6 +6,34 @@ import java.util.List;
 import java.util.Optional;
 
     public class ClientDAO {
+        public Client findById(int id) {
+            String sql = "SELECT * FROM clients WHERE id_client = ?";
+
+            try (Connection c = DBConnection.getConnection();
+                 PreparedStatement ps = c.prepareStatement(sql)) {
+
+                ps.setInt(1, id);
+                ResultSet rs = ps.executeQuery();
+
+                if (rs.next()) {
+                    Client client = new Client();
+                    client.setIdClient(rs.getInt("id_client"));
+                    client.setNom(rs.getString("nom"));
+                    client.setPrenom(rs.getString("prenom"));
+                    client.setEmail(rs.getString("email"));
+                    client.setTelephone(rs.getString("telephone"));
+                    client.setPassword(rs.getString("password"));
+                    client.setDateInscription(rs.getTimestamp("date_inscription").toLocalDateTime());
+                    client.setEstBloque(rs.getBoolean("est_bloque"));
+                    return client;
+                }
+            } catch (SQLException e) {
+                System.err.println("Erreur lors du findById Client : " + e.getMessage());
+            }
+
+            return null;
+        }
+
 
         // Trouver un client par email (pour le login)
         public Client findByEmail(String email) {

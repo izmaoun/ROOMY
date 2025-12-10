@@ -13,9 +13,18 @@ public class Image_hotel {
         this.description=description;
         this.hotel=hotel;
     }
+    public int getId() { return id; }
+    public void setId(int id) { this.id = id; }
 
-    public void setHotel (Hotel hotel){
-        this.hotel=hotel;
+    public String getUrl() { return url; }
+    public void setUrl(String url) { this.url = url; }
+
+    public String getDescription() { return description; }
+    public void setDescription(String description) { this.description = description; }
+
+    public Hotel getHotel() { return hotel; }
+    public void setHotel(Hotel hotel) {
+        this.hotel = hotel;
     }
 
     @Override

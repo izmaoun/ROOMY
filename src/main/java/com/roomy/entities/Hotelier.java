@@ -6,7 +6,16 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Hotelier extends Utilisateur {
+public class Hotelier {
+    // Inlined fields from former Utilisateur
+    protected int id;
+    protected String nom;
+    protected String prenom;
+    protected String email;
+    protected String motDePasseHash;
+    protected String telephone;
+    protected LocalDateTime dateInscription;
+
     private String nomEtablissement;
     private String ville;
     private String ice;

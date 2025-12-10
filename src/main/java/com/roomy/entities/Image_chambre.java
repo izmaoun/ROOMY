@@ -6,18 +6,50 @@ public class Image_chambre {
     private String description;
     private Chambre chambre;
 
-    public Image_chambre(){}
-    public Image_chambre(int id, String url, String description, Chambre ch) {
+    public Image_chambre() {}
+
+    public Image_chambre(int id, String url, String description, Chambre chambre) {
         this.id = id;
-        this.url=url;
-        this.description=description;
-        this.chambre=ch;
+        this.url = url;
+        this.description = description;
+        this.chambre = chambre;
     }
 
-    public void setChambre (Chambre ch){
-        this.chambre=ch;
+    // ---------- GETTERS ----------
+    public int getId() {
+        return id;
     }
 
+    public String getUrl() {
+        return url;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public Chambre getChambre() {
+        return chambre;
+    }
+
+    // ---------- SETTERS ----------
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public void setChambre(Chambre chambre) {
+        this.chambre = chambre;
+    }
+
+    // ---------- EQUALS ----------
     @Override
     public boolean equals(Object obj) {
         if (this == obj) return true;
@@ -26,5 +58,12 @@ public class Image_chambre {
         return this.id == img.id && this.url.equals(img.url);
     }
 
+    @Override
+    public String toString() {
+        return "Image_chambre{" +
+                "id=" + id +
+                ", url='" + url + '\'' +
+                ", description='" + description + '\'' +
+                '}';
+    }
 }
-

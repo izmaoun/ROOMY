@@ -2,7 +2,16 @@ package com.roomy.entities;
 
 import java.time.LocalDateTime;
 
-public class Client extends Utilisateur {
+public class Client {
+    // Inlined fields from former Utilisateur
+    protected int id;
+    protected String nom;
+    protected String prenom;
+    protected String email;
+    protected String motDePasseHash;
+    protected String telephone;
+    protected LocalDateTime dateInscription;
+
     private boolean estBloque;
 
     // Constructeur vide (obligatoire pour JDBC)
@@ -10,7 +19,12 @@ public class Client extends Utilisateur {
 
     // Constructeur pour l'inscription
     public Client(String nom, String prenom, String email, String telephone, String motDePasseHash) {
-        super(nom, prenom, email, motDePasseHash, telephone, LocalDateTime.now());
+        this.nom = nom;
+        this.prenom = prenom;
+        this.email = email;
+        this.telephone = telephone;
+        this.motDePasseHash = motDePasseHash;
+        this.dateInscription = LocalDateTime.now();
         this.estBloque = false;
     }
 

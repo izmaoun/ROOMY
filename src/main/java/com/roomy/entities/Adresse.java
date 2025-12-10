@@ -1,33 +1,96 @@
 package com.roomy.entities;
 
 public class Adresse {
+
+    private int idAdresse;
     private String rue;
     private String ville;
     private String codepostal;
     private String pays;
 
-    public Adresse(){}
+    // Constructeur vide
+    public Adresse() {}
 
-    public Adresse(String rue, String ville, String codepostal, String pays){
+    // Constructeur AVEC id (utilisé quand on lit depuis la BD)
+    public Adresse(int idAdresse, String rue, String ville, String codepostal, String pays) {
+        this.idAdresse = idAdresse;
         this.rue = rue;
-        this.ville=ville;
-        this.codepostal=codepostal;
-        this.pays=pays;
+        this.ville = ville;
+        this.codepostal = codepostal;
+        this.pays = pays;
     }
 
+    // Constructeur SANS id (utilisé avant insertion BD)
+    public Adresse(String rue, String ville, String codepostal, String pays) {
+        this.rue = rue;
+        this.ville = ville;
+        this.codepostal = codepostal;
+        this.pays = pays;
+    }
+
+    // -------------------------
+    // Getters & Setters
+    // -------------------------
+    public int getIdAdresse() {
+        return idAdresse;
+    }
+
+    public void setIdAdresse(int idAdresse) {
+        this.idAdresse = idAdresse;
+    }
+
+    public String getRue() {
+        return rue;
+    }
+
+    public void setRue(String rue) {
+        this.rue = rue;
+    }
+
+    public String getVille() {
+        return ville;
+    }
+
+    public void setVille(String ville) {
+        this.ville = ville;
+    }
+
+    public String getCodepostal() {
+        return codepostal;
+    }
+
+    public void setCodepostal(String codepostal) {
+        this.codepostal = codepostal;
+    }
+
+    public String getPays() {
+        return pays;
+    }
+
+    public void setPays(String pays) {
+        this.pays = pays;
+    }
+
+    // -------------------------
+    // toString
+    // -------------------------
     @Override
     public String toString() {
-        return "rue : "+ rue+
-                "ville :"+ ville +
-                "codepostal :"+ codepostal+
-                "pays : "+ pays;
+        return rue + ", " + ville + " " + codepostal + ", " + pays;
     }
 
     @Override
     public boolean equals(Object obj) {
         if (this == obj) return true;
-        if ( obj == null || this.getClass() != obj.getClass() ) return false;
-        Adresse adresse = (Adresse)obj;
-        return this.rue.equals(rue) && this.ville.equals(ville) && this.codepostal.equals(codepostal) && this.pays.equals(pays);
+        if (obj == null || getClass() != obj.getClass()) return false;
+
+        Adresse a = (Adresse) obj;
+
+        return this.idAdresse == a.idAdresse;
+    }
+
+    @Override
+    public int hashCode() {
+        return Integer.hashCode(idAdresse);
     }
 }

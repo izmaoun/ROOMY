@@ -79,5 +79,18 @@ CREATE TABLE chambre_images (
                                     ON DELETE CASCADE
 );
 
-
-
+CREATE TABLE reservations (
+    id_reservation INT AUTO_INCREMENT PRIMARY KEY,
+    id_client INT NOT NULL,
+    id_chambre INT,
+    date_reservation TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    date_debut_sejour DATETIME NOT NULL,
+    date_fin_sejour DATETIME NOT NULL,
+    nombre_personnes INT NOT NULL,
+    montant_total DECIMAL(10,2) NOT NULL,
+    statut ENUM('CONFIRMEE','ANNULEE','EN_ATTENTE','TERMINEE') DEFAULT 'EN_ATTENTE',
+    INDEX idx_reservations_client (id_client),
+    INDEX idx_reservations_chambre (id_chambre),
+    CONSTRAINT fk_reservations_client FOREIGN KEY (id_client) REFERENCES clients(id_client) ON DELETE RESTRICT ON UPDATE CASCADE,
+    CONSTRAINT fk_reservations_chambre FOREIGN KEY (id_chambre) REFERENCES chambres(id_chambre) ON DELETE SET NULL ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
