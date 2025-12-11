@@ -29,3 +29,61 @@ CREATE TABLE administrateurs (
                              password VARCHAR(255) NOT NULL,
                              email VARCHAR(255) NOT NULL UNIQUE
 );
+
+CREATE TABLE adresses (
+                          id_adresse INT AUTO_INCREMENT PRIMARY KEY,
+                          rue VARCHAR(255),
+                          ville VARCHAR(100),
+                          codepostal VARCHAR(20),
+                          pays VARCHAR(50)
+);
+
+CREATE TABLE hotels (
+                        id_hotel INT AUTO_INCREMENT PRIMARY KEY,
+                        nom_hotel VARCHAR(100) NOT NULL,
+                        description TEXT,
+                        id_adresse INT,
+                        etoiles INT,
+                        id_hotelier INT,
+                        FOREIGN KEY (id_adresse) REFERENCES adresses(id_adresse),
+                        FOREIGN KEY (id_hotelier) REFERENCES hoteliers(id_hotelier)
+);
+
+CREATE TABLE chambres (
+                          id_chambre INT AUTO_INCREMENT PRIMARY KEY,
+                          num_chambre INT NOT NULL,
+                          type ENUM('Simple', 'Double', 'Suite', 'Familiale') NOT NULL,
+                          prix_nuit DECIMAL(10,2) NOT NULL,
+                          capacity INT NOT NULL,
+                          surface INT,
+                          statut ENUM('disponible', 'en_maintenance', 'hors_service', 'en_netoyage') DEFAULT 'disponible',
+                          description TEXT,
+                          id_hotel INT NOT NULL,
+                          FOREIGN KEY (id_hotel) REFERENCES hotels(id_hotel)
+);
+
+CREATE TABLE hotel_images (
+                              id_image INT AUTO_INCREMENT PRIMARY KEY,
+                              id_hotel INT NOT NULL,
+                              url VARCHAR(500) NOT NULL,
+                              description VARCHAR(255),
+                              FOREIGN KEY (id_hotel) REFERENCES hotels(id_hotel)
+                                  ON DELETE CASCADE
+);
+
+CREATE TABLE chambre_images (
+                                id_image INT AUTO_INCREMENT PRIMARY KEY,
+                                id_chambre INT NOT NULL,
+                                url VARCHAR(500) NOT NULL,
+                                description VARCHAR(255),
+                                FOREIGN KEY (id_chambre) REFERENCES chambres(id_chambre)
+                                    ON DELETE CASCADE
+);
+CREATE TABLE hotel_services (
+    id_service INT AUTO_INCREMENT PRIMARY KEY,
+    id_hotel INT NOT NULL,
+    service_name VARCHAR(100) NOT NULL,
+    FOREIGN KEY (id_hotel) REFERENCES hotels(id_hotel) ON DELETE CASCADE
+);
+
+
