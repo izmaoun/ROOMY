@@ -23,8 +23,6 @@ public abstract class Utilisateur {
     protected String telephone;
     protected LocalDateTime dateInscription;
 
-    public Utilisateur (){}
-
     public Utilisateur (String nom, String prenom, String email, String motDePasseHash, String telephone, LocalDateTime dateInscription){
         this.nom = nom;
         this.prenom = prenom;

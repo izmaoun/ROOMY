@@ -13,7 +13,16 @@ public class Image_hotel {
         this.description=description;
         this.hotel=hotel;
     }
+    public int getId() { return id; }
+    public void setId(int id) { this.id = id; }
 
+    public String getUrl() { return url; }           // ✅ GETTER MANQUANT
+    public void setUrl(String url) { this.url = url; } // ✅ SETTER MANQUANT
+
+    public String getDescription() { return description; } // ✅ GETTER MANQUANT
+    public void setDescription(String description) { this.description = description; } // ✅ SETTER MANQUANT
+
+    public Hotel getHotel() { return hotel; }
     public void setHotel (Hotel hotel){
         this.hotel=hotel;
     }

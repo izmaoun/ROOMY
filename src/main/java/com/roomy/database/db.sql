@@ -41,6 +41,7 @@ CREATE TABLE adresses (
 CREATE TABLE hotels (
                         id_hotel INT AUTO_INCREMENT PRIMARY KEY,
                         nom_hotel VARCHAR(100) NOT NULL,
+                        description TEXT,
                         id_adresse INT,
                         etoiles INT,
                         id_hotelier INT,
@@ -78,6 +79,11 @@ CREATE TABLE chambre_images (
                                 FOREIGN KEY (id_chambre) REFERENCES chambres(id_chambre)
                                     ON DELETE CASCADE
 );
-
+CREATE TABLE hotel_services (
+    id_service INT AUTO_INCREMENT PRIMARY KEY,
+    id_hotel INT NOT NULL,
+    service_name VARCHAR(100) NOT NULL,
+    FOREIGN KEY (id_hotel) REFERENCES hotels(id_hotel) ON DELETE CASCADE
+);
 
 

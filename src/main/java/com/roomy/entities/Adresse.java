@@ -14,6 +14,17 @@ public class Adresse {
         this.codepostal=codepostal;
         this.pays=pays;
     }
+    public String getRue() { return rue; }
+    public void setRue(String rue) { this.rue = rue; }
+
+    public String getVille() { return ville; }           // ✅ GETTER MANQUANT
+    public void setVille(String ville) { this.ville = ville; } // ✅ SETTER MANQUANT
+
+    public String getCodepostal() { return codepostal; }
+    public void setCodepostal(String codepostal) { this.codepostal = codepostal; }
+
+    public String getPays() { return pays; }             // ✅ GETTER MANQUANT
+    public void setPays(String pays) { this.pays = pays; } // ✅ SETTER MANQUANT
 
     @Override
     public String toString() {
