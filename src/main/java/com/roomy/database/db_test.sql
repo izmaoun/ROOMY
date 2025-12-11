@@ -1,5 +1,3 @@
-
--- 1. D'abord, insérer un hotelier (nécessaire pour la clé étrangère)
 INSERT INTO hoteliers (nom_etablissement, nom_gerant, prenom_gerant, ville, email_gerant, telephone, password, ice, statut_verification)
 VALUES
 ('LuxeStay Hotels', 'Dupont', 'Jean', 'Paris', 'jean@luxestay.com', '0612345678', '$2a$10$hashedpassword', 'ICE123456789', 'verifie'),
