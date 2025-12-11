@@ -76,14 +76,14 @@ public class LandingPageController {
         // Listener pour le slider
         priceSlider.valueProperty().addListener((obs, oldVal, newVal) -> {
             int value = newVal.intValue();
-            priceRangeLabel.setText("Jusqu'à $" + value + " / nuit");
+            priceRangeLabel.setText("Up to $\" + value + \" / night");
             maxPriceField.setText(String.valueOf(value));
         });
 
         // Valeurs par défaut
         minPriceField.setText("0");
         maxPriceField.setText("3000");
-        priceRangeLabel.setText("Jusqu'à $3000 / nuit");
+        priceRangeLabel.setText("Up to $3000 / night");
 
         // Listener pour les champs de prix
         minPriceField.textProperty().addListener((obs, oldVal, newVal) -> {
@@ -164,7 +164,7 @@ public class LandingPageController {
     private void loadHotels() {
         try {
             allHotels = hotelDAO.findAll();
-            System.out.println("✅ " + allHotels.size() + " hôtels chargés");
+            System.out.println("✅ " + allHotels.size() + " hotels loaded");
             displayHotels(allHotels);
         } catch (Exception e) {
             System.err.println("Erreur chargement hôtels: " + e.getMessage());
@@ -179,7 +179,7 @@ public class LandingPageController {
 
         if (hotels.isEmpty()) {
             // Afficher un message "Aucun résultat"
-            Label noResults = new Label("Aucun hôtel ne correspond à vos critères de recherche.");
+            Label noResults = new Label("No hotel matches your search criteria.");
             noResults.setStyle("-fx-font-size: 16px; -fx-text-fill: #7f8c8d; -fx-padding: 20px;");
             hotelsContainer.getChildren().add(noResults);
             return;
@@ -246,25 +246,25 @@ public class LandingPageController {
 
         // Ville
         Adresse adresse = hotel.getAdresse();
-        String ville = (adresse != null && adresse.getVille() != null) ? adresse.getVille() : "Ville inconnue";
+        String ville = (adresse != null && adresse.getVille() != null) ? adresse.getVille() : "Unknown city";
         Label cityLabel = new Label("📍 " + ville);
         cityLabel.setStyle("-fx-text-fill: #7f8c8d; -fx-font-size: 14px;");
 
         // Prix (calculé localement)
         double minPrice = calculateHotelMinPrice(hotel);
-        Label priceLabel = new Label("À partir de $" + String.format("%.2f", minPrice) + " / nuit");
+        Label priceLabel = new Label("Up to $" + String.format("%.2f", minPrice) + " / night");
         priceLabel.setStyle("-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: #f1c40f;");
 
         // Boutons
         HBox buttonBox = new HBox(10);
         buttonBox.setAlignment(Pos.CENTER);
 
-        Button detailsBtn = new Button("Voir détails");
+        Button detailsBtn = new Button("See details");
         detailsBtn.setStyle("-fx-background-color: #3498db; -fx-text-fill: white; " +
                 "-fx-font-weight: bold; -fx-pref-width: 120px; -fx-pref-height: 35px;");
         detailsBtn.setOnAction(e -> showHotelDetails(hotel));
 
-        Button bookBtn = new Button("Réserver");
+        Button bookBtn = new Button("Book now");
         bookBtn.setStyle("-fx-background-color: #f1c40f; -fx-text-fill: #2c3e50; " +
                 "-fx-font-weight: bold; -fx-pref-width: 120px; -fx-pref-height: 35px;");
         bookBtn.setOnAction(e -> handleReservation(hotel));
@@ -337,7 +337,7 @@ public class LandingPageController {
             cityComboBox.getItems().clear();
             cityComboBox.getItems().addAll(cities);
         } catch (Exception e) {
-            System.err.println("Erreur chargement villes: " + e.getMessage());
+            System.err.println("Error loading cities: " + e.getMessage());
             cityComboBox.getItems().addAll("Paris", "Lyon", "Marseille", "Nice", "Bordeaux", "Toulouse", "Strasbourg");
         }
     }
@@ -350,7 +350,7 @@ public class LandingPageController {
             roomTypeComboBox.getItems().addAll(roomTypes);
             roomTypeComboBox.setValue("All");
         } catch (Exception e) {
-            System.err.println("Erreur chargement types: " + e.getMessage());
+            System.err.println("Error loading types: " + e.getMessage());
             roomTypeComboBox.getItems().addAll("All", "Simple", "Double", "Suite", "Familiale");
             roomTypeComboBox.setValue("All");
         }
@@ -388,26 +388,26 @@ public class LandingPageController {
 
             // Validation
             if (minPrice != null && minPrice < 0) {
-                showAlert("Erreur", "Le prix minimum ne peut pas être négatif.");
+                showAlert("Error", "Minimum price must be lower than maximum price.");
                 return;
             }
 
             if (maxPrice != null && maxPrice < 0) {
-                showAlert("Erreur", "Le prix maximum ne peut pas être négatif.");
+                showAlert("Error", "Maximum price cannot be negative.");
                 return;
             }
 
             if (minPrice != null && maxPrice != null && minPrice > maxPrice) {
-                showAlert("Erreur", "Le prix minimum doit être inférieur au prix maximum.");
+                showAlert("Error", "Minimum price must be lower than maximum price.");
                 return;
             }
 
-            System.out.println("🎯 Intervalle demandé: " +
-                    (minPrice != null ? "$" + minPrice : "pas de min") + " - " +
-                    (maxPrice != null ? "$" + maxPrice : "pas de max"));
+            System.out.println("🎯 Requested interval: " +
+                    (minPrice != null ? "$" + minPrice : "no min") + " - " +
+                    (maxPrice != null ? "$" + maxPrice : "no max"));
 
         } catch (NumberFormatException e) {
-            showAlert("Erreur", "Format de prix invalide. Utilisez des nombres (ex: 100.50).");
+            showAlert("Error", "Invalid price format. Use numbers (ex: 100.50).");
             return;
         }
 
@@ -443,15 +443,15 @@ public class LandingPageController {
                 // Vérifier le prix minimum
                 if (minPrice != null && hotelMinPrice < minPrice) {
                     isValid = false;
-                    System.out.println("❌ " + hotel.getNomHotel() + " - Prix min: $" + hotelMinPrice +
-                            " ✗ (inférieur à min $" + minPrice + ")");
+                    System.out.println("❌ " + hotel.getNomHotel() + " - Min price: $" + hotelMinPrice +
+                            " ✗ (less than min $" + minPrice + ")");
                 }
 
                 // Vérifier le prix maximum
                 if (maxPrice != null && hotelMinPrice > maxPrice) {
                     isValid = false;
-                    System.out.println("❌ " + hotel.getNomHotel() + " - Prix min: $" + hotelMinPrice +
-                            " ✗ (supérieur à max $" + maxPrice + ")");
+                    System.out.println("❌ " + hotel.getNomHotel() + " - Max price: $" + hotelMinPrice +
+                            " ✗ (greater than max $" + maxPrice + ")");
                 }
 
                 if (isValid) {
@@ -464,7 +464,7 @@ public class LandingPageController {
             displayFilteredResults(strictlyFilteredHotels, minPrice, maxPrice);
 
         } catch (Exception e) {
-            System.err.println("❌ Erreur lors du filtrage: " + e.getMessage());
+            System.err.println("❌ Error while filtering: " + e.getMessage());
             e.printStackTrace();
 
             // Fallback: filtrer manuellement de façon stricte
