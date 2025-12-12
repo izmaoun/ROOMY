@@ -12,6 +12,7 @@ module com.roomy {
     // Lombok est utilisé seulement à la compilation
     requires static lombok;
 
+
     // Open packages used by JavaFX FXMLLoader (reflection)
     opens com.roomy.Controller to javafx.fxml;
     opens com.roomy.service to javafx.fxml;

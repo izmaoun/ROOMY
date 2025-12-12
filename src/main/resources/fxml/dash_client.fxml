@@ -1,2 +1,118 @@
-<?import javafx.scene.control.Label?>
-<Label text="Bienvenue Client !" />
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.image.Image?>
+
+<BorderPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="com.roomy.Controller.DashClientController"
+            prefWidth="1200"
+            prefHeight="700"
+            stylesheets="@../css/client-styles.css">
+
+    <!-- ======================== HEADER (Top) ======================== -->
+    <top>
+        <HBox styleClass="header" alignment="CENTER_LEFT" spacing="20">
+            <!-- Logo -->
+            <ImageView fitHeight="40" fitWidth="120" preserveRatio="true">
+                <image>
+                    <Image url="@../images/logo.png"/>
+                </image>
+            </ImageView>
+
+            <Region HBox.hgrow="ALWAYS"/>
+
+            <!-- Nom du client -->
+            <Label fx:id="lblClientName" text="nom Client"
+                   style="-fx-text-fill: white; -fx-font-size: 16px; -fx-font-weight: bold;"/>
+
+            <!-- Bouton Client avec icône -->
+            <Button text="Client" styleClass="header-button">
+                <graphic>
+                    <Label text="👤" style="-fx-text-fill: white; -fx-font-size: 18px;"/>
+                </graphic>
+            </Button>
+
+            <!-- Bouton Déconnexion -->
+            <Button fx:id="btnLogout" text="Déconnexion" onAction="#handleLogout" styleClass="header-button"/>
+
+
+        </HBox>
+    </top>
+
+    <!-- ======================== MENU GAUCHE (Left) ======================== -->
+    <left>
+        <VBox spacing="0"
+              style="-fx-background-color: #2C3E50; -fx-min-width: 200px;"
+              alignment="TOP_CENTER">
+            <padding>
+                <Insets top="30" right="0" bottom="30" left="0"/>
+            </padding>
+
+            <!-- Bouton Mes réservations -->
+            <Button fx:id="btnReservations"
+                    text="Mes réservations"
+                    onAction="#loadReservationsPage"
+                    prefWidth="180"
+                    prefHeight="45"
+                    styleClass="menu-button"
+                    style="-fx-background-color: #A59090; -fx-text-fill: white;
+                           -fx-font-size: 14px; -fx-cursor: hand;
+                           -fx-background-radius: 5; -fx-border-radius: 5;">
+                <VBox.margin>
+                    <Insets bottom="10"/>
+                </VBox.margin>
+            </Button>
+
+            <!-- Bouton Mon profil -->
+            <Button fx:id="btnProfile"
+                    text="Mon profil"
+                    onAction="#loadProfilePage"
+                    prefWidth="180"
+                    prefHeight="45"
+                    styleClass="menu-button"
+                    style="-fx-background-color: #A59090; -fx-text-fill: white;
+                           -fx-font-size: 14px; -fx-cursor: hand;
+                           -fx-background-radius: 5; -fx-border-radius: 5;">
+                <VBox.margin>
+                    <Insets bottom="10"/>
+                </VBox.margin>
+            </Button>
+
+            <!-- Bouton Voir hôtels -->
+            <Button fx:id="btnHotels"
+                    text="Voir hôtels"
+                    onAction="#loadHotelsPage"
+                    prefWidth="180"
+                    prefHeight="45"
+                    styleClass="menu-button"
+                    style="-fx-background-color: #A59090; -fx-text-fill: white;
+                           -fx-font-size: 14px; -fx-cursor: hand;
+                           -fx-background-radius: 5; -fx-border-radius: 5;">
+            </Button>
+        </VBox>
+    </left>
+
+    <!-- ======================== ZONE CENTRALE (Center) ======================== -->
+    <center>
+        <StackPane fx:id="centerStack"
+                   style="-fx-background-color: #EFDFC5;">
+
+            <!-- Page d'accueil par défaut -->
+            <VBox alignment="CENTER" spacing="30">
+                <Label text="Bienvenue sur Roomy"
+                       style="-fx-font-size: 32px; -fx-font-weight: bold; -fx-text-fill: #380F17;"/>
+                <Label text="Sélectionnez une option dans le menu"
+                       style="-fx-font-size: 16px; -fx-text-fill: #666666;"/>
+
+                <!-- Icône décorative -->
+                <Label text="🏨" style="-fx-font-size: 80px;"/>
+            </VBox>
+
+        </StackPane>
+    </center>
+
+</BorderPane>

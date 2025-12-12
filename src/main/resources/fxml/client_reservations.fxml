@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="com.roomy.Controller.ReservationsController"
+      styleClass="main-background"
+      stylesheets="@../css/client-styles.css">
+
+    <!-- Contenu principal -->
+    <ScrollPane fitToWidth="true" VBox.vgrow="ALWAYS" style="-fx-background-color: transparent; -fx-background: #EFDFC5;">
+        <VBox spacing="30">
+            <padding>
+                <Insets top="40" right="60" bottom="40" left="60"/>
+            </padding>
+
+            <!-- Titre -->
+            <Label text="Mes Réservations" styleClass="page-title"/>
+
+            <!-- Section Réservations à venir -->
+            <VBox spacing="15" maxWidth="700">
+                <!-- En-tête section -->
+                <HBox alignment="CENTER_LEFT" spacing="10">
+                    <Label text="Réservations à venir" styleClass="section-header" HBox.hgrow="ALWAYS"/>
+                    <Button text="+ Nouvelle réservation" styleClass="btn-reserved" onAction="#handleNouvelleReservation"/>
+                </HBox>
+
+                <!-- Container pour les cartes -->
+                <VBox fx:id="upcomingReservationsContainer" spacing="15">
+                    <!-- Les cartes seront ajoutées dynamiquement -->
+                </VBox>
+
+                <!-- Message si vide -->
+                <Label fx:id="noUpcomingLabel" text="Aucune réservation à venir"
+                       style="-fx-text-fill: #666666; -fx-font-style: italic; -fx-padding: 20;"
+                       visible="false"/>
+            </VBox>
+
+            <!-- Section Réservations passées -->
+            <VBox spacing="15" maxWidth="700">
+                <!-- En-tête section -->
+                <Label text="Réservations passées" styleClass="section-header"/>
+
+                <!-- Container pour les cartes -->
+                <VBox fx:id="pastReservationsContainer" spacing="15">
+                    <!-- Les cartes seront ajoutées dynamiquement -->
+                </VBox>
+
+                <!-- Message si vide -->
+                <Label fx:id="noPastLabel" text="Aucune réservation passée"
+                       style="-fx-text-fill: #666666; -fx-font-style: italic; -fx-padding: 20;"
+                       visible="false"/>
+            </VBox>
+
+        </VBox>
+    </ScrollPane>
+
+</VBox>

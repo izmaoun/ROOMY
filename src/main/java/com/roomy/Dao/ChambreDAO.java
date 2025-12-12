@@ -62,7 +62,7 @@ public class ChambreDAO {
             ps.setInt(5, ch.getSurface());
             ps.setString(6, ch.getStatut().name());
             ps.setString(7, ch.getDescription());
-            ps.setInt(8, ch.getHotel().getIdHotel());
+            ps.setInt(8, ch.getHotel().getIdhotel());
 
             int rows = ps.executeUpdate();
 
@@ -92,7 +92,7 @@ public class ChambreDAO {
             ps.setInt(5, ch.getSurface());
             ps.setString(6, ch.getStatut().name());
             ps.setString(7, ch.getDescription());
-            ps.setInt(8, ch.getHotel().getIdHotel());
+            ps.setInt(8, ch.getHotel().getIdhotel());
             ps.setInt(9, ch.getId());
 
             return ps.executeUpdate() > 0;
