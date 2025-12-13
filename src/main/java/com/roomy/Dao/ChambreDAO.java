@@ -142,5 +142,39 @@ public class ChambreDAO {
 
         return ch;
     }
+
+    public int getNombreChambresTotal(int idHotelier) {
+        String sql = """
+            SELECT COUNT(*) FROM chambres c
+            JOIN hotels h ON c.id_hotel = h.id_hotel
+            WHERE h.id_hotelier = ?
+            """;
+        try ( Connection conn = DBConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, idHotelier);
+            ResultSet rs = ps.executeQuery();
+            return rs.next() ? rs.getInt(1) : 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return 0;
+        }
+    }
+
+    public int getNombreChambresDisponibles(int idHotelier) {
+        String sql = """
+            SELECT COUNT(*) FROM chambres c
+            JOIN hotels h ON c.id_hotel = h.id_hotel
+            WHERE h.id_hotelier = ? AND c.statut = 'disponible'
+            """;
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, idHotelier);
+            ResultSet rs = ps.executeQuery();
+            return rs.next() ? rs.getInt(1) : 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return 0;
+        }
+    }
 }
 

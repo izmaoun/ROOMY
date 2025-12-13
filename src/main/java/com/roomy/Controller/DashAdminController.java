@@ -143,7 +143,7 @@ public class DashAdminController {
                 HBox.setHgrow(villeLabel, Priority.SOMETIMES);
 
                 // Colonne Confirmation - Responsive
-                Label confirmLabel = new Label(getStatutDisplay(h.getStatutVerification()));
+                Label confirmLabel = new Label(getStatutDisplay(h.getStatutVerification()));  // hadi rah hna 3ndna ENUM à verifier
                 confirmLabel.setStyle("-fx-text-fill: white; -fx-min-width: 80; -fx-pref-width: 100; -fx-font-size: 11px;");
                 HBox.setHgrow(confirmLabel, Priority.SOMETIMES);
 
@@ -153,7 +153,7 @@ public class DashAdminController {
                 actionBox.setAlignment(Pos.CENTER_LEFT);
                 HBox.setHgrow(actionBox, Priority.SOMETIMES);
 
-                String statut = h.getStatutVerification() != null ? h.getStatutVerification().toLowerCase() : "en_attente";
+                String statut = h.getStatutVerification() != null ? h.getStatutVerification().toLowerCase() : "en_attente"; // meme cas
 
                 if (statut.equals("en_attente") || statut.equals("en attente")) {
                     // Afficher les deux boutons

@@ -120,6 +120,10 @@ public class Hotel {
         }
     }
 
+    public int getNombreDeChambres() {
+        return chambres == null ? 0 : chambres.size();
+    }
+
     @Override
     public String toString() {
         return "Hotel {" +

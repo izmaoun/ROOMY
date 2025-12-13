@@ -107,7 +107,7 @@ public class HotelierDAO {
                     h.setDateInscription(ts.toLocalDateTime());
                 }
 
-                h.setStatutVerification(rs.getString("statut_verification"));
+                h.setStatutVerification(StatutVerification.valueOf(rs.getString("statut_verification")));
                 hoteliers.add(h);
             }
 
@@ -250,4 +250,20 @@ public class HotelierDAO {
         }
         return result;
     }
+
+    public String getNomComplet(int idHotelier) {
+        String sql = "SELECT prenom_gerant, nom_gerant FROM hoteliers WHERE id_hotelier = ?";
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, idHotelier);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                return rs.getString("prenom_gerant") + " " + rs.getString("nom_gerant");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return "Utilisateur";
+    }
+
 }

@@ -1,5 +1,7 @@
 package com.roomy.Dao;
 
+import com.roomy.ENUMS.Statut_technique_Chambre;
+import com.roomy.ENUMS.TypeChambre;
 import com.roomy.entities.Hotel;
 import com.roomy.entities.Hotelier;
 import com.roomy.entities.Adresse;
@@ -176,5 +178,80 @@ public class HotelDAO {
         }
 
         return false;
+    }
+    //nombre utilisé en dash et en stats
+    public int getNombreHotels(int idHotelier) {
+        String sql = "SELECT COUNT(*) FROM hotels WHERE id_hotelier = ?";
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, idHotelier);
+            ResultSet rs = ps.executeQuery();
+            return rs.next() ? rs.getInt(1) : 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return 0;
+        }
+    }
+
+    public List<Hotel> getHotelsByHotelier(int idHotelier) {
+        List<Hotel> hotels = new ArrayList<>();
+        String sqlHotels = """
+        SELECT h.id_hotel, h.nom_hotel, h.etoiles,
+               a.rue, a.ville, a.codepostal, a.pays
+        FROM hotels h
+        LEFT JOIN adresses a ON h.id_adresse = a.id_adresse
+        WHERE h.id_hotelier = ?
+        """;
+
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement psHotels = conn.prepareStatement(sqlHotels)) {
+
+            psHotels.setInt(1, idHotelier);
+            ResultSet rsHotels = psHotels.executeQuery();
+
+            // Pour chaque hôtel, on charge aussi ses chambres
+            String sqlChambres = "SELECT id_chambre, num_chambre, type, prix_nuit, capacity, surface, statut, description FROM chambres WHERE id_hotel = ?";
+
+            while (rsHotels.next()) {
+                Hotel hotel = new Hotel();
+                hotel.setIdhotel(rsHotels.getInt("id_hotel"));
+                hotel.setNomHotel(rsHotels.getString("nom_hotel"));
+                hotel.setEtoiles(rsHotels.getInt("etoiles"));
+
+                // Adresse
+                Adresse adresse = new Adresse();
+                adresse.setRue(rsHotels.getString("rue"));
+                adresse.setVille(rsHotels.getString("ville"));
+                adresse.setCodepostal(rsHotels.getString("codepostal"));
+                adresse.setPays(rsHotels.getString("pays"));
+                hotel.setAdresse(adresse);
+
+                // === Chargement des chambres pour cet hôtel ===
+                try (PreparedStatement psChambres = conn.prepareStatement(sqlChambres)) {
+                    psChambres.setInt(1, hotel.getIdhotel());
+                    ResultSet rsChambres = psChambres.executeQuery();
+
+                    while (rsChambres.next()) {
+                        Chambre chambre = new Chambre();
+                        chambre.setId(rsChambres.getInt("id_chambre"));
+                        chambre.setNumchambre(rsChambres.getInt("num_chambre"));
+                        chambre.setType(TypeChambre.valueOf(rsChambres.getString("type")));
+                        chambre.setPrix_nuit(rsChambres.getDouble("prix_nuit"));
+                        chambre.setCapacity(rsChambres.getInt("capacity"));
+                        chambre.setSurface(rsChambres.getInt("surface"));
+                        chambre.setStatut(Statut_technique_Chambre.valueOf(rsChambres.getString("statut")));
+                        chambre.setDescription(rsChambres.getString("description"));
+                        chambre.setHotel(hotel); // cohérence bidirectionnelle
+
+                        hotel.addChambre(chambre); // utilise ta méthode addChambre()
+                    }
+                }
+
+                hotels.add(hotel);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return hotels;
     }
 }

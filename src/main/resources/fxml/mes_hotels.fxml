@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<?import javafx.scene.text.Text?>
+<?import javafx.scene.control.cell.PropertyValueFactory?>
+<AnchorPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="com.roomy.Controller.Hotels_control"
+            prefHeight="400.0" prefWidth="600.0">
+    <VBox spacing="30" alignment="TOP_CENTER"
+          style="-fx-padding: 50; -fx-background-color: #F5F0E6;">
+        <!-- Fond beige clair comme le dashboard -->
+
+        <!-- Titre -->
+        <Text text="Mes hôtels"
+              style="-fx-fill: #380F17; -fx-font-size: 42px; -fx-font-weight: bold;"/>
+
+        <!-- Bouton Ajouter hôtel -->
+        <HBox alignment="CENTER_RIGHT" style="-fx-padding: 0 60 20 0;">
+            <Button text="+ Ajouter un nouvel hôtel" onAction="#openAddHotelForm"
+                    prefWidth="320" prefHeight="60"
+                    style="-fx-background-color: #A59090; -fx-text-fill: #380F17;
+                       -fx-font-size: 18px; -fx-font-weight: bold; -fx-background-radius: 20;
+                       -fx-cursor: hand; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.2), 12, 0, 0, 5);"/>
+        </HBox>
+
+        <!-- Tableau des hôtels -->
+        <TableView fx:id="tableHotels" prefHeight="500" prefWidth="1050"
+                   style="-fx-background-color: white; -fx-border-color: #ddd; -fx-border-radius: 15;
+                      -fx-background-radius: 15;">
+            <columns>
+                <TableColumn text="Nom de l'hôtel" prefWidth="280">
+                    <cellValueFactory>
+                        <PropertyValueFactory property="nomHotel" />
+                    </cellValueFactory>
+                </TableColumn>
+
+                <TableColumn text="Adresse" prefWidth="350">
+                    <cellValueFactory>
+                        <PropertyValueFactory property="adresse" />
+                    </cellValueFactory>
+                </TableColumn>
+
+                <TableColumn text="Étoiles" prefWidth="100">
+                    <cellValueFactory>
+                        <PropertyValueFactory property="etoiles" />
+                    </cellValueFactory>
+                </TableColumn>
+
+                <TableColumn text="Nombre de chambres" prefWidth="180">
+                    <cellValueFactory>
+                        <PropertyValueFactory property="nombreDeChambres" />
+                    </cellValueFactory>
+                </TableColumn>
+
+                <TableColumn text="Actions" prefWidth="140">
+                    <!-- Tu pourras ajouter des boutons ici plus tard -->
+                    <cellValueFactory>
+                        <PropertyValueFactory property="" />
+                    </cellValueFactory>
+                </TableColumn>
+            </columns>
+        </TableView>
+
+        <!-- Message si aucun hôtel -->
+        <Label fx:id="lblNoHotels" text="Vous n'avez pas encore ajouté d'hôtel."
+               visible="false" managed="false"
+               style="-fx-font-size: 18px; -fx-text-fill: #888; -fx-padding: 50 0 0 0;"/>
+    </VBox>
+
+</AnchorPane>
+
