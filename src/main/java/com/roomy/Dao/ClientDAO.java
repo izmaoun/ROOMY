@@ -99,4 +99,63 @@ import java.util.Optional;
             }
             return false;
         }
+        public boolean updatePassword(String email, String hashedPassword) {
+            try (Connection conn = DBConnection.getConnection()) {
+                String sql = "UPDATE client SET password = ? WHERE email = ?";
+                PreparedStatement stmt = conn.prepareStatement(sql);
+                stmt.setString(1, hashedPassword);
+                stmt.setString(2, email);
+                stmt.executeUpdate();
+                return true;
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            return false;
+        }
+
+    /**
+     * Retourne tous les clients (pour dashboard admin)
+     */
+    public List<Client> findAll() {
+        List<Client> clients = new java.util.ArrayList<>();
+        String sql = "SELECT * FROM clients";
+        try (Connection c = DBConnection.getConnection();
+             PreparedStatement ps = c.prepareStatement(sql)) {
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                Client client = new Client();
+                client.setIdClient(rs.getInt("id_client"));
+                client.setNom(rs.getString("nom"));
+                client.setPrenom(rs.getString("prenom"));
+                client.setEmail(rs.getString("email"));
+                client.setTelephone(rs.getString("telephone"));
+                client.setPassword(rs.getString("password"));
+                client.setDateInscription(rs.getTimestamp("date_inscription").toLocalDateTime());
+                client.setEstBloque(rs.getBoolean("est_bloque"));
+                clients.add(client);
+            }
+        } catch (SQLException e) {
+            System.err.println("Erreur lors de la récupération des clients: " + e.getMessage());
+            e.printStackTrace();
+        }
+        return clients;
+    }
+
+    /**
+     * Met à jour le statut bloqué d'un client
+     */
+    public boolean updateBlockStatus(int idClient, boolean estBloque) {
+        String sql = "UPDATE clients SET est_bloque = ? WHERE id_client = ?";
+        try (Connection c = DBConnection.getConnection();
+             PreparedStatement ps = c.prepareStatement(sql)) {
+            ps.setBoolean(1, estBloque);
+            ps.setInt(2, idClient);
+            int affected = ps.executeUpdate();
+            return affected > 0;
+        } catch (SQLException e) {
+            System.err.println("Erreur update block status: " + e.getMessage());
+            e.printStackTrace();
+        }
+        return false;
+    }
     }

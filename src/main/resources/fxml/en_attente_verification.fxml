@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.image.*?>
+
+
+<?import javafx.scene.text.Text?>
+<BorderPane xmlns="http://javafx.com/javafx/17"
+            fx:controller="com.roomy.Controller.SignupController"
+            xmlns:fx="http://javafx.com/fxml/1"
+            style="-fx-background-color: #380F17;"
+            prefWidth="800" prefHeight="600">
+
+    <center>
+        <VBox alignment="CENTER" spacing="25"
+              style="-fx-padding: 40;">
+
+            <!-- Logo -->
+            <ImageView fitHeight="90" fitWidth="220" preserveRatio="true">
+                <Image url="@../images/logo.png"/>
+            </ImageView>
+
+            <!-- Title -->
+            <Text text="Votre compte est en attente de vérification"
+                  style="-fx-fill: #EFDFC5;
+                         -fx-font-size: 26;
+                         -fx-font-weight: bold;
+                         -fx-text-alignment: center;"/>
+
+            <!-- Subtitle -->
+            <Label text="Notre équipe vérifie votre identité.Vous serez notifié dès que votre compte sera activé."
+                   textAlignment="CENTER"
+                   style="-fx-text-fill: #EFDFC5;
+                          -fx-font-size: 15;
+                          -fx-opacity: 0.85;"
+                   maxWidth="450"
+                   wrapText="true"/>
+
+            <!-- Loading Animation -->
+            <ProgressIndicator progress="-1"
+                               prefHeight="70" prefWidth="70"
+                               style="-fx-progress-color: #A59090;"/>
+
+            <!-- Info Box -->
+            <Label text="Merci pour votre patience"
+                   style="-fx-font-size: 14;
+                          -fx-text-fill: #A59090;
+                          -fx-font-style: italic;"/>
+
+            <!-- Button to return to login -->
+            <Button text="Retour à la connexion"
+                    onAction="#goToLogin"
+                    style="-fx-background-color: #A59090;
+                           -fx-background-radius: 20;
+                           -fx-text-fill: #380F17;
+                           -fx-font-size: 15;
+                           -fx-font-weight: bold;"
+                    prefWidth="250" prefHeight="40"/>
+        </VBox>
+    </center>
+
+</BorderPane>
