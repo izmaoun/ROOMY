@@ -348,6 +348,290 @@ public class DashAdminController {
         validationPane.setVisible(false);
         usersPane.setVisible(false);
         statsPane.setVisible(true);
+        loadStatistics();
+    }
+
+    /**
+     * Charge et affiche les statistiques avec des graphiques
+     */
+    private void loadStatistics() {
+        statsList.getChildren().clear();
+
+        int currentYear = java.time.Year.now().getValue();
+
+        // 1. Graphique circulaire : Nombre total d'utilisateurs vs hôteliers
+        VBox totalCountBox = createTotalCountChart();
+        statsList.getChildren().add(totalCountBox);
+
+        // 2. Graphique en barres : Inscriptions par mois
+        VBox monthlyChart = createMonthlyRegistrationsChart(currentYear);
+        statsList.getChildren().add(monthlyChart);
+
+        // 3. Répartition géographique des établissements
+        VBox geographicChart = createGeographicDistributionChart();
+        statsList.getChildren().add(geographicChart);
+    }
+
+    /**
+     * Crée un graphique circulaire simple montrant le nombre total d'utilisateurs et d'hôteliers vérifiés
+     */
+    private VBox createTotalCountChart() {
+        VBox container = new VBox(15);
+        container.setStyle("-fx-background-color: #2a2a2a; -fx-padding: 20; -fx-background-radius: 10;");
+
+        Label title = new Label("Nombre total d'utilisateurs et d'hôteliers vérifiés");
+        title.setStyle("-fx-text-fill: #f2d6c6; -fx-font-size: 18px; -fx-font-weight: bold;");
+
+        int nbClients = clientDAO.countAll();
+        int nbHoteliers = hotelierDAO.countVerified(); // Utiliser countVerified() au lieu de countAll()
+        int total = nbClients + nbHoteliers;
+
+        // Créer une représentation visuelle simple avec des barres
+        HBox statsBox = new HBox(30);
+        statsBox.setStyle("-fx-alignment: center; -fx-padding: 20;");
+
+        // Colonne Clients
+        VBox clientBox = new VBox(10);
+        clientBox.setStyle("-fx-alignment: center;");
+        Label clientLabel = new Label("Utilisateurs");
+        clientLabel.setStyle("-fx-text-fill: #4a9d5f; -fx-font-size: 16px; -fx-font-weight: bold;");
+        Label clientCount = new Label(String.valueOf(nbClients));
+        clientCount.setStyle("-fx-text-fill: white; -fx-font-size: 36px; -fx-font-weight: bold;");
+
+        // Barre visuelle pour les clients
+        HBox clientBar = new HBox();
+        clientBar.setStyle("-fx-background-color: #4a9d5f; -fx-pref-height: 30;");
+        double clientPercentage = total > 0 ? (nbClients * 300.0 / total) : 0;
+        clientBar.setPrefWidth(clientPercentage);
+
+        clientBox.getChildren().addAll(clientLabel, clientCount, clientBar);
+
+        // Colonne Hôteliers
+        VBox hotelierBox = new VBox(10);
+        hotelierBox.setStyle("-fx-alignment: center;");
+        Label hotelierLabel = new Label("Hôteliers vérifiés");
+        hotelierLabel.setStyle("-fx-text-fill: #c74444; -fx-font-size: 16px; -fx-font-weight: bold;");
+        Label hotelierCount = new Label(String.valueOf(nbHoteliers));
+        hotelierCount.setStyle("-fx-text-fill: white; -fx-font-size: 36px; -fx-font-weight: bold;");
+
+        // Barre visuelle pour les hôteliers
+        HBox hotelierBar = new HBox();
+        hotelierBar.setStyle("-fx-background-color: #c74444; -fx-pref-height: 30;");
+        double hotelierPercentage = total > 0 ? (nbHoteliers * 300.0 / total) : 0;
+        hotelierBar.setPrefWidth(hotelierPercentage);
+
+        hotelierBox.getChildren().addAll(hotelierLabel, hotelierCount, hotelierBar);
+
+        statsBox.getChildren().addAll(clientBox, hotelierBox);
+        container.getChildren().addAll(title, statsBox);
+
+        return container;
+    }
+
+    /**
+     * Crée un graphique en barres montrant les inscriptions vérifiées par mois
+     */
+    private VBox createMonthlyRegistrationsChart(int year) {
+        VBox container = new VBox(15);
+        container.setStyle("-fx-background-color: #2a2a2a; -fx-padding: 20; -fx-background-radius: 10;");
+
+        Label title = new Label("Inscriptions vérifiées par mois en " + year);
+        title.setStyle("-fx-text-fill: #f2d6c6; -fx-font-size: 18px; -fx-font-weight: bold;");
+
+        // Récupérer les données
+        java.util.Map<Integer, Integer> clientsByMonth = clientDAO.countByMonthForYear(year);
+        java.util.Map<Integer, Integer> hoteliersByMonth = hotelierDAO.countByMonthForYear(year);
+
+        // Noms des mois
+        String[] monthNames = {"Jan", "Fév", "Mar", "Avr", "Mai", "Jun",
+                               "Jul", "Aoû", "Sep", "Oct", "Nov", "Déc"};
+
+        // Trouver la valeur maximale pour la mise à l'échelle
+        int maxValue = 1;
+        for (int i = 1; i <= 12; i++) {
+            int monthTotal = clientsByMonth.get(i) + hoteliersByMonth.get(i);
+            if (monthTotal > maxValue) maxValue = monthTotal;
+        }
+
+        // Conteneur pour le graphique
+        VBox chartBox = new VBox(5);
+        chartBox.setStyle("-fx-padding: 20; -fx-alignment: bottom-left;");
+
+        // Créer les barres pour chaque mois
+        HBox barsContainer = new HBox(15);
+        barsContainer.setStyle("-fx-alignment: bottom-left; -fx-pref-height: 300;");
+
+        for (int month = 1; month <= 12; month++) {
+            int clientsCount = clientsByMonth.get(month);
+            int hoteliersCount = hoteliersByMonth.get(month);
+
+            VBox monthColumn = new VBox(5);
+            monthColumn.setStyle("-fx-alignment: bottom-center;");
+            monthColumn.setMinWidth(60);
+
+            // Stack de barres (clients + hôteliers)
+            VBox barsStack = new VBox(0);
+            barsStack.setStyle("-fx-alignment: bottom-center;");
+
+            // Barre des hôteliers (en haut)
+            if (hoteliersCount > 0) {
+                VBox hotelierBar = new VBox();
+                hotelierBar.setStyle("-fx-background-color: #c74444; -fx-background-radius: 5 5 0 0;");
+                double hotelierHeight = (hoteliersCount * 200.0) / maxValue;
+                hotelierBar.setPrefHeight(hotelierHeight);
+                hotelierBar.setPrefWidth(50);
+
+                Label hotelierLabel = new Label(String.valueOf(hoteliersCount));
+                hotelierLabel.setStyle("-fx-text-fill: white; -fx-font-size: 10px; -fx-padding: 2;");
+                hotelierBar.getChildren().add(hotelierLabel);
+                hotelierBar.setStyle(hotelierBar.getStyle() + "-fx-alignment: center;");
+
+                barsStack.getChildren().add(hotelierBar);
+            }
+
+            // Barre des clients (en bas)
+            if (clientsCount > 0) {
+                VBox clientBar = new VBox();
+                String radius = hoteliersCount > 0 ? "0 0 5 5" : "5 5 5 5";
+                clientBar.setStyle("-fx-background-color: #4a9d5f; -fx-background-radius: " + radius + ";");
+                double clientHeight = (clientsCount * 200.0) / maxValue;
+                clientBar.setPrefHeight(clientHeight);
+                clientBar.setPrefWidth(50);
+
+                Label clientLabel = new Label(String.valueOf(clientsCount));
+                clientLabel.setStyle("-fx-text-fill: white; -fx-font-size: 10px; -fx-padding: 2;");
+                clientBar.getChildren().add(clientLabel);
+                clientBar.setStyle(clientBar.getStyle() + "-fx-alignment: center;");
+
+                barsStack.getChildren().add(clientBar);
+            }
+
+            // Si aucune inscription ce mois
+            if (clientsCount == 0 && hoteliersCount == 0) {
+                VBox emptyBar = new VBox();
+                emptyBar.setStyle("-fx-background-color: #444; -fx-background-radius: 5;");
+                emptyBar.setPrefHeight(10);
+                emptyBar.setPrefWidth(50);
+                barsStack.getChildren().add(emptyBar);
+            }
+
+            // Nom du mois
+            Label monthLabel = new Label(monthNames[month - 1]);
+            monthLabel.setStyle("-fx-text-fill: #ccc; -fx-font-size: 12px; -fx-padding: 5 0 0 0;");
+
+            monthColumn.getChildren().addAll(barsStack, monthLabel);
+            barsContainer.getChildren().add(monthColumn);
+        }
+
+        // Légende
+        HBox legend = new HBox(20);
+        legend.setStyle("-fx-alignment: center; -fx-padding: 20 0 0 0;");
+
+        HBox clientLegend = new HBox(8);
+        clientLegend.setStyle("-fx-alignment: center-left;");
+        HBox clientColor = new HBox();
+        clientColor.setStyle("-fx-background-color: #4a9d5f; -fx-pref-width: 20; -fx-pref-height: 15; -fx-background-radius: 3;");
+        Label clientLegendLabel = new Label("Utilisateurs");
+        clientLegendLabel.setStyle("-fx-text-fill: white; -fx-font-size: 14px;");
+        clientLegend.getChildren().addAll(clientColor, clientLegendLabel);
+
+        HBox hotelierLegend = new HBox(8);
+        hotelierLegend.setStyle("-fx-alignment: center-left;");
+        HBox hotelierColor = new HBox();
+        hotelierColor.setStyle("-fx-background-color: #c74444; -fx-pref-width: 20; -fx-pref-height: 15; -fx-background-radius: 3;");
+        Label hotelierLegendLabel = new Label("Hôteliers vérifiés");
+        hotelierLegendLabel.setStyle("-fx-text-fill: white; -fx-font-size: 14px;");
+        hotelierLegend.getChildren().addAll(hotelierColor, hotelierLegendLabel);
+
+        legend.getChildren().addAll(clientLegend, hotelierLegend);
+
+        container.getChildren().addAll(title, barsContainer, legend);
+
+        return container;
+    }
+
+    /**
+     * Crée un graphique montrant la répartition géographique des établissements vérifiés
+     */
+    private VBox createGeographicDistributionChart() {
+        VBox container = new VBox(15);
+        container.setStyle("-fx-background-color: #2a2a2a; -fx-padding: 20; -fx-background-radius: 10;");
+
+        Label title = new Label("Répartition géographique des établissements vérifiés");
+        title.setStyle("-fx-text-fill: #f2d6c6; -fx-font-size: 18px; -fx-font-weight: bold;");
+
+        // Récupérer les données
+        java.util.Map<String, Integer> hoteliersByCity = hotelierDAO.countByCity();
+
+        if (hoteliersByCity.isEmpty()) {
+            Label noData = new Label("Aucune donnée disponible");
+            noData.setStyle("-fx-text-fill: #ccc; -fx-font-size: 14px; -fx-padding: 20;");
+            container.getChildren().addAll(title, noData);
+            return container;
+        }
+
+        // Trouver le maximum pour la mise à l'échelle
+        int maxCount = hoteliersByCity.values().stream().max(Integer::compare).orElse(1);
+
+        // Conteneur pour les barres
+        VBox barsBox = new VBox(12);
+        barsBox.setStyle("-fx-padding: 20 0;");
+
+        // Créer une barre pour chaque ville (limité aux 10 premières)
+        int count = 0;
+        for (java.util.Map.Entry<String, Integer> entry : hoteliersByCity.entrySet()) {
+            if (count >= 10) break; // Limiter à 10 villes
+
+            String city = entry.getKey();
+            int total = entry.getValue();
+
+            HBox cityRow = new HBox(15);
+            cityRow.setStyle("-fx-alignment: center-left;");
+
+            // Nom de la ville
+            Label cityLabel = new Label(city);
+            cityLabel.setStyle("-fx-text-fill: white; -fx-font-size: 14px; -fx-min-width: 120; -fx-font-weight: bold;");
+
+            // Barre de progression
+            HBox barContainer = new HBox();
+            barContainer.setStyle("-fx-background-color: #444; -fx-pref-height: 25; -fx-background-radius: 5;");
+            barContainer.setPrefWidth(400);
+            HBox.setHgrow(barContainer, Priority.ALWAYS);
+
+            HBox progressBar = new HBox();
+            progressBar.setStyle("-fx-background-color: #c74444; -fx-pref-height: 25; -fx-background-radius: 5; -fx-alignment: center-left; -fx-padding: 0 8;");
+            double percentage = (total * 100.0) / maxCount;
+            double barWidth = (percentage * 400.0) / 100.0;
+            progressBar.setPrefWidth(barWidth);
+            progressBar.setMinWidth(barWidth);
+            progressBar.setMaxWidth(barWidth);
+
+            // Label du nombre
+            Label countLabel = new Label(total + " établissement" + (total > 1 ? "s" : ""));
+            countLabel.setStyle("-fx-text-fill: white; -fx-font-size: 11px; -fx-font-weight: bold;");
+
+            if (barWidth > 100) {
+                progressBar.getChildren().add(countLabel);
+            } else {
+                // Si la barre est trop petite, afficher le label à côté
+                Label externalCount = new Label(String.valueOf(total));
+                externalCount.setStyle("-fx-text-fill: white; -fx-font-size: 12px; -fx-padding: 0 0 0 10;");
+                cityRow.getChildren().addAll(cityLabel, barContainer, externalCount);
+                barContainer.getChildren().add(progressBar);
+                barsBox.getChildren().add(cityRow);
+                count++;
+                continue;
+            }
+
+            barContainer.getChildren().add(progressBar);
+            cityRow.getChildren().addAll(cityLabel, barContainer);
+            barsBox.getChildren().add(cityRow);
+            count++;
+        }
+
+        container.getChildren().addAll(title, barsBox);
+
+        return container;
     }
 
     /**
