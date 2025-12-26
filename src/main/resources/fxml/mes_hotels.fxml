@@ -1,77 +1,97 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
+<!-- File: src/main/resources/fxml/mes_hotels.fxml -->
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.*?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.*?>
-
 <?import javafx.scene.text.Text?>
-<?import javafx.scene.control.cell.PropertyValueFactory?>
-<AnchorPane xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml"
+
+<BorderPane xmlns="http://javafx.com/javafx/17.0.14"
+            xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="com.roomy.Controller.Hotels_control"
-            prefHeight="400.0" prefWidth="600.0">
-    <VBox spacing="30" alignment="TOP_CENTER"
-          style="-fx-padding: 50; -fx-background-color: #F5F0E6;">
-        <!-- Fond beige clair comme le dashboard -->
+            style="-fx-background-color: #380F17;"
+            prefHeight="900.0" prefWidth="1200.0">
 
-        <!-- Titre -->
-        <Text text="Mes hôtels"
-              style="-fx-fill: #380F17; -fx-font-size: 42px; -fx-font-weight: bold;"/>
+    <!-- Top (même style que dashboard_hotelier.fxml) -->
+    <top>
+        <HBox style="-fx-background-color: #2d0c13; -fx-padding: 20 40; -fx-alignment: CENTER_LEFT;" spacing="30">
+            <ImageView fitHeight="60.0" fitWidth="200.0" preserveRatio="true">
+                <image>
+                    <Image url="@../images/logo.png"/>
+                </image>
+            </ImageView>
 
-        <!-- Bouton Ajouter hôtel -->
-        <HBox alignment="CENTER_RIGHT" style="-fx-padding: 0 60 20 0;">
-            <Button text="+ Ajouter un nouvel hôtel" onAction="#openAddHotelForm"
-                    prefWidth="320" prefHeight="60"
-                    style="-fx-background-color: #A59090; -fx-text-fill: #380F17;
-                       -fx-font-size: 18px; -fx-font-weight: bold; -fx-background-radius: 20;
-                       -fx-cursor: hand; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.2), 12, 0, 0, 5);"/>
+            <Region HBox.hgrow="ALWAYS"/>
+
+            <Label fx:id="lblwelcome" text="Bienvenue, Utilisateur"
+                   style="-fx-text-fill: #EFDFC5; -fx-font-size: 20px; -fx-font-weight: bold;"/>
+
+            <Button text="Déconnexion" onAction="#handleDeconnexion"
+                    style="-fx-background-color: transparent; -fx-text-fill: #A59090; -fx-font-size: 15px;
+                           -fx-cursor: hand; -fx-padding: 8 20;">
+                <graphic>
+                    <ImageView fitHeight="20.0" fitWidth="20.0"/>
+                </graphic>
+            </Button>
         </HBox>
+    </top>
 
-        <!-- Tableau des hôtels -->
-        <TableView fx:id="tableHotels" prefHeight="500" prefWidth="1050"
-                   style="-fx-background-color: white; -fx-border-color: #ddd; -fx-border-radius: 15;
-                      -fx-background-radius: 15;">
-            <columns>
-                <TableColumn text="Nom de l'hôtel" prefWidth="280">
-                    <cellValueFactory>
-                        <PropertyValueFactory property="nomHotel" />
-                    </cellValueFactory>
-                </TableColumn>
+    <!-- Menu gauche (même style que dashboard_hotelier.fxml) -->
+    <left>
+        <VBox style="-fx-background-color: #2d0c13; -fx-padding: 40 25;" spacing="20">
+            <Button text="Tableau de bord" onAction="#goToDashboard"
+                    prefWidth="240.0" prefHeight="55.0"
+                    style="-fx-background-color: transparent; -fx-text-fill: #EFDFC5; -fx-font-size: 16px;
+                           -fx-background-radius: 15; -fx-cursor: hand;"/>
+            <Button text="Mes hôtels" onAction="#goToMesHotels"
+                    prefWidth="240.0" prefHeight="55.0"
+                    style="-fx-background-color: #A59090; -fx-text-fill: #380F17; -fx-font-size: 17px;
+                           -fx-font-weight: bold; -fx-background-radius: 15; -fx-cursor: hand;"/>
+            <Button text="Chambres" onAction="#goToChambres"
+                    prefWidth="240.0" prefHeight="55.0"
+                    style="-fx-background-color: transparent; -fx-text-fill: #EFDFC5; -fx-font-size: 16px;
+                           -fx-background-radius: 15; -fx-cursor: hand;"/>
+            <Button text="Statistiques" onAction="#goToStatistiques"
+                    prefWidth="240.0" prefHeight="55.0"
+                    style="-fx-background-color: transparent; -fx-text-fill: #EFDFC5; -fx-font-size: 16px;
+                           -fx-background-radius: 15; -fx-cursor: hand;"/>
+            <Button text="Profil" onAction="#goToProfil"
+                    prefWidth="240.0" prefHeight="55.0"
+                    style="-fx-background-color: transparent; -fx-text-fill: #EFDFC5; -fx-font-size: 16px;
+                           -fx-background-radius: 15; -fx-cursor: hand;"/>
+            <Region VBox.vgrow="ALWAYS"/>
+            <Text text="Roomy Hotel Manager"
+                  style="-fx-fill: #A59090; -fx-font-size: 13px;"/>
+        </VBox>
+    </left>
 
-                <TableColumn text="Adresse" prefWidth="350">
-                    <cellValueFactory>
-                        <PropertyValueFactory property="adresse" />
-                    </cellValueFactory>
-                </TableColumn>
+    <!-- Contenu central : grille d'icônes + bouton ajouter -->
+    <center>
+        <VBox spacing="30" alignment="TOP_CENTER"
+              style="-fx-padding: 50; -fx-background-color: #F5F0E6;">
+            <Text text="Mes hôtels"
+                  style="-fx-fill: #380F17; -fx-font-size: 42px; -fx-font-weight: bold;"/>
 
-                <TableColumn text="Étoiles" prefWidth="100">
-                    <cellValueFactory>
-                        <PropertyValueFactory property="etoiles" />
-                    </cellValueFactory>
-                </TableColumn>
+            <HBox alignment="CENTER_RIGHT" style="-fx-padding: 0 60 0 0;">
+                <Button fx:id="btnAddHotel" text="+ Ajouter un nouvel hôtel" onAction="#openAddHotelForm"
+                        prefWidth="320" prefHeight="60"
+                        style="-fx-background-color: #A59090; -fx-text-fill: #380F17;
+                           -fx-font-size: 18px; -fx-font-weight: bold; -fx-background-radius: 20;
+                           -fx-cursor: hand; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.2), 12, 0, 0, 5);"/>
+            </HBox>
 
-                <TableColumn text="Nombre de chambres" prefWidth="180">
-                    <cellValueFactory>
-                        <PropertyValueFactory property="nombreDeChambres" />
-                    </cellValueFactory>
-                </TableColumn>
+            <!-- Zone défilable contenant des "cartes" icônes -->
+            <ScrollPane fitToWidth="true" prefHeight="600" style="-fx-background: transparent; -fx-border-color: transparent;">
+                <content>
+                    <FlowPane fx:id="flowHotels" hgap="24" vgap="24" padding="20" prefWrapLength="1000" alignment="TOP_LEFT"/>
+                </content>
+            </ScrollPane>
 
-                <TableColumn text="Actions" prefWidth="140">
-                    <!-- Tu pourras ajouter des boutons ici plus tard -->
-                    <cellValueFactory>
-                        <PropertyValueFactory property="" />
-                    </cellValueFactory>
-                </TableColumn>
-            </columns>
-        </TableView>
+            <Label fx:id="lblNoHotels" text="Vous n'avez pas encore ajouté d'hôtel."
+                   visible="false" managed="false"
+                   style="-fx-font-size: 18px; -fx-text-fill: #888; -fx-padding: 50 0 0 0;"/>
+        </VBox>
+    </center>
 
-        <!-- Message si aucun hôtel -->
-        <Label fx:id="lblNoHotels" text="Vous n'avez pas encore ajouté d'hôtel."
-               visible="false" managed="false"
-               style="-fx-font-size: 18px; -fx-text-fill: #888; -fx-padding: 50 0 0 0;"/>
-    </VBox>
-
-</AnchorPane>
-
+</BorderPane>
