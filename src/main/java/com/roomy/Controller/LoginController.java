@@ -49,6 +49,8 @@ public class LoginController {
                     lblError.setText("Votre compte est bloqué. Contactez l'administration.");
                     return;
                 }
+                // Mettre le client dans la session
+                com.roomy.service.Session.setCurrentClient(client);
                 showAlert("Succès", "Connexion Client réussie !");
                 openDashboard(event, "dash_client.fxml", "Client");
                 return;
@@ -65,6 +67,8 @@ public class LoginController {
                     lblError.setText("Votre compte est en attente de vérification.");
                     return;
                 }
+                // Mettre l'hôtelier dans la session
+                com.roomy.service.Session.setCurrentHotelier(hotelier);
                 showAlert("Succès", "Connexion Hôtelier réussie !");
                 openDashboard(event, "dash_hotelier.fxml", "Hotelier");
                 return;
@@ -76,6 +80,8 @@ public class LoginController {
                 admin = adminDAO.findByEmail(email); // ou son email
             }
             if (admin != null && BCrypt.checkpw(password, admin.getPassword())) {
+                // Mettre l'admin dans la session
+                com.roomy.service.Session.setCurrentAdmin(admin);
                 showAlert("Succès", "Connexion Admin réussie !");
 
                 // Charger le dashboard admin et passer l'objet admin au contrôleur
@@ -115,11 +121,13 @@ public class LoginController {
     @FXML
     private void handleBack(ActionEvent event) {
         try {
-            Parent root = FXMLLoader.load(getClass().getResource("/fxml/welcome.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/landing-page.fxml"));
+            Parent root = loader.load();
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-            Scene scene = new Scene(root);
+            Scene scene = new Scene(root, 1200, 800);
             stage.setScene(scene);
-            stage.setMaximized(false);
+            stage.setTitle("ROOMY - Accueil");
+            stage.centerOnScreen();
             stage.show();
         } catch (Exception e) {
             e.printStackTrace();
@@ -134,11 +142,13 @@ public class LoginController {
     @FXML
     private void handleSignupNav(ActionEvent event) {
         try {
-            Parent root = FXMLLoader.load(getClass().getResource("/fxml/welcome.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/client_signup.fxml"));
+            Parent root = loader.load();
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
             Scene scene = new Scene(root);
             stage.setScene(scene);
-            stage.setMaximized(false);
+            stage.setTitle("ROOMY - Inscription");
+            stage.centerOnScreen();
             stage.show();
         } catch (Exception e) {
             e.printStackTrace();

@@ -6,6 +6,7 @@ import com.roomy.entities.Adresse;
 import com.roomy.entities.Image_hotel;
 import com.roomy.entities.Chambre;
 import com.roomy.ENUMS.TypeChambre;
+import com.roomy.service.Session;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -40,6 +41,8 @@ public class LandingPageController {
 
     private HotelDAO hotelDAO = new HotelDAO();
     private List<Hotel> allHotels = new ArrayList<>();
+    private boolean hideAuthButtons = false; // Pour masquer les boutons de connexion
+    private boolean showBackToAccount = false; // Pour afficher le bouton retour au compte
 
     @FXML
     public void initialize() {
@@ -58,6 +61,17 @@ public class LandingPageController {
         }
         if (testButton != null) {
             testButton.setOnAction(e -> testPriceFilters());
+        }
+        
+        // Masquer les boutons auth si nécessaire
+        if (hideAuthButtons) {
+            if (loginButton != null) loginButton.setVisible(false);
+            if (registerButton != null) registerButton.setVisible(false);
+        }
+        
+        // Afficher le bouton retour au compte si nécessaire
+        if (showBackToAccount) {
+            addBackToAccountButton();
         }
     }
 
@@ -786,8 +800,59 @@ public class LandingPageController {
 
     @FXML
     private void handleReservation(Hotel hotel) {
+        // Utiliser la logique des flux de réservation
+        handleBookingFlow(hotel, null);
+    }
+    
+    /**
+     * FLUX 1 : Utilisateur NON connecté → Redirige vers inscription → Auto-redirection vers réservation
+     * FLUX 2 : Utilisateur DÉJÀ connecté → Formulaire réservation DIRECT
+     */
+    private void handleBookingFlow(Hotel hotel, Chambre chambre) {
+        // Vérifier si l'utilisateur est connecté
+        if (Session.getCurrentClient() != null) {
+            // FLUX 2 : Utilisateur connecté → Réservation directe
+            redirectToBookingForm(hotel, chambre);
+        } else {
+            // FLUX 1 : Utilisateur non connecté → Inscription avec redirection auto
+            storeBookingContext(hotel, chambre);
+            redirectToSignup();
+        }
+    }
+    
+    private void storeBookingContext(Hotel hotel, Chambre chambre) {
+        // Stocker le contexte de réservation dans la session pour redirection automatique
+        BookingContext.setHotel(hotel);
+        BookingContext.setChambre(chambre);
+    }
+    
+    private void redirectToBookingForm(Hotel hotel, Chambre chambre) {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/signup.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/booking_form.fxml"));
+            Parent root = loader.load();
+            
+            BookingController controller = loader.getController();
+            if (chambre != null) {
+                // Réservation depuis une chambre spécifique
+                controller.setHotelAndChambre(hotel, chambre);
+            } else {
+                // Réservation depuis l'hôtel (choix de chambre à faire)
+                controller.setHotelOnly(hotel);
+            }
+            
+            Stage stage = (Stage) hotelsContainer.getScene().getWindow();
+            stage.setScene(new Scene(root));
+            stage.setTitle("Réservation - ROOMY");
+            
+        } catch (Exception e) {
+            e.printStackTrace();
+            showAlert("Erreur", "Impossible d'ouvrir le formulaire de réservation: " + e.getMessage());
+        }
+    }
+    
+    private void redirectToSignup() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/client_signup.fxml"));
             Parent root = loader.load();
 
             Stage stage = (Stage) hotelsContainer.getScene().getWindow();
@@ -819,7 +884,7 @@ public class LandingPageController {
     @FXML
     private void openRegister() {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/signup.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/client_signup.fxml"));
             Parent root = loader.load();
 
             Stage stage = (Stage) hotelsContainer.getScene().getWindow();
@@ -968,5 +1033,49 @@ public class LandingPageController {
         sampleHotels.add(hotel4);
 
         return sampleHotels;
+    }
+    
+    // Méthode pour masquer les boutons de connexion/inscription
+    public void hideAuthButtons() {
+        this.hideAuthButtons = true;
+        if (loginButton != null) loginButton.setVisible(false);
+        if (registerButton != null) registerButton.setVisible(false);
+    }
+    
+    // Méthode pour afficher le bouton retour au compte
+    public void showBackToAccountButton() {
+        this.showBackToAccount = true;
+        addBackToAccountButton();
+    }
+    
+    private void addBackToAccountButton() {
+        // Créer un bouton retour au compte dynamiquement
+        Button backToAccountBtn = new Button("← Mon Compte");
+        backToAccountBtn.setStyle("-fx-background-color: #380F17; -fx-text-fill: white; " +
+                                 "-fx-font-weight: bold; -fx-pref-width: 150; -fx-pref-height: 40; " +
+                                 "-fx-background-radius: 5; -fx-cursor: hand;");
+        backToAccountBtn.setOnAction(e -> goBackToDashboard());
+        
+        // L'ajouter à l'interface (vous devrez adapter selon votre FXML)
+        // Pour l'instant, on le place là où étaient les boutons auth
+        if (loginButton != null && loginButton.getParent() instanceof HBox) {
+            HBox parent = (HBox) loginButton.getParent();
+            parent.getChildren().add(backToAccountBtn);
+        }
+    }
+    
+    private void goBackToDashboard() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/dash_client.fxml"));
+            Parent root = loader.load();
+            
+            Stage stage = (Stage) hotelsContainer.getScene().getWindow();
+            stage.setScene(new Scene(root));
+            stage.setTitle("Dashboard Client - ROOMY");
+            stage.setMaximized(true);
+        } catch (Exception e) {
+            showAlert("Erreur", "Impossible de retourner au dashboard: " + e.getMessage());
+            e.printStackTrace();
+        }
     }
 }

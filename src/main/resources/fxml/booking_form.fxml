@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<VBox xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.roomy.Controller.BookingController">
+   <children>
+      <HBox alignment="CENTER" style="-fx-background-color: #380F17;">
+         <children>
+            <Label text="ROOMY - Réservation" textFill="WHITE">
+               <font>
+                  <Font name="System Bold" size="24.0" />
+               </font>
+            </Label>
+         </children>
+         <padding>
+            <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+         </padding>
+      </HBox>
+      
+      <ScrollPane fitToWidth="true" VBox.vgrow="ALWAYS">
+         <content>
+            <VBox spacing="20.0">
+               <padding>
+                  <Insets bottom="30.0" left="30.0" right="30.0" top="30.0" />
+               </padding>
+               
+               <!-- Informations de l'hôtel -->
+               <VBox spacing="10.0" style="-fx-background-color: #F9F7F2; -fx-border-color: #E0D6C2; -fx-border-radius: 10; -fx-background-radius: 10;">
+                  <padding>
+                     <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+                  </padding>
+                  <children>
+                     <Label text="Détails de votre réservation" style="-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #380F17;" />
+                     <Label fx:id="hotelNameLabel" text="Nom de l'hôtel" style="-fx-font-size: 16px; -fx-font-weight: bold;" />
+                     <Label fx:id="chambreInfoLabel" text="Informations chambre" style="-fx-font-size: 14px;" />
+                     <Label fx:id="prixLabel" text="Prix par nuit" style="-fx-font-size: 14px; -fx-text-fill: #666;" />
+                  </children>
+               </VBox>
+               
+               <!-- Formulaire de réservation -->
+               <VBox spacing="15.0">
+                  <children>
+                     <Label text="Informations de séjour" style="-fx-font-size: 16px; -fx-font-weight: bold;" />
+                     
+                     <HBox spacing="20.0">
+                        <children>
+                           <VBox spacing="5.0" HBox.hgrow="ALWAYS">
+                              <children>
+                                 <Label text="Date d'arrivée *" />
+                                 <DatePicker fx:id="dateArrivee" prefWidth="200.0" />
+                              </children>
+                           </VBox>
+                           <VBox spacing="5.0" HBox.hgrow="ALWAYS">
+                              <children>
+                                 <Label text="Date de départ *" />
+                                 <DatePicker fx:id="dateDepart" prefWidth="200.0" />
+                              </children>
+                           </VBox>
+                        </children>
+                     </HBox>
+                     
+                     <VBox spacing="5.0">
+                        <children>
+                           <Label text="Nombre de personnes *" />
+                           <Spinner fx:id="nombrePersonnes" prefWidth="150.0" />
+                        </children>
+                     </VBox>
+                     
+                     <!-- Total -->
+                     <VBox spacing="10.0" style="-fx-background-color: #E8F5E8; -fx-border-color: #27ae60; -fx-border-radius: 5; -fx-background-radius: 5;">
+                        <padding>
+                           <Insets bottom="15.0" left="15.0" right="15.0" top="15.0" />
+                        </padding>
+                        <children>
+                           <Label fx:id="totalLabel" text="Total: -- DH" style="-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #27ae60;" />
+                        </children>
+                     </VBox>
+                     
+                     <!-- Boutons -->
+                     <HBox spacing="15.0" alignment="CENTER">
+                        <children>
+                           <Button onAction="#goBack" text="← Retour" style="-fx-background-color: #6c757d; -fx-text-fill: white; -fx-font-weight: bold; -fx-pref-width: 120; -fx-pref-height: 40;" />
+                           <Button fx:id="confirmerButton" onAction="#handleConfirmerReservation" text="Confirmer la réservation" style="-fx-background-color: #380F17; -fx-text-fill: white; -fx-font-weight: bold; -fx-pref-width: 200; -fx-pref-height: 40;" />
+                        </children>
+                     </HBox>
+                  </children>
+               </VBox>
+            </VBox>
+         </content>
+      </ScrollPane>
+   </children>
+</VBox>

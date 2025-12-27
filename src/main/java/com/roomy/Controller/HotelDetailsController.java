@@ -5,6 +5,7 @@ import com.roomy.entities.Chambre;
 import com.roomy.entities.Image_hotel;
 import com.roomy.entities.Image_chambre;
 import com.roomy.Dao.HotelDAO;
+import com.roomy.service.Session;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -37,6 +38,7 @@ public class HotelDetailsController implements Initializable {
 
     private Hotel hotel;
     private HotelDAO hotelDAO = new HotelDAO();
+    private Chambre selectedChambre; // Pour stocker la chambre sélectionnée
 
     public void setHotel(Hotel hotel) {
         this.hotel = hotel;
@@ -292,7 +294,7 @@ public class HotelDetailsController implements Initializable {
                 "-fx-text-fill: " + getStatusColor(chambre.getStatut()) + ";");
 
         // Bouton Réserver cette chambre
-        Button bookRoomButton = new Button("Book This Room");
+        Button bookRoomButton = new Button("Réserver");
         bookRoomButton.setStyle("-fx-background-color: #27ae60; " +
                 "-fx-text-fill: white; " +
                 "-fx-font-weight: bold; " +
@@ -300,7 +302,7 @@ public class HotelDetailsController implements Initializable {
                 "-fx-pref-height: 40px; " +
                 "-fx-background-radius: 5px; " +
                 "-fx-cursor: hand;");
-        bookRoomButton.setOnAction(e -> bookRoom(chambre));
+        bookRoomButton.setOnAction(e -> handleBookingFlow(chambre));
 
         // Effet hover
         bookRoomButton.setOnMouseEntered(e -> {
@@ -374,30 +376,64 @@ public class HotelDetailsController implements Initializable {
 
     @FXML
     private void handleBooking() {
-        redirectToSignup();
+        // Flux général de réservation pour l'hôtel
+        handleBookingFlow(null);
     }
 
-    private void bookRoom(Chambre chambre) {
-        // Vous pouvez ajouter de la logique spécifique à la chambre ici
-        showAlert("Room Selected",
-                "You have selected " + chambre.getType() + " - Room #" + chambre.getNumchambre() +
-                        "\nPrice: $" + chambre.getPrix_nuit() + " per night");
-
-        redirectToSignup();
+    /**
+     * FLUX 1 : Utilisateur NON connecté → Redirige vers inscription → Auto-redirection vers réservation
+     * FLUX 2 : Utilisateur DÉJÀ connecté → Formulaire réservation DIRECT
+     */
+    private void handleBookingFlow(Chambre chambre) {
+        this.selectedChambre = chambre;
+        
+        // Vérifier si l'utilisateur est connecté
+        if (Session.getCurrentClient() != null) {
+            // FLUX 2 : Utilisateur connecté → Réservation directe
+            redirectToBookingForm();
+        } else {
+            // FLUX 1 : Utilisateur non connecté → Inscription avec redirection auto
+            storeBookingContext();
+            redirectToSignup();
+        }
+    }
+    
+    private void storeBookingContext() {
+        // Stocker le contexte de réservation dans la session pour redirection automatique
+        BookingContext.setHotel(this.hotel);
+        BookingContext.setChambre(this.selectedChambre);
+    }
+    
+    private void redirectToBookingForm() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/booking_form.fxml"));
+            Parent root = loader.load();
+            
+            BookingController controller = loader.getController();
+            controller.setHotelAndChambre(this.hotel, this.selectedChambre);
+            
+            Stage stage = (Stage) bookButton.getScene().getWindow();
+            stage.setScene(new Scene(root));
+            stage.setTitle("Réservation - ROOMY");
+            
+        } catch (Exception e) {
+            e.printStackTrace();
+            showAlert("Erreur", "Impossible d'ouvrir le formulaire de réservation: " + e.getMessage());
+        }
     }
 
     private void redirectToSignup() {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/signup.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/client_signup.fxml"));
             Parent root = loader.load();
 
             Stage stage = (Stage) bookButton.getScene().getWindow();
             stage.setScene(new Scene(root));
-            stage.setTitle("Sign Up - ROOMY");
+            stage.setTitle("Inscription - ROOMY");
 
         } catch (Exception e) {
             e.printStackTrace();
-            showAlert("Error", "Cannot open sign up page: " + e.getMessage());
+            showAlert("Erreur", "Impossible d'ouvrir la page d'inscription: " + e.getMessage());
         }
     }
 

@@ -41,6 +41,8 @@ public class Chambre {
     // Getters et setters
     public int getId() { return id; }
     public void setId(int id) { this.id = id; }
+    public int getIdChambre() { return id; }
+    public void setIdChambre(int id) { this.id = id; }
     public int getNumchambre() { return numchambre; }
     public void setNumchambre(int numchambre) { this.numchambre = numchambre; }
     public TypeChambre getType() { return type; }
