@@ -57,15 +57,19 @@ public class LoginController {
             // Essai comme Hôtelier
             Hotelier hotelier = hotelierDAO.findByEmail(email);
             if (hotelier != null && BCrypt.checkpw(password, hotelier.getPassword())) {
-                if ("rejete".equals(hotelier.getStatutVerification())) {
+                if ("rejete".equals(hotelier.getStatutVerification().name())) {
                     lblError.setText("Votre compte a été rejeté. Contactez l'administration.");
                     return;
                 }
-                if ("en_attente".equals(hotelier.getStatutVerification())) {
+                if ("en_attente".equals(hotelier.getStatutVerification().name())) {
                     openDashboard(event, "en_attente_verification.fxml", "En attente");
                     return;
                 }
                 showAlert("Succès", "Connexion Hôtelier réussie !");
+
+                // ✓ Définir l'ID de l'hôtelier connecté AVANT de charger le dashboard
+                Dash_hotelier_Control.setCurrentHotelierId(hotelier.getIdHotelier());
+
                 openDashboard(event, "dash_hotelier.fxml", "Hotelier");
                 return;
             }
