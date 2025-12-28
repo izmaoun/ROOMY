@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="com.roomy.Controller.ReservationsTableController"
+      spacing="20">
+
+    <padding>
+        <Insets top="20" right="20" bottom="20" left="20"/>
+    </padding>
+
+    <!-- Titre -->
+    <Label text="Mes Réservations" style="-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: #380F17;"/>
+
+    <!-- Bouton Nouvelle réservation -->
+    <HBox alignment="CENTER_LEFT">
+        <Button onAction="#handleNouvelleReservation" text="+ Nouvelle réservation" 
+                style="-fx-background-color: #380F17; -fx-text-fill: white; -fx-font-weight: bold; -fx-pref-width: 200; -fx-pref-height: 40; -fx-background-radius: 5;"/>
+    </HBox>
+
+    <!-- Tableau des réservations -->
+    <TableView fx:id="reservationsTable" VBox.vgrow="ALWAYS">
+        <columns>
+            <TableColumn fx:id="colId" text="ID" prefWidth="60"/>
+            <TableColumn fx:id="colHotel" text="Hôtel" prefWidth="200"/>
+            <TableColumn fx:id="colChambre" text="Chambre" prefWidth="120"/>
+            <TableColumn fx:id="colDateDebut" text="Arrivée" prefWidth="100"/>
+            <TableColumn fx:id="colDateFin" text="Départ" prefWidth="100"/>
+            <TableColumn fx:id="colPersonnes" text="Personnes" prefWidth="80"/>
+            <TableColumn fx:id="colMontant" text="Montant (DH)" prefWidth="100"/>
+            <TableColumn fx:id="colStatut" text="Statut" prefWidth="120"/>
+            <TableColumn fx:id="colActions" text="Actions" prefWidth="150"/>
+        </columns>
+    </TableView>
+
+    <!-- Message si aucune réservation -->
+    <Label fx:id="noReservationsLabel" text="Aucune réservation trouvée" 
+           style="-fx-font-size: 16px; -fx-text-fill: #666; -fx-alignment: center;" 
+           visible="false"/>
+
+</VBox>

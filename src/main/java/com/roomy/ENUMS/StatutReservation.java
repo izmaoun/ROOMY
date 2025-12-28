@@ -2,5 +2,7 @@ package com.roomy.ENUMS;
 
 public enum StatutReservation {
     CONFIRMEE,
-    ANNULEE
+    ANNULEE,
+    EN_ATTENTE,
+    TERMINEE
 }

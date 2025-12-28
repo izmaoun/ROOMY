@@ -36,6 +36,7 @@ public class SingupHotelierController {
                 Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
                 Scene scene = new Scene(root);
                 stage.setScene(scene);
+                stage.setTitle("ROOMY - Choix du type de compte");
                 stage.setMaximized(false);
                 stage.show();
             } catch (Exception e) {

@@ -2,6 +2,7 @@ package com.roomy.Controller;
 
 import com.roomy.Dao.ClientDAO;
 import com.roomy.entities.Client;
+import com.roomy.service.Session;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -30,11 +31,13 @@ public class SignupController {
     @FXML
     private void goBack(ActionEvent event) {
         try {
-            Parent root = FXMLLoader.load(getClass().getResource("/fxml/welcome.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/welcome.fxml"));
+            Parent root = loader.load();
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-            Scene scene = new Scene(root);
+            Scene scene = new Scene(root, 800, 600);
             stage.setScene(scene);
-            stage.setMaximized(false);
+            stage.setTitle("ROOMY - Choix du type de compte");
+            stage.centerOnScreen();
             stage.show();
         } catch (Exception e) {
             showAlert("Erreur", "Erreur lors du retour: " + e.getMessage());
@@ -90,7 +93,18 @@ public class SignupController {
             if (res) {
                 showAlert("Succès", "Inscription réussie !");
                 clearFields();
-                goToLogin(event);
+                
+                // Connecter automatiquement l'utilisateur
+                Session.setCurrentClient(client);
+                
+                // Vérifier s'il y a une réservation en attente
+                if (BookingContext.hasPendingBooking()) {
+                    // FLUX 1 : Redirection automatique vers le formulaire de réservation
+                    redirectToBookingForm(event);
+                } else {
+                    // Redirection normale vers login ou dashboard
+                    goToLogin(event);
+                }
             } else {
                 showAlert("Erreur", "Échec de l'inscription.");
             }
@@ -105,7 +119,9 @@ public class SignupController {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/login.fxml"));
             Parent root = loader.load();
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-            stage.setScene(new Scene(root, 800, 600));
+            stage.setScene(new Scene(root));
+            stage.setTitle("ROOMY - Connexion");
+            stage.centerOnScreen();
             stage.show();
         } catch (Exception e) {
             showAlert("Erreur", "Erreur lors de la navigation: " + e.getMessage());
@@ -154,10 +170,36 @@ public class SignupController {
         alert.setContentText(message);
         alert.showAndWait();
     }
+<<<<<<< HEAD
 
     private static String generateOTP(){
         int OTP = (int)(Math.random() * 900000) + 100000;
         return String.valueOf(OTP);
     }
 
+=======
+    
+    private void redirectToBookingForm(ActionEvent event) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/booking_form.fxml"));
+            Parent root = loader.load();
+            
+            BookingController controller = loader.getController();
+            controller.setHotelAndChambre(BookingContext.getHotel(), BookingContext.getChambre());
+            
+            // Nettoyer le contexte après utilisation
+            BookingContext.clear();
+            
+            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            stage.setScene(new Scene(root));
+            stage.setTitle("Réservation - ROOMY");
+            
+        } catch (Exception e) {
+            showAlert("Erreur", "Erreur lors de la redirection vers la réservation: " + e.getMessage());
+            e.printStackTrace();
+            // En cas d'erreur, aller vers le login
+            goToLogin(event);
+        }
+    }
+>>>>>>> 146ddc43664c4b11e5d3f96cac87047998ebacd1
 }

@@ -13,10 +13,28 @@ public class Hotel {
     private Hotelier hotelier;
     private List<Chambre> chambres;
     private List<Image_hotel> imgs;
+    private List<String> services;
+    private String description;
 
+<<<<<<< HEAD
     public Hotel() {
+=======
+    public Hotel(){
         this.chambres = new ArrayList<>();
         this.imgs = new ArrayList<>();
+        this.services = new ArrayList<>();
+    }
+
+    public Hotel(int idhotel, String nomHotel, Adresse adresse, int e, Hotelier hotelier){
+        this.idhotel = idhotel;
+        this.nomHotel = nomHotel;
+        this.adresse = adresse;
+        this.etoiles = e;
+        this.hotelier = hotelier;
+>>>>>>> 146ddc43664c4b11e5d3f96cac87047998ebacd1
+        this.chambres = new ArrayList<>();
+        this.imgs = new ArrayList<>();
+        this.services = new ArrayList<>();
     }
 
     public Hotel(int idhotel, String nomHotel, String description, Adresse adresse, int etoiles, Hotelier hotelier) {
@@ -72,9 +90,37 @@ public class Hotel {
         }
         this.etoiles = etoiles;
     }
+<<<<<<< HEAD
 
     public Hotelier getHotelier() {
         return hotelier;
+=======
+    public List<String> getServices() { return services; }
+    public void setServices(List<String> services) { this.services = services; }
+
+    public String getDescription() { return description; }
+    public void setDescription(String description) { this.description = description; }
+
+    // Méthode pour obtenir l'image principale
+    public String getMainImage() {
+        if (imgs != null && !imgs.isEmpty()) {
+            return imgs.get(0).getUrl();
+        }
+        return null;
+    }
+
+    // Méthode pour obtenir le prix minimum
+    public double getMinPrice() {
+        if (chambres == null || chambres.isEmpty()) return 0;
+        return chambres.stream()
+                .mapToDouble(Chambre::getPrix_nuit)
+                .min()
+                .orElse(0);
+    }
+    public Hotelier getHotelier() { return hotelier; }
+    public void setHotelier(Hotelier hotlier){
+        this.hotelier = Objects.requireNonNull(hotelier, "l'hotelier est obligatoire");
+>>>>>>> 146ddc43664c4b11e5d3f96cac87047998ebacd1
     }
 
     public void setHotelier(Hotelier hotelier) {

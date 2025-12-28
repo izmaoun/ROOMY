@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.image.*?>
+
+<BorderPane xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.roomy.Controller.HotelDetailsController"
+            style="-fx-background-color: #EFDFC5;">
+
+    <!-- TOP: Navigation -->
+    <top>
+        <HBox style="-fx-background-color: #380F17; -fx-padding: 15 20; -fx-border-color: #4C4F54; -fx-border-width: 0 0 1 0;">
+            <Button fx:id="backButton" text="← Back to Hotels"
+                    onAction="#handleBack"
+                    style="-fx-background-color: transparent; -fx-text-fill: #EFDFC5; -fx-font-weight: bold; -fx-cursor: hand; -fx-font-size: 14px;"/>
+            <Region HBox.hgrow="ALWAYS"/>
+            <Button fx:id="bookButton" text="Book Now"
+                    onAction="#handleBooking"
+                    style="-fx-background-color: #EFDFC5; -fx-text-fill: #380F17; -fx-font-weight: bold; -fx-pref-width: 120px; -fx-pref-height: 40px; -fx-background-radius: 5px; -fx-cursor: hand;"/>
+        </HBox>
+    </top>
+
+    <!-- CENTER: Contenu principal -->
+    <center>
+        <ScrollPane fitToWidth="true" style="-fx-background-color: transparent;">
+            <VBox spacing="30" style="-fx-padding: 20;">
+
+                <!-- Header avec nom, étoiles et localisation -->
+                <VBox spacing="15">
+                    <HBox spacing="15" alignment="CENTER_LEFT">
+                        <Label fx:id="hotelNameLabel"
+                               style="-fx-font-size: 32px; -fx-font-weight: bold; -fx-text-fill: #380F17;"/>
+                        <Label fx:id="starsLabel"
+                               style="-fx-font-size: 24px; -fx-text-fill: #FFD700;"/>
+                    </HBox>
+
+                    <HBox spacing="20" alignment="CENTER_LEFT">
+                        <Label fx:id="locationLabel"
+                               style="-fx-font-size: 18px; -fx-text-fill: #4C4F54;"/>
+                        <Label fx:id="priceRangeLabel"
+                               style="-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: #380F17;"/>
+                    </HBox>
+                </VBox>
+
+                <!-- Images de l'hôtel -->
+                <VBox spacing="15">
+                    <Label text="Photos"
+                           style="-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: #380F17;"/>
+                    <FlowPane fx:id="imagesContainer" hgap="15" vgap="15"
+                              style="-fx-padding: 10px;"/>
+                </VBox>
+
+                <!-- Description -->
+                <VBox spacing="15">
+                    <Label text="Description"
+                           style="-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: #380F17;"/>
+                    <TextArea fx:id="descriptionLabel" wrapText="true" editable="false"
+                              style="-fx-font-size: 18px; -fx-text-fill: #4C4F54; -fx-background-color: #A59090; -fx-border-color: #4C4F54; -fx-pref-height: 180px;"/>
+                </VBox>
+
+                <!-- Services -->
+                <VBox spacing="15">
+                    <Label text="Services - Amenities"
+                           style="-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: #380F17;"/>
+                    <FlowPane fx:id="servicesContainer" hgap="10" vgap="10"
+                              style="-fx-padding: 10px;"/>
+                </VBox>
+
+                <!-- Chambres disponibles -->
+                <VBox spacing="20">
+                    <Label text="Available Rooms"
+                           style="-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: #380F17;"/>
+                    <VBox fx:id="roomsContainer" spacing="20"
+                          style="-fx-padding: 10px;"/>
+                </VBox>
+
+            </VBox>
+        </ScrollPane>
+    </center>
+
+</BorderPane>

@@ -79,6 +79,7 @@ CREATE TABLE chambre_images (
                                 FOREIGN KEY (id_chambre) REFERENCES chambres(id_chambre)
                                     ON DELETE CASCADE
 );
+<<<<<<< HEAD
 
 CREATE TABLE reservations (
     id_reservation INT AUTO_INCREMENT PRIMARY KEY,
@@ -95,3 +96,13 @@ CREATE TABLE reservations (
     CONSTRAINT fk_reservations_client FOREIGN KEY (id_client) REFERENCES clients(id_client) ON DELETE RESTRICT ON UPDATE CASCADE,
     CONSTRAINT fk_reservations_chambre FOREIGN KEY (id_chambre) REFERENCES chambres(id_chambre) ON DELETE SET NULL ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+=======
+CREATE TABLE hotel_services (
+    id_service INT AUTO_INCREMENT PRIMARY KEY,
+    id_hotel INT NOT NULL,
+    service_name VARCHAR(100) NOT NULL,
+    FOREIGN KEY (id_hotel) REFERENCES hotels(id_hotel) ON DELETE CASCADE
+);
+
+
+>>>>>>> 146ddc43664c4b11e5d3f96cac87047998ebacd1

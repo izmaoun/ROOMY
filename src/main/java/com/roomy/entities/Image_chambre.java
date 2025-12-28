@@ -15,9 +15,24 @@ public class Image_chambre {
         this.chambre = chambre;
     }
 
+<<<<<<< HEAD
     // ---------- GETTERS ----------
     public int getId() {
         return id;
+=======
+    public int getId() { return id; }
+    public void setId(int id) { this.id = id; }
+
+    public String getUrl() { return url; }           // ✅ GETTER MANQUANT
+    public void setUrl(String url) { this.url = url; } // ✅ SETTER MANQUANT
+
+    public String getDescription() { return description; } // ✅ GETTER MANQUANT
+    public void setDescription(String description) { this.description = description; } // ✅ SETTER MANQUANT
+
+    public Chambre getChambre() { return chambre; }
+    public void setChambre (Chambre ch){
+        this.chambre=ch;
+>>>>>>> 146ddc43664c4b11e5d3f96cac87047998ebacd1
     }
 
     public String getUrl() {

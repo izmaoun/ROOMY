@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<ScrollPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="com.roomy.Controller.ProfileController"
+            styleClass="main-background"
+            stylesheets="@../css/client-styles.css"
+            fitToWidth="true"
+            hbarPolicy="NEVER"
+            vbarPolicy="AS_NEEDED">
+    <VBox
+            stylesheets="@../css/client-styles.css"
+            spacing="10">
+
+        <!-- Contenu principal -->
+        <VBox spacing="10" VBox.vgrow="ALWAYS">
+            <padding>
+                <Insets top="0" right="60" bottom="40" left="60"/>
+            </padding>
+
+            <!-- Message de bienvenue -->
+            <VBox spacing="0">
+                <Label fx:id="welcomeLabel" text="Bonjour Client" styleClass="welcome-text"/>
+                <Label fx:id="emailHeaderLabel" text="benmida.@gmail.com" styleClass="subtitle-text"/>
+            </VBox>
+
+            <!-- Titre section -->
+            <VBox spacing="0" alignment="CENTER">
+                <padding>
+                    <Insets top="0"/>
+                </padding>
+                <Label text="Vos Informations personnelles" styleClass="page-title"/>
+                <Label text="Mettez à jour vos informations et découvrez comment elles sont utilisées."
+                       styleClass="subtitle-text"/>
+            </VBox>
+
+            <!-- Tableau des informations avec bouton Modifier aligné à droite -->
+            <VBox styleClass="profile-table" maxWidth="700" spacing="0" >
+
+                <!-- Ligne Nom -->
+                <HBox styleClass="profile-row" alignment="CENTER_LEFT" spacing="5">
+                    <Label text="Nom" styleClass="profile-label" prefWidth="200"/>
+                    <Label fx:id="nomLabel" text="Client Nom" styleClass="profile-value" HBox.hgrow="ALWAYS"/>
+                    <Button text="Modifier" styleClass="btn-modifier" onAction="#handleModifierNom"/>
+                </HBox>
+
+                <!-- Ligne Prénom -->
+                <HBox styleClass="profile-row" alignment="CENTER_LEFT" spacing="5">
+                    <Label text="Prénom" styleClass="profile-label" prefWidth="200"/>
+                    <Label fx:id="prenomLabel" text="Client Prénom" styleClass="profile-value" HBox.hgrow="ALWAYS"/>
+                    <Button text="Modifier" styleClass="btn-modifier" onAction="#handleModifierPrenom"/>
+                </HBox>
+
+                <!-- Ligne Email -->
+                <HBox styleClass="profile-row" alignment="CENTER_LEFT" spacing="5">
+                    <Label text="Adresse e-mail" styleClass="profile-label" prefWidth="200"/>
+                    <Label fx:id="emailLabel" text="benmida.@gmail.com" styleClass="profile-value" HBox.hgrow="ALWAYS"/>
+                    <Button text="Modifier" styleClass="btn-modifier" onAction="#handleModifierEmail"/>
+                </HBox>
+
+                <!-- Ligne Téléphone -->
+                <HBox styleClass="profile-row" alignment="CENTER_LEFT" spacing="5">
+                    <Label text="Numéro de téléphone" styleClass="profile-label" prefWidth="200"/>
+                    <Label fx:id="telephoneLabel" text="06*****15" styleClass="profile-value" HBox.hgrow="ALWAYS"/>
+                    <Button text="Modifier" styleClass="btn-modifier" onAction="#handleModifierTelephone"/>
+                </HBox>
+
+                <!-- Ligne Mot de passe -->
+                <HBox styleClass="profile-row" alignment="CENTER_LEFT" spacing="5">
+                    <Label text="Mot de passe" styleClass="profile-label" prefWidth="200"/>
+                    <Label text="••••••••••" styleClass="profile-value" HBox.hgrow="ALWAYS"/>
+                    <Button text="Modifier" styleClass="btn-modifier" onAction="#handleModifierPassword"/>
+                </HBox>
+            </VBox>
+
+        </VBox>
+
+    </VBox>
+</ScrollPane>
