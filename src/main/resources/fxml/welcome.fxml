@@ -14,6 +14,20 @@
             style="-fx-background-color: #380F17;"
             prefWidth="800" prefHeight="600">
 
+    <!-- Return to Landing Page Button -->
+    <Button text="← Retour à l'accueil"
+            onAction="#goToLandingPage"
+            AnchorPane.topAnchor="20"
+            AnchorPane.leftAnchor="20"
+            style="-fx-background-color: #A59090;
+                   -fx-background-radius: 15;
+                   -fx-text-fill: #380F17;
+                   -fx-font-size: 14;
+                   -fx-font-weight: bold;
+                   -fx-cursor: hand;"
+            prefWidth="150"
+            prefHeight="35"/>
+
     <VBox alignment="CENTER"
           spacing="50"
           AnchorPane.topAnchor="0"
@@ -61,6 +75,20 @@
                            -fx-font-size: 16;
                            -fx-font-weight: bold;"/>
         </VBox>
+
+        <!-- Return to Landing Page Button -->
+        <Button text="← Retour à l'accueil"
+                onAction="#goToLandingPage"
+                AnchorPane.topAnchor="20"
+                AnchorPane.leftAnchor="20"
+                style="-fx-background-color: #EFDFC5;
+               -fx-background-radius: 20;
+               -fx-text-fill: #380F17;
+               -fx-font-size: 12;
+               -fx-font-weight: bold;
+               -fx-cursor: hand;"
+                prefWidth="150"
+                prefHeight="35"/>
 
         <!-- Espace en bas -->
         <VBox prefHeight="50"/>

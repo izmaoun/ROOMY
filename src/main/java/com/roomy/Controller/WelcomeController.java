@@ -19,6 +19,12 @@ public class WelcomeController {
         switchScene(event, "collab_signup.fxml");
     }
 
+    @FXML
+    private void goToLandingPage(ActionEvent event) {
+        switchScene(event, "landingPage.fxml");
+    }
+
+
     private void switchScene(ActionEvent event, String fxmlName) {
         try {
             Parent root = FXMLLoader.load(getClass().getResource("/fxml/" + fxmlName));

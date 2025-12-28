@@ -102,12 +102,16 @@
                                    -fx-cursor: hand;"/>
                     </HBox>
 
-                    <Button text="Retour"
+                    <Button text="← Retour à l'accueil"
                             onAction="#handleBack"
-                            style="-fx-background-color: transparent;
-                               -fx-text-fill: #A59090;
+                            style="-fx-background-color: #A59090;
+                               -fx-background-radius: 10;
+                               -fx-text-fill: #380F17;
                                -fx-font-size: 14;
-                               -fx-cursor: hand;"/>
+                               -fx-font-weight: bold;
+                               -fx-cursor: hand;"
+                            prefWidth="150"
+                            prefHeight="35"/>
 
                     <VBox prefHeight="20"/>
 

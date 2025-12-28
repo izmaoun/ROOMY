@@ -158,4 +158,52 @@ import java.util.Optional;
         }
         return false;
     }
+
+    /**
+     * Compte le nombre total de clients
+     */
+    public int countAll() {
+        String sql = "SELECT COUNT(*) as total FROM clients";
+        try (Connection c = DBConnection.getConnection();
+             PreparedStatement ps = c.prepareStatement(sql)) {
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                return rs.getInt("total");
+            }
+        } catch (SQLException e) {
+            System.err.println("Erreur count clients: " + e.getMessage());
+            e.printStackTrace();
+        }
+        return 0;
     }
+
+    /**
+     * Compte le nombre d'inscriptions de clients par mois pour une année donnée
+     * Retourne un Map avec le mois (1-12) comme clé et le nombre d'inscriptions comme valeur
+     */
+    public java.util.Map<Integer, Integer> countByMonthForYear(int year) {
+        java.util.Map<Integer, Integer> result = new java.util.HashMap<>();
+        // Initialiser tous les mois à 0
+        for (int i = 1; i <= 12; i++) {
+            result.put(i, 0);
+        }
+
+        String sql = "SELECT MONTH(date_inscription) as mois, COUNT(*) as total " +
+                     "FROM clients " +
+                     "WHERE YEAR(date_inscription) = ? " +
+                     "GROUP BY MONTH(date_inscription)";
+
+        try (Connection c = DBConnection.getConnection();
+             PreparedStatement ps = c.prepareStatement(sql)) {
+            ps.setInt(1, year);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                result.put(rs.getInt("mois"), rs.getInt("total"));
+            }
+        } catch (SQLException e) {
+            System.err.println("Erreur count by month: " + e.getMessage());
+            e.printStackTrace();
+        }
+        return result;
+    }
+}

@@ -317,4 +317,95 @@ public class HotelierDAO {
         return false;
     }
 
+    /**
+     * Compte le nombre total d'hôteliers (tous statuts confondus)
+     */
+    public int countAll() {
+        String sql = "SELECT COUNT(*) as total FROM hoteliers";
+        try (Connection c = DBConnection.getConnection();
+             PreparedStatement ps = c.prepareStatement(sql)) {
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                return rs.getInt("total");
+            }
+        } catch (SQLException e) {
+            System.err.println("Erreur count hoteliers: " + e.getMessage());
+            e.printStackTrace();
+        }
+        return 0;
+    }
+
+    /**
+     * Compte le nombre d'hôteliers vérifiés uniquement
+     */
+    public int countVerified() {
+        String sql = "SELECT COUNT(*) as total FROM hoteliers WHERE statut_verification = 'verifie'";
+        try (Connection c = DBConnection.getConnection();
+             PreparedStatement ps = c.prepareStatement(sql)) {
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                return rs.getInt("total");
+            }
+        } catch (SQLException e) {
+            System.err.println("Erreur count hoteliers vérifiés: " + e.getMessage());
+            e.printStackTrace();
+        }
+        return 0;
+    }
+
+    /**
+     * Compte le nombre d'inscriptions d'hôteliers vérifiés par mois pour une année donnée
+     * Retourne un Map avec le mois (1-12) comme clé et le nombre d'inscriptions comme valeur
+     */
+    public java.util.Map<Integer, Integer> countByMonthForYear(int year) {
+        java.util.Map<Integer, Integer> result = new java.util.HashMap<>();
+        // Initialiser tous les mois à 0
+        for (int i = 1; i <= 12; i++) {
+            result.put(i, 0);
+        }
+
+        String sql = "SELECT MONTH(date_inscription) as mois, COUNT(*) as total " +
+                "FROM hoteliers " +
+                "WHERE YEAR(date_inscription) = ? AND statut_verification = 'verifie' " +
+                "GROUP BY MONTH(date_inscription)";
+
+        try (Connection c = DBConnection.getConnection();
+             PreparedStatement ps = c.prepareStatement(sql)) {
+            ps.setInt(1, year);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                result.put(rs.getInt("mois"), rs.getInt("total"));
+            }
+        } catch (SQLException e) {
+            System.err.println("Erreur count by month: " + e.getMessage());
+            e.printStackTrace();
+        }
+        return result;
+    }
+
+    /**
+     * Compte le nombre d'hôteliers vérifiés par ville
+     * Retourne un Map avec la ville comme clé et le nombre d'hôteliers comme valeur
+     */
+    public java.util.Map<String, Integer> countByCity() {
+        java.util.Map<String, Integer> result = new java.util.HashMap<>();
+
+        String sql = "SELECT ville, COUNT(*) as total " +
+                     "FROM hoteliers " +
+                     "WHERE ville IS NOT NULL AND statut_verification = 'verifie' " +
+                     "GROUP BY ville " +
+                     "ORDER BY total DESC";
+
+        try (Connection c = DBConnection.getConnection();
+             PreparedStatement ps = c.prepareStatement(sql)) {
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                result.put(rs.getString("ville"), rs.getInt("total"));
+            }
+        } catch (SQLException e) {
+            System.err.println("Erreur count by city: " + e.getMessage());
+            e.printStackTrace();
+        }
+        return result;
+    }
 }
