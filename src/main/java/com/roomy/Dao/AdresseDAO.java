@@ -61,17 +61,16 @@ public class AdresseDAO {
         return false;
     }
     //Methode pour mettre à jour une adresse
-    public boolean updateAdresse(Adresse a) {
-        String sql = "UPDATE adresses SET rue=?, ville=?, codepostal=?, pays=? WHERE id_adresse=?";
-
+    public boolean updateAdresse(Adresse adresse) {
+        String sql = "UPDATE adresses SET rue = ?, ville = ?, codepostal = ?, pays = ? WHERE id_adresse = ?";
         try (Connection c = DBConnection.getConnection();
              PreparedStatement ps = c.prepareStatement(sql)) {
 
-            ps.setString(1, a.getRue());
-            ps.setString(2, a.getVille());
-            ps.setString(3, a.getCodepostal());
-            ps.setString(4, a.getPays());
-            ps.setInt(5, a.getIdAdresse());
+            ps.setString(1, adresse.getRue());
+            ps.setString(2, adresse.getVille());
+            ps.setString(3, adresse.getCodepostal());
+            ps.setString(4, adresse.getPays());
+            ps.setInt(5, adresse.getIdAdresse());
 
             return ps.executeUpdate() > 0;
 
@@ -124,4 +123,32 @@ public class AdresseDAO {
 
         return list;
     }
+    // Alias pour ajouterAdresse (pour cohérence avec les autres DAO)
+    public boolean add(Adresse adresse) {
+        String sql = "INSERT INTO adresses (rue, ville, codepostal, pays) VALUES (?, ?, ?, ?)";
+        try (Connection c = DBConnection.getConnection();
+             PreparedStatement ps = c.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+
+            ps.setString(1, adresse.getRue());
+            ps.setString(2, adresse.getVille());
+            ps.setString(3, adresse.getCodepostal());
+            ps.setString(4, adresse.getPays());
+
+            int rows = ps.executeUpdate();
+            if (rows > 0) {
+                try (ResultSet keys = ps.getGeneratedKeys()) {
+                    if (keys.next()) {
+                        adresse.setIdAdresse(keys.getInt(1)); // L'ID est assigné à l'objet
+                    }
+                }
+                return true;
+            }
+        } catch (SQLException e) {
+            System.err.println("Erreur add Adresse : " + e.getMessage());
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+
 }

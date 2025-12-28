@@ -1,14 +1,80 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
+<?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
 
 <AnchorPane xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
-            fx:controller="CONTROLLER_NAME"
-            prefHeight="400.0" prefWidth="600.0">
+            fx:controller="com.roomy.Controller.Profile_control"
+            prefHeight="700.0" prefWidth="1000.0"
+            style="-fx-background-color: #f5f5f5;">
+
+    <VBox AnchorPane.topAnchor="20" AnchorPane.leftAnchor="20" AnchorPane.rightAnchor="20" AnchorPane.bottomAnchor="20" spacing="20">
+
+        <!-- Titre -->
+        <Text text="Mon Profil" style="-fx-font-size: 28px; -fx-font-weight: bold; -fx-fill: #380F17;" />
+
+        <!-- Section Infos Hôtelier -->
+        <VBox spacing="15" style="-fx-border-color: #e0e0e0; -fx-border-radius: 10; -fx-padding: 20; -fx-background-color: white;">
+            <Text text="Informations Personnelles" style="-fx-font-size: 18px; -fx-font-weight: bold; -fx-fill: #380F17;" />
+
+            <GridPane hgap="20" vgap="15" prefWidth="Infinity">
+                <columnConstraints>
+                    <ColumnConstraints percentWidth="50" />
+                    <ColumnConstraints percentWidth="50" />
+                </columnConstraints>
+
+                <!-- Nom Établissement -->
+                <Label text="Nom Établissement :" style="-fx-font-size: 12px; -fx-font-weight: bold;" GridPane.rowIndex="0" GridPane.columnIndex="0" />
+                <TextField fx:id="tfNomEtablissement" GridPane.rowIndex="0" GridPane.columnIndex="1" promptText="Nom de l'établissement" />
+
+                <!-- Nom Gérant -->
+                <Label text="Nom Gérant :" style="-fx-font-size: 12px; -fx-font-weight: bold;" GridPane.rowIndex="1" GridPane.columnIndex="0" />
+                <TextField fx:id="tfNomGerant" GridPane.rowIndex="1" GridPane.columnIndex="1" promptText="Nom du gérant" />
+
+                <!-- Prénom Gérant -->
+                <Label text="Prénom Gérant :" style="-fx-font-size: 12px; -fx-font-weight: bold;" GridPane.rowIndex="2" GridPane.columnIndex="0" />
+                <TextField fx:id="tfPrenomGerant" GridPane.rowIndex="2" GridPane.columnIndex="1" promptText="Prénom du gérant" />
+
+                <!-- Ville -->
+                <Label text="Ville :" style="-fx-font-size: 12px; -fx-font-weight: bold;" GridPane.rowIndex="3" GridPane.columnIndex="0" />
+                <TextField fx:id="tfVille" GridPane.rowIndex="3" GridPane.columnIndex="1" promptText="Ville" />
+
+                <!-- Email -->
+                <Label text="Email :" style="-fx-font-size: 12px; -fx-font-weight: bold;" GridPane.rowIndex="4" GridPane.columnIndex="0" />
+                <TextField fx:id="tfEmail" GridPane.rowIndex="4" GridPane.columnIndex="1" promptText="Email" />
+
+                <!-- Téléphone -->
+                <Label text="Téléphone :" style="-fx-font-size: 12px; -fx-font-weight: bold;" GridPane.rowIndex="5" GridPane.columnIndex="0" />
+                <TextField fx:id="tfTelephone" GridPane.rowIndex="5" GridPane.columnIndex="1" promptText="Téléphone" />
+
+                <!-- ICE -->
+                <Label text="ICE :" style="-fx-font-size: 12px; -fx-font-weight: bold;" GridPane.rowIndex="6" GridPane.columnIndex="0" />
+                <TextField fx:id="tfIce" GridPane.rowIndex="6" GridPane.columnIndex="1" promptText="ICE" editable="false" />
+            </GridPane>
+
+            <!-- Boutons Modifier/Annuler -->
+            <HBox spacing="10" prefWidth="Infinity" alignment="CENTER_RIGHT">
+                <Button fx:id="btnModifier" text="Modifier" style="-fx-padding: 10px 30px; -fx-font-size: 12px; -fx-background-color: #380F17; -fx-text-fill: white; -fx-border-radius: 5;" />
+                <Button fx:id="btnAnnuler" text="Annuler" style="-fx-padding: 10px 30px; -fx-font-size: 12px; -fx-background-color: #d3d3d3; -fx-border-radius: 5;" visible="false" />
+            </HBox>
+        </VBox>
+
+        <!-- Section Hôtels Gérés -->
+        <VBox spacing="15" style="-fx-border-color: #e0e0e0; -fx-border-radius: 10; -fx-padding: 20; -fx-background-color: white;">
+            <HBox alignment="CENTER_LEFT" spacing="10">
+                <Text text="Mes Hôtels" style="-fx-font-size: 18px; -fx-font-weight: bold; -fx-fill: #380F17;" />
+                <Label fx:id="lblNombreHotels" style="-fx-font-size: 14px; -fx-text-fill: #666; -fx-font-weight: bold;" />
+            </HBox>
+
+            <ScrollPane style="-fx-background-color: white; -fx-border-color: #e0e0e0;" prefHeight="250" vbarPolicy="ALWAYS">
+                <VBox fx:id="vboxHotels" spacing="10" style="-fx-padding: 10;" />
+            </ScrollPane>
+        </VBox>
+
+        <Region VBox.vgrow="ALWAYS" />
+    </VBox>
 
 </AnchorPane>

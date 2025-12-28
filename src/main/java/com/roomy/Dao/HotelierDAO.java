@@ -1,6 +1,8 @@
 package com.roomy.Dao;
 
 import com.roomy.ENUMS.StatutVerification;
+import com.roomy.entities.Adresse;
+import com.roomy.entities.Hotel;
 import com.roomy.entities.Hotelier;
 import java.sql.*;
 import java.util.ArrayList;
@@ -200,14 +202,41 @@ public class HotelierDAO {
 
             int affectedRows = ps.executeUpdate();
             if (affectedRows > 0) {
+                if (StatutVerification.verifie.name().equalsIgnoreCase(statut)) {
+                    Hotelier validated = findById(idHotelier);
+                    if (validated != null) {
+                        ensureHotelExistsFor(validated);
+                    }
+                }
                 System.out.println("Statut de vérification mis à jour pour l'hotelier ID: " + idHotelier + " => " + statut);
                 return true;
             }
+
         } catch (SQLException e) {
             System.err.println("Erreur mise à jour statut vérification : " + e.getMessage());
             e.printStackTrace();
         }
         return false;
+    }
+    private void ensureHotelExistsFor(Hotelier hotelier) {
+        HotelDAO hotelDAO = new HotelDAO();
+        if (!hotelDAO.getHotelsByHotelier(hotelier.getIdHotelier()).isEmpty()) {
+            return;
+        }
+
+        Adresse adresse = new Adresse();
+        adresse.setRue("À compléter");
+        adresse.setVille(hotelier.getVille());
+        adresse.setCodepostal("00000");
+        adresse.setPays("Maroc");
+        new AdresseDAO().add(adresse);
+
+        Hotel hotel = new Hotel();
+        hotel.setNomHotel(hotelier.getNomEtablissement());
+        hotel.setEtoiles(3);
+        hotel.setAdresse(adresse);
+        hotel.setHotelier(hotelier);
+        hotelDAO.ajouterHotel(hotel);
     }
 
     // Vérifier si un email existe déjà
@@ -264,6 +293,28 @@ public class HotelierDAO {
             e.printStackTrace();
         }
         return "Utilisateur";
+    }
+    //me7tajinha l profile :
+    public boolean updateHotelier(Hotelier hotelier) {
+        String sql = "UPDATE hoteliers SET nom_etablissement=?, nom_gerant=?, prenom_gerant=?, " +
+                "ville=?, email_gerant=?, telephone=? WHERE id_hotelier=?";
+        try (Connection c = DBConnection.getConnection();
+             PreparedStatement ps = c.prepareStatement(sql)) {
+
+            ps.setString(1, hotelier.getNomEtablissement());
+            ps.setString(2, hotelier.getNomGerant());
+            ps.setString(3, hotelier.getPrenomGerant());
+            ps.setString(4, hotelier.getVille());
+            ps.setString(5, hotelier.getEmailGerant());
+            ps.setString(6, hotelier.getTelephone());
+            ps.setInt(7, hotelier.getIdHotelier());
+
+            return ps.executeUpdate() > 0;
+        } catch (SQLException e) {
+            System.err.println("Erreur updateHotelier : " + e.getMessage());
+            e.printStackTrace();
+        }
+        return false;
     }
 
 }

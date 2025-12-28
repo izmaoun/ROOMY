@@ -20,29 +20,31 @@ public class ImageHotelDAO {
     }
 
     // Charger toutes les images d’un hôtel
-    public List<Image_hotel> findByHotel(int idHotel) {
-        List<Image_hotel> list = new ArrayList<>();
-        String sql = "SELECT * FROM hotel_images WHERE id_hotel = ?";
+   public List<Image_hotel> findByHotel(int idHotel) {
+       List<Image_hotel> list = new ArrayList<>();
+       String sql = "SELECT * FROM hotel_images WHERE id_hotel = ?";
 
-        try (Connection c = DBConnection.getConnection();
-             PreparedStatement ps = c.prepareStatement(sql)) {
+       try (Connection c = DBConnection.getConnection();
+            PreparedStatement ps = c.prepareStatement(sql)) {
 
-            ps.setInt(1, idHotel);
-            ResultSet rs = ps.executeQuery();
+           ps.setInt(1, idHotel);
+           ResultSet rs = ps.executeQuery();
 
-            HotelDAO hotelDAO = new HotelDAO();
-            Hotel hotel = hotelDAO.findById(idHotel);
+           while (rs.next()) {
+               Image_hotel img = new Image_hotel();
+               img.setId(rs.getInt("id_image"));
+               img.setUrl(rs.getString("url"));
+               img.setDescription(rs.getString("description"));
+               list.add(img);
+               // N'assigne PAS l'hôtel ici pour éviter la recursion
+           }
 
-            while (rs.next()) {
-                list.add(mapToImage(rs, hotel));
-            }
+       } catch (SQLException e) {
+           System.err.println("Erreur ImageHotelDAO.findByHotel : " + e.getMessage());
+       }
 
-        } catch (SQLException e) {
-            System.err.println("Erreur ImageHotelDAO.findByHotel : " + e.getMessage());
-        }
-
-        return list;
-    }
+       return list;
+   }
 
     // Ajouter une image
     public boolean addImage(Image_hotel img) {

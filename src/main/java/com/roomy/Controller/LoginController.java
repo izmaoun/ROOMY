@@ -66,7 +66,17 @@ public class LoginController {
                     return;
                 }
                 showAlert("Succès", "Connexion Hôtelier réussie !");
-                openDashboard(event, "dash_hotelier.fxml", "Hotelier");
+                Dash_hotelier_Control.setCurrentHotelierId(hotelier.getIdHotelier());
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/dash_hotelier.fxml"));
+                Parent root = loader.load();
+                Dash_hotelier_Control controller = loader.getController();
+                controller.refreshDashboard();
+                Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+                Scene scene = new Scene(root);
+                stage.setScene(scene);
+                stage.setMaximized(true);
+                stage.setTitle("Dashboard Hotelier");
+                stage.show();
                 return;
             }
 

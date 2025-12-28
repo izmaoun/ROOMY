@@ -44,29 +44,22 @@ public class HotelDAO {
         hotel.setEtoiles(rs.getInt("etoiles"));
 
         // Adresse
-        AdresseDAO adresseDAO = new AdresseDAO();
-        Adresse adresse = adresseDAO.findById(rs.getInt("id_adresse"));
-        hotel.setAdresse(adresse);
+        int idAdresse = rs.getInt("id_adresse");
+        if (idAdresse > 0) {
+            AdresseDAO adresseDAO = new AdresseDAO();
+            Adresse adresse = adresseDAO.findById(idAdresse);
+            if (adresse != null) hotel.setAdresse(adresse);
+        }
 
         // Hotelier
-        HotelierDAO hotelierDAO = new HotelierDAO();
-        Hotelier hotelier = hotelierDAO.findById(rs.getInt("id_hotelier"));
-        hotel.setHotelier(hotelier);
-
-        // Chambres
-        ChambreDAO chambreDAO = new ChambreDAO();
-        List<Chambre> chambres = chambreDAO.findByHotel(hotel.getIdhotel());
-        for (Chambre ch : chambres) {
-            hotel.addChambre(ch);
+        int idHotelier = rs.getInt("id_hotelier");
+        if (idHotelier > 0) {
+            HotelierDAO hotelierDAO = new HotelierDAO();
+            Hotelier hotelier = hotelierDAO.findById(idHotelier);
+            if (hotelier != null) hotel.setHotelier(hotelier);
         }
 
-        // Images d'hôtel
-        ImageHotelDAO imageHotelDAO = new ImageHotelDAO();
-        List<Image_hotel> imagesHotel = imageHotelDAO.findByHotel(hotel.getIdhotel());
-        for (Image_hotel img : imagesHotel) {
-            hotel.addImg(img);
-        }
-
+        // NE PAS charger images/chambres ici
         return hotel;
     }
 
@@ -195,63 +188,53 @@ public class HotelDAO {
 
     public List<Hotel> getHotelsByHotelier(int idHotelier) {
         List<Hotel> hotels = new ArrayList<>();
-        String sqlHotels = """
-        SELECT h.id_hotel, h.nom_hotel, h.etoiles,
-               a.rue, a.ville, a.codepostal, a.pays
-        FROM hotels h
-        LEFT JOIN adresses a ON h.id_adresse = a.id_adresse
-        WHERE h.id_hotelier = ?
-        """;
+        String sql = "SELECT * FROM hotels WHERE id_hotelier = ?";
 
-        try (Connection conn = DBConnection.getConnection();
-             PreparedStatement psHotels = conn.prepareStatement(sqlHotels)) {
+        try (Connection c = DBConnection.getConnection();
+             PreparedStatement ps = c.prepareStatement(sql)) {
 
-            psHotels.setInt(1, idHotelier);
-            ResultSet rsHotels = psHotels.executeQuery();
+            ps.setInt(1, idHotelier);
+            ResultSet rs = ps.executeQuery();
 
-            // Pour chaque hôtel, on charge aussi ses chambres
-            String sqlChambres = "SELECT id_chambre, num_chambre, type, prix_nuit, capacity, surface, statut, description FROM chambres WHERE id_hotel = ?";
+            while (rs.next()) {
+                Hotel hotel = mapToHotel(rs);
 
-            while (rsHotels.next()) {
-                Hotel hotel = new Hotel();
-                hotel.setIdhotel(rsHotels.getInt("id_hotel"));
-                hotel.setNomHotel(rsHotels.getString("nom_hotel"));
-                hotel.setEtoiles(rsHotels.getInt("etoiles"));
-
-                // Adresse
-                Adresse adresse = new Adresse();
-                adresse.setRue(rsHotels.getString("rue"));
-                adresse.setVille(rsHotels.getString("ville"));
-                adresse.setCodepostal(rsHotels.getString("codepostal"));
-                adresse.setPays(rsHotels.getString("pays"));
-                hotel.setAdresse(adresse);
-
-                // === Chargement des chambres pour cet hôtel ===
-                try (PreparedStatement psChambres = conn.prepareStatement(sqlChambres)) {
-                    psChambres.setInt(1, hotel.getIdhotel());
-                    ResultSet rsChambres = psChambres.executeQuery();
-
-                    while (rsChambres.next()) {
-                        Chambre chambre = new Chambre();
-                        chambre.setId(rsChambres.getInt("id_chambre"));
-                        chambre.setNumchambre(rsChambres.getInt("num_chambre"));
-                        chambre.setType(TypeChambre.valueOf(rsChambres.getString("type")));
-                        chambre.setPrix_nuit(rsChambres.getDouble("prix_nuit"));
-                        chambre.setCapacity(rsChambres.getInt("capacity"));
-                        chambre.setSurface(rsChambres.getInt("surface"));
-                        chambre.setStatut(Statut_technique_Chambre.valueOf(rsChambres.getString("statut")));
-                        chambre.setDescription(rsChambres.getString("description"));
-                        chambre.setHotel(hotel); // cohérence bidirectionnelle
-
-                        hotel.addChambre(chambre); // utilise ta méthode addChambre()
-                    }
-                }
+                // Charger les images SEULEMENT pour l'affichage
+                List<Image_hotel> images = loadHotelImages(hotel.getIdhotel());
+                hotel.setImgs(images);
 
                 hotels.add(hotel);
             }
+
         } catch (SQLException e) {
-            e.printStackTrace();
+            System.err.println("Erreur getHotelsByHotelier : " + e.getMessage());
         }
+
         return hotels;
+    }
+
+    public List<Image_hotel> loadHotelImages(int idHotel) {
+        List<Image_hotel> images = new ArrayList<>();
+        String sql = "SELECT * FROM hotel_images WHERE id_hotel = ?";
+
+        try (Connection c = DBConnection.getConnection();
+             PreparedStatement ps = c.prepareStatement(sql)) {
+
+            ps.setInt(1, idHotel);
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                Image_hotel img = new Image_hotel();
+                img.setId(rs.getInt("id_image"));
+                img.setUrl(rs.getString("url"));
+                img.setDescription(rs.getString("description"));
+                images.add(img);
+            }
+
+        } catch (SQLException e) {
+            System.err.println("Erreur loadHotelImages : " + e.getMessage());
+        }
+
+        return images;
     }
 }
