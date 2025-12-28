@@ -43,7 +43,7 @@ public class ReservationDAO {
     public List<Reservation> getReservationsByClientId(int clientId) {
         System.out.println("🔍 ReservationDAO: Recherche réservations pour client ID: " + clientId);
         List<Reservation> reservations = new ArrayList<>();
-        String sql = "SELECT r.*, ch.numchambre, ch.prix_nuit, ch.type, h.nom_hotel " +
+        String sql = "SELECT r.*, ch.num_chambre, ch.prix_nuit, ch.type, h.nom_hotel " +
                     "FROM reservations r " +
                     "JOIN chambres ch ON r.id_chambre = ch.id_chambre " +
                     "JOIN hotels h ON ch.id_hotel = h.id_hotel " +
@@ -78,7 +78,7 @@ public class ReservationDAO {
                 
                 Chambre chambre = new Chambre();
                 chambre.setIdChambre(rs.getInt("id_chambre"));
-                chambre.setNumchambre(rs.getInt("numchambre"));
+                chambre.setNumchambre(rs.getInt("num_chambre"));
                 chambre.setPrix_nuit(rs.getDouble("prix_nuit"));
                 
                 // Gérer le type de chambre
