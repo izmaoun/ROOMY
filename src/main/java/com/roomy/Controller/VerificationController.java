@@ -9,8 +9,8 @@ public class VerificationController {
     //Méthode publique et statique pour envoyer un OTP pour le mdp
     public static void sendOTPmdp(String toEmail, String otpCode){
         // Adresse Gmail et mot de passe d'application
-        final String fromEmail = "chaouchzineb26@gmail.com";
-        final String password = "ymugjvdvbibwjkor";
+        final String fromEmail = "roomy.co.otp@gmail.com";
+        final String password = "gfwn zhzm rbxj nddm";
 
         // Configuration SMTP
         Properties props = new Properties();
@@ -45,8 +45,8 @@ public class VerificationController {
     // Méthode publique et statique pour envoyer un OTP
     public static void sendOtpEmail(String toEmail, String otpCode) {
         // Adresse Gmail et mot de passe d'application
-        final String fromEmail = "chaouchzineb26@gmail.com";
-        final String password = "ymugjvdvbibwjkor";
+        final String fromEmail = "roomy.co.otp@gmail.com";
+        final String password = "gfwn zhzm rbxj nddm";
 
         // Configuration SMTP
         Properties props = new Properties();
