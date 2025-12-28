@@ -11,25 +11,27 @@
 
     <!-- TOP: Header avec navigation - RÉDUIT -->
     <top>
-        <VBox style="-fx-background-color: linear-gradient(to right, #380F17, #252B2B); -fx-padding: 10;">
+        <VBox style="-fx-background-color: #380F17; -fx-padding: 10;">
             <!-- Barre de navigation compacte -->
             <HBox spacing="15" alignment="CENTER">
                 <ImageView fitWidth="120" fitHeight="40" preserveRatio="true">
-                    <Image url="@../images/logo.png"/>
+                    <image>
+                        <Image url="@../images/logo.png"/>
+                    </image>
                 </ImageView>
                 <Region HBox.hgrow="ALWAYS"/>
 
                 <!-- Barre de recherche du HEADER -->
                 <TextField fx:id="searchField" promptText="Search hotels, destinations..."
-                           style="-fx-pref-width: 250px; -fx-pref-height: 35px; -fx-background-radius: 20; -fx-border-radius: 20; -fx-padding: 0 15px; -fx-background-color: #EFDFC5; -fx-prompt-text-fill: #4C4F54;"
+                           style="-fx-pref-width: 250px; -fx-pref-height: 35px; -fx-background-radius: 20; -fx-border-radius: 20; -fx-padding: 0 15px; -fx-background-color: #EFDFC5;"
                            onAction="#handleSearch"/>
 
                 <!-- Boutons auth -->
                 <Button fx:id="loginButton" text="Sign In"
-                        style="-fx-background-color: transparent; -fx-text-fill: #EFDFC5; -fx-border-color: #8F0B13; -fx-border-width: 2; -fx-border-radius: 15; -fx-pref-width: 80px; -fx-pref-height: 35px; -fx-font-weight: bold;"
+                        style="-fx-background-color: transparent; -fx-text-fill: #EFDFC5; -fx-border-color: #EFDFC5; -fx-border-width: 2; -fx-border-radius: 15; -fx-pref-width: 80px; -fx-pref-height: 35px; -fx-font-weight: bold;"
                         onAction="#openLogin"/>
                 <Button fx:id="registerButton" text="Sign Up"
-                        style="-fx-background-color: #8F0B13; -fx-text-fill: #EFDFC5; -fx-font-weight: bold; -fx-border-radius: 15; -fx-pref-width: 80px; -fx-pref-height: 35px;"
+                        style="-fx-background-color: #EFDFC5; -fx-text-fill: #380F17; -fx-font-weight: bold; -fx-border-radius: 15; -fx-pref-width: 80px; -fx-pref-height: 35px;"
                         onAction="#openRegister"/>
             </HBox>
 
@@ -38,7 +40,7 @@
                 <Label text="Discover the world's most extraordinary stays"
                        style="-fx-font-size: 28px; -fx-font-weight: bold; -fx-text-fill: #EFDFC5; -fx-text-alignment: center; -fx-wrap-text: true;"/>
                 <Label text="Curated for the discerning traveler. Explore our collection of hand-picked luxury hotels and resorts."
-                       style="-fx-font-size: 14px; -fx-text-fill: rgba(239, 223, 197, 0.8); -fx-text-alignment: center; -fx-wrap-text: true; -fx-max-width: 500px;"/>
+                       style="-fx-font-size: 14px; -fx-text-fill: #EFDFC5; -fx-opacity: 0.8; -fx-text-alignment: center; -fx-wrap-text: true; -fx-max-width: 500px;"/>
             </VBox>
         </VBox>
     </top>
@@ -48,103 +50,100 @@
         <ScrollPane fitToWidth="true"
                     vbarPolicy="AS_NEEDED"
                     hbarPolicy="NEVER"
-                    prefHeight="600"
-                    style="-fx-background-color: transparent; -fx-border-color: #4C4F54; -fx-border-width: 0 1px 0 0;">
+                    prefWidth="300"
+                    maxWidth="300"
+                    style="-fx-background-color: transparent; -fx-border-color: #e0e0e0; -fx-border-width: 0 1px 0 0;">
             <content>
-                <VBox spacing="15" style="-fx-background-color: #EFDFC5; -fx-padding: 20; -fx-pref-width: 320px;">
-                    <Label text="Filters" style="-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: #380F17;"/>
+                <VBox spacing="15" style="-fx-background-color: #4C4F54; -fx-padding: 20; -fx-min-width: 280px; -fx-max-width: 280px;">
+                    <Label text="Filters" style="-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: #EFDFC5;"/>
 
                     <!-- Recherche dans les filtres -->
                     <VBox spacing="5">
-                        <Label text="Search" style="-fx-font-size: 13px; -fx-font-weight: bold; -fx-text-fill: #252B2B;"/>
+                        <Label text="Search" style="-fx-font-size: 13px; -fx-font-weight: bold; -fx-text-fill: #EFDFC5;"/>
                         <TextField fx:id="searchField2" promptText="Hotel name, city..."
-                                   style="-fx-pref-height: 35px; -fx-background-radius: 5; -fx-background-color: white; -fx-border-color: #4C4F54; -fx-border-width: 1px; -fx-border-radius: 5;"
+                                   style="-fx-pref-height: 35px; -fx-background-radius: 5; -fx-background-color: #EFDFC5;"
                                    onAction="#handleSearch"/>
                     </VBox>
 
                     <!-- Prix -->
                     <VBox spacing="5">
-                        <Label text="Price Range" style="-fx-font-size: 13px; -fx-font-weight: bold; -fx-text-fill: #252B2B;"/>
+                        <Label text="Price Range" style="-fx-font-size: 13px; -fx-font-weight: bold; -fx-text-fill: #EFDFC5;"/>
                         <HBox spacing="5">
                             <TextField fx:id="minPriceField" promptText="Min"
-                                       style="-fx-pref-width: 70px; -fx-pref-height: 30px; -fx-background-radius: 5; -fx-background-color: white; -fx-border-color: #4C4F54; -fx-border-width: 1px; -fx-border-radius: 5;"/>
-                            <Label text="to" style="-fx-text-fill: #4C4F54;"/>
+                                       style="-fx-pref-width: 70px; -fx-pref-height: 30px; -fx-background-radius: 5; -fx-background-color: #EFDFC5;"/>
+                            <Label text="to" style="-fx-text-fill: #EFDFC5;"/>
                             <TextField fx:id="maxPriceField" promptText="Max"
-                                       style="-fx-pref-width: 70px; -fx-pref-height: 30px; -fx-background-radius: 5; -fx-background-color: white; -fx-border-color: #4C4F54; -fx-border-width: 1px; -fx-border-radius: 5;"/>
+                                       style="-fx-pref-width: 70px; -fx-pref-height: 30px; -fx-background-radius: 5; -fx-background-color: #EFDFC5;"/>
                         </HBox>
-                        <Label text="Min Price" style="-fx-font-size: 11px; -fx-text-fill: #4C4F54;"/>
-                        <Slider fx:id="minPriceSlider" min="0" max="4000" value="0"/>
-                        <Label fx:id="minPriceRangeLabel" text="From $0 / night"
-                               style="-fx-font-size: 11px; -fx-text-fill: #4C4F54;"/>
-                        <Label text="Max Price" style="-fx-font-size: 11px; -fx-text-fill: #4C4F54;"/>
-                        <Slider fx:id="priceSlider" min="0" max="4000" value="4000"/>
-                        <Label fx:id="priceRangeLabel" text="Up to $4000 / night"
-                               style="-fx-font-size: 11px; -fx-text-fill: #4C4F54;"/>
+                        <Slider fx:id="priceSlider" min="0" max="5000" value="5000"
+                                style="-fx-pref-width: 230px;"/>
+                        <Label fx:id="priceRangeLabel" text="Up to $5000 / night"
+                               style="-fx-font-size: 11px; -fx-text-fill: #EFDFC5;"/>
                     </VBox>
 
                     <!-- Ville -->
                     <VBox spacing="5">
-                        <Label text="City" style="-fx-font-size: 13px; -fx-font-weight: bold; -fx-text-fill: #252B2B;"/>
+                        <Label text="City" style="-fx-font-size: 13px; -fx-font-weight: bold; -fx-text-fill: #EFDFC5;"/>
                         <ComboBox fx:id="cityComboBox" promptText="Select city"
-                                  style="-fx-pref-height: 35px; -fx-background-radius: 5; -fx-background-color: white; -fx-border-color: #4C4F54; -fx-border-width: 1px; -fx-border-radius: 5;"/>
+                                  style="-fx-pref-height: 35px; -fx-background-radius: 5; -fx-background-color: #EFDFC5;"/>
                     </VBox>
 
                     <!-- Type de chambre -->
                     <VBox spacing="5">
-                        <Label text="Room Type" style="-fx-font-size: 13px; -fx-font-weight: bold; -fx-text-fill: #252B2B;"/>
+                        <Label text="Room Type" style="-fx-font-size: 13px; -fx-font-weight: bold; -fx-text-fill: #EFDFC5;"/>
                         <ComboBox fx:id="roomTypeComboBox" promptText="All types"
-                                  style="-fx-pref-height: 35px; -fx-background-radius: 5; -fx-background-color: white; -fx-border-color: #4C4F54; -fx-border-width: 1px; -fx-border-radius: 5;"/>
+                                  style="-fx-pref-height: 35px; -fx-background-radius: 5; -fx-background-color: #EFDFC5;"/>
                     </VBox>
 
                     <!-- Étoiles -->
                     <VBox spacing="5">
-                        <Label text="Stars" style="-fx-font-size: 13px; -fx-font-weight: bold; -fx-text-fill: #252B2B;"/>
-                        <VBox spacing="5">
-                            <CheckBox fx:id="star5" text="⭐⭐⭐⭐⭐" style="-fx-text-fill: #8F0B13; -fx-font-size: 12px;"/>
-                            <CheckBox fx:id="star4" text="⭐⭐⭐⭐" style="-fx-text-fill: #8F0B13; -fx-font-size: 12px;"/>
-                            <CheckBox fx:id="star3" text="⭐⭐⭐" style="-fx-text-fill: #8F0B13; -fx-font-size: 12px;"/>
-                        </VBox>
+                        <Label text="Stars" style="-fx-font-size: 13px; -fx-font-weight: bold; -fx-text-fill: #EFDFC5;"/>
+                        <HBox spacing="5">
+                            <CheckBox fx:id="star5" text="★★★★★" style="-fx-text-fill: #FFD700; -fx-font-size: 12px;"/>
+                            <CheckBox fx:id="star4" text="★★★★☆" style="-fx-text-fill: #FFD700; -fx-font-size: 12px;"/>
+                            <CheckBox fx:id="star3" text="★★★☆☆" style="-fx-text-fill: #FFD700; -fx-font-size: 12px;"/>
+                        </HBox>
                     </VBox>
 
                     <!-- Services -->
                     <VBox spacing="5">
-                        <Label text="Services" style="-fx-font-size: 13px; -fx-font-weight: bold; -fx-text-fill: #252B2B;"/>
+                        <Label text="Services" style="-fx-font-size: 13px; -fx-font-weight: bold; -fx-text-fill: #EFDFC5;"/>
                         <VBox spacing="5">
-                            <CheckBox fx:id="wifiCheck" text="Wi-Fi" style="-fx-font-size: 12px; -fx-text-fill: #252B2B;"/>
-                            <CheckBox fx:id="poolCheck" text="Swimming Pool" style="-fx-font-size: 12px; -fx-text-fill: #252B2B;"/>
-                            <CheckBox fx:id="spaCheck" text="Spa" style="-fx-font-size: 12px; -fx-text-fill: #252B2B;"/>
-                            <CheckBox fx:id="restaurantCheck" text="Restaurant" style="-fx-font-size: 12px; -fx-text-fill: #252B2B;"/>
-                            <CheckBox fx:id="breakfastCheck" text="Breakfast" style="-fx-font-size: 12px; -fx-text-fill: #252B2B;"/>
-                            <CheckBox fx:id="parkingCheck" text="Parking" style="-fx-font-size: 12px; -fx-text-fill: #252B2B;"/>
+                            <CheckBox fx:id="wifiCheck" text="Wi-Fi" style="-fx-font-size: 12px; -fx-text-fill: #EFDFC5;"/>
+                            <CheckBox fx:id="poolCheck" text="Swimming Pool" style="-fx-font-size: 12px; -fx-text-fill: #EFDFC5;"/>
+                            <CheckBox fx:id="spaCheck" text="Spa" style="-fx-font-size: 12px; -fx-text-fill: #EFDFC5;"/>
+                            <CheckBox fx:id="restaurantCheck" text="Restaurant" style="-fx-font-size: 12px; -fx-text-fill: #EFDFC5;"/>
+                            <CheckBox fx:id="breakfastCheck" text="Breakfast" style="-fx-font-size: 12px; -fx-text-fill: #EFDFC5;"/>
+                            <CheckBox fx:id="parkingCheck" text="Parking" style="-fx-font-size: 12px; -fx-text-fill: #EFDFC5;"/>
                         </VBox>
                     </VBox>
 
                     <Button text="Apply Filters" onAction="#applyFilters"
-                            style="-fx-background-color: #8F0B13; -fx-text-fill: #EFDFC5; -fx-font-weight: bold; -fx-pref-height: 40px; -fx-background-radius: 5;"/>
+                            style="-fx-background-color: #380F17; -fx-text-fill: #EFDFC5; -fx-font-weight: bold; -fx-pref-height: 40px; -fx-background-radius: 5;"/>
                     <Button text="Reset" onAction="#resetFilters"
-                            style="-fx-background-color: transparent; -fx-text-fill: #8F0B13; -fx-border-color: #8F0B13; -fx-border-width: 1px; -fx-pref-height: 40px; -fx-background-radius: 5;"/>
+                            style="-fx-background-color: transparent; -fx-text-fill: #EFDFC5; -fx-border-color: #EFDFC5; -fx-border-width: 1px; -fx-pref-height: 40px; -fx-background-radius: 5;"/>
                 </VBox>
             </content>
         </ScrollPane>
     </left>
+
     <!-- CENTER: Liste des hôtels avec SCROLL fonctionnel -->
     <center>
         <ScrollPane fitToWidth="true"
                     vbarPolicy="ALWAYS"
                     hbarPolicy="NEVER"
-                    prefHeight="600"
-                    style="-fx-background-color: white; -fx-padding: 15;">
+                    style="-fx-background-color: #EFDFC5; -fx-padding: 15;">
             <content>
                 <FlowPane fx:id="hotelsContainer"
                           hgap="20"
                           vgap="20"
-                          alignment="CENTER"
-                          columnHalignment="CENTER"
-                          style="-fx-padding: 10px; -fx-background-color: white;">
+                          style="-fx-padding: 10px; -fx-background-color: #EFDFC5;"
+                          prefWrapLength="750">
                     <!-- Les cartes d'hôtel seront ajoutées dynamiquement par le contrôleur Java -->
                     <!-- AUCUNE CARTE FIXE ICI ! -->
                 </FlowPane>
             </content>
         </ScrollPane>
     </center>
+
 </BorderPane>
