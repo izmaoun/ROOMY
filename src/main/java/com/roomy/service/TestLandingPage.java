@@ -36,7 +36,7 @@ public class TestLandingPage extends Application {
 
         primaryStage.setTitle("ROOMY - Test Landing Page");
         primaryStage.setScene(scene);
-        primaryStage.centerOnScreen();
+        primaryStage.setMaximized(true);
         primaryStage.show();
 
         System.out.println("✅ Landing Page loaded successfully!");

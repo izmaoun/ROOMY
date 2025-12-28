@@ -98,7 +98,8 @@ public class DashClientController {
                 controller.showBackToAccountButton();
                 
                 Stage stage = (Stage) btnHotels.getScene().getWindow();
-                stage.setScene(new Scene(root, 1200, 800));
+                Scene scene = new Scene(root);
+                stage.setScene(scene);
                 stage.setTitle("ROOMY - Hôtels");
                 stage.setMaximized(true);
                 
@@ -122,8 +123,10 @@ public class DashClientController {
             Parent loginRoot = loader.load();
 
             Stage stage = (Stage) btnLogout.getScene().getWindow();
-            stage.setScene(new Scene(loginRoot));
+            Scene scene = new Scene(loginRoot);
+            stage.setScene(scene);
             stage.setTitle("Roomy - Connexion");
+            stage.setMaximized(true);
 
         } catch (IOException e) {
             System.err.println("Erreur lors de la redirection vers login: " + e.getMessage());

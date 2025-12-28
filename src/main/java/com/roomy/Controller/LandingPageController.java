@@ -194,7 +194,7 @@ public class LandingPageController {
         if (hotels.isEmpty()) {
             // Afficher un message "Aucun résultat"
             Label noResults = new Label("Aucun hôtel ne correspond à vos critères de recherche.");
-            noResults.setStyle("-fx-font-size: 16px; -fx-text-fill: #7f8c8d; -fx-padding: 20px;");
+            noResults.setStyle("-fx-font-size: 16px; -fx-text-fill: #4C4F54; -fx-padding: 20px;");
             hotelsContainer.getChildren().add(noResults);
             return;
         }
@@ -207,8 +207,8 @@ public class LandingPageController {
 
     private VBox createHotelCard(Hotel hotel) {
         VBox card = new VBox();
-        card.setStyle("-fx-background-color: white; " +
-                "-fx-border-color: #e0e0e0; " +
+        card.setStyle("-fx-background-color: #A59090; " +
+                "-fx-border-color: #4C4F54; " +
                 "-fx-border-width: 1px; " +
                 "-fx-border-radius: 10px; " +
                 "-fx-background-radius: 10px; " +
@@ -218,37 +218,37 @@ public class LandingPageController {
                 "-fx-cursor: hand;");
 
         // Taille fixe pour que FlowPane les aligne bien
-        card.setPrefSize(380, 400);
-        card.setMaxSize(380, 400);
+        card.setPrefSize(450, 480);
+        card.setMaxSize(450, 480);
 
         // Image
         ImageView imageView = new ImageView();
         String imageUrl = getHotelImageUrl(hotel);
 
         try {
-            Image image = new Image(imageUrl, 380, 220, false, true);
+            Image image = new Image(imageUrl, 450, 260, false, true);
             imageView.setImage(image);
         } catch (Exception e) {
             imageView.setImage(new Image("https://images.unsplash.com/photo-1564501049412-61c2a3083791?w=600",
-                    380, 220, false, true));
+                    450, 260, false, true));
         }
 
-        imageView.setFitWidth(380);
-        imageView.setFitHeight(220);
+        imageView.setFitWidth(450);
+        imageView.setFitHeight(260);
         imageView.setStyle("-fx-border-radius: 10px 10px 0 0;");
 
         // Détails
         VBox content = new VBox(10);
         content.setPadding(new Insets(15));
         content.setAlignment(Pos.TOP_LEFT);
-        content.setPrefHeight(180); // Hauteur fixe pour uniformité
+        content.setPrefHeight(220); // Hauteur fixe pour uniformité
 
         // Nom et étoiles
         HBox titleBox = new HBox(10);
         titleBox.setAlignment(Pos.CENTER_LEFT);
 
         Label nameLabel = new Label(hotel.getNomHotel());
-        nameLabel.setStyle("-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #2c3e50;");
+        nameLabel.setStyle("-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #380F17;");
         nameLabel.setWrapText(true);
         nameLabel.setMaxWidth(250);
 
@@ -262,24 +262,24 @@ public class LandingPageController {
         Adresse adresse = hotel.getAdresse();
         String ville = (adresse != null && adresse.getVille() != null) ? adresse.getVille() : "Ville inconnue";
         Label cityLabel = new Label("📍 " + ville);
-        cityLabel.setStyle("-fx-text-fill: #7f8c8d; -fx-font-size: 14px;");
+        cityLabel.setStyle("-fx-text-fill: #4C4F54; -fx-font-size: 14px;");
 
         // Prix (calculé localement)
         double minPrice = calculateHotelMinPrice(hotel);
         Label priceLabel = new Label("À partir de $" + String.format("%.2f", minPrice) + " / nuit");
-        priceLabel.setStyle("-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: #f1c40f;");
+        priceLabel.setStyle("-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: #380F17;");
 
         // Boutons
         HBox buttonBox = new HBox(10);
         buttonBox.setAlignment(Pos.CENTER);
 
         Button detailsBtn = new Button("Voir détails");
-        detailsBtn.setStyle("-fx-background-color: #3498db; -fx-text-fill: white; " +
+        detailsBtn.setStyle("-fx-background-color: #4C4F54; -fx-text-fill: #EFDFC5; " +
                 "-fx-font-weight: bold; -fx-pref-width: 120px; -fx-pref-height: 35px;");
         detailsBtn.setOnAction(e -> showHotelDetails(hotel));
 
         Button bookBtn = new Button("Réserver");
-        bookBtn.setStyle("-fx-background-color: #f1c40f; -fx-text-fill: #2c3e50; " +
+        bookBtn.setStyle("-fx-background-color: #380F17; -fx-text-fill: #EFDFC5; " +
                 "-fx-font-weight: bold; -fx-pref-width: 120px; -fx-pref-height: 35px;");
         bookBtn.setOnAction(e -> handleReservation(hotel));
 
@@ -290,20 +290,20 @@ public class LandingPageController {
 
         // Effet hover sur la carte
         card.setOnMouseEntered(e -> {
-            card.setStyle("-fx-background-color: #f8f9fa; " +
-                    "-fx-border-color: #3498db; " +
+            card.setStyle("-fx-background-color: #EFDFC5; " +
+                    "-fx-border-color: #380F17; " +
                     "-fx-border-width: 2px; " +
                     "-fx-border-radius: 10px; " +
                     "-fx-background-radius: 10px; " +
                     "-fx-padding: 0px; " +
                     "-fx-spacing: 0px; " +
-                    "-fx-effect: dropshadow(three-pass-box, rgba(52,152,219,0.2), 15, 0, 0, 0);" +
+                    "-fx-effect: dropshadow(three-pass-box, rgba(56,15,23,0.2), 15, 0, 0, 0);" +
                     "-fx-cursor: hand;");
         });
 
         card.setOnMouseExited(e -> {
-            card.setStyle("-fx-background-color: white; " +
-                    "-fx-border-color: #e0e0e0; " +
+            card.setStyle("-fx-background-color: #A59090; " +
+                    "-fx-border-color: #4C4F54; " +
                     "-fx-border-width: 1px; " +
                     "-fx-border-radius: 10px; " +
                     "-fx-background-radius: 10px; " +
@@ -788,8 +788,10 @@ public class LandingPageController {
             controller.setHotel(hotel);
 
             Stage stage = new Stage();
-            stage.setScene(new Scene(root, 1000, 700));
+            Scene scene = new Scene(root, 1000, 700);
+            stage.setScene(scene);
             stage.setTitle(hotel.getNomHotel() + " - Détails");
+            stage.setMaximized(true);
             stage.show();
 
         } catch (Exception e) {
@@ -841,8 +843,10 @@ public class LandingPageController {
             }
             
             Stage stage = (Stage) hotelsContainer.getScene().getWindow();
-            stage.setScene(new Scene(root));
+            Scene scene = new Scene(root);
+            stage.setScene(scene);
             stage.setTitle("Réservation - ROOMY");
+            stage.setMaximized(true);
             
         } catch (Exception e) {
             e.printStackTrace();
@@ -856,8 +860,10 @@ public class LandingPageController {
             Parent root = loader.load();
 
             Stage stage = (Stage) hotelsContainer.getScene().getWindow();
-            stage.setScene(new Scene(root));
+            Scene scene = new Scene(root);
+            stage.setScene(scene);
             stage.setTitle("Inscription - ROOMY");
+            stage.setMaximized(true);
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -872,8 +878,10 @@ public class LandingPageController {
             Parent root = loader.load();
 
             Stage stage = (Stage) hotelsContainer.getScene().getWindow();
-            stage.setScene(new Scene(root));
+            Scene scene = new Scene(root);
+            stage.setScene(scene);
             stage.setTitle("Connexion - ROOMY");
+            stage.setMaximized(true);
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -888,8 +896,10 @@ public class LandingPageController {
             Parent root = loader.load();
 
             Stage stage = (Stage) hotelsContainer.getScene().getWindow();
-            stage.setScene(new Scene(root));
+            Scene scene = new Scene(root);
+            stage.setScene(scene);
             stage.setTitle("Inscription - ROOMY");
+            stage.setMaximized(true);
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -1051,7 +1061,7 @@ public class LandingPageController {
     private void addBackToAccountButton() {
         // Créer un bouton retour au compte dynamiquement
         Button backToAccountBtn = new Button("← Mon Compte");
-        backToAccountBtn.setStyle("-fx-background-color: #380F17; -fx-text-fill: white; " +
+        backToAccountBtn.setStyle("-fx-background-color: #380F17; -fx-text-fill: #EFDFC5; " +
                                  "-fx-font-weight: bold; -fx-pref-width: 150; -fx-pref-height: 40; " +
                                  "-fx-background-radius: 5; -fx-cursor: hand;");
         backToAccountBtn.setOnAction(e -> goBackToDashboard());
@@ -1070,7 +1080,8 @@ public class LandingPageController {
             Parent root = loader.load();
             
             Stage stage = (Stage) hotelsContainer.getScene().getWindow();
-            stage.setScene(new Scene(root));
+            Scene scene = new Scene(root);
+            stage.setScene(scene);
             stage.setTitle("Dashboard Client - ROOMY");
             stage.setMaximized(true);
         } catch (Exception e) {

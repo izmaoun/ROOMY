@@ -183,15 +183,17 @@ public class BookingController {
     @FXML
     private void goBack(ActionEvent event) {
         try {
-            // Retourner vers la landing page
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/landing-page.fxml"));
+            // Retourner vers le dashboard client
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/dash_client.fxml"));
             Parent root = loader.load();
             
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-            stage.setScene(new Scene(root, 1200, 800));
-            stage.setTitle("ROOMY - Accueil");
+            Scene scene = new Scene(root);
+            stage.setScene(scene);
+            stage.setTitle("Dashboard Client - ROOMY");
+            stage.setMaximized(true);
         } catch (Exception e) {
-            showAlert("Erreur", "Impossible de retourner à l'accueil.");
+            showAlert("Erreur", "Impossible de retourner au dashboard.");
             e.printStackTrace();
         }
     }
@@ -202,7 +204,8 @@ public class BookingController {
             Parent root = loader.load();
             
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-            stage.setScene(new Scene(root));
+            Scene scene = new Scene(root);
+            stage.setScene(scene);
             stage.setTitle("Dashboard Client - ROOMY");
             stage.setMaximized(true);
         } catch (Exception e) {

@@ -73,9 +73,10 @@ public class HotelDetailsController implements Initializable {
         if (descriptionLabel != null) {
             descriptionLabel.setWrapText(true);
             descriptionLabel.setEditable(false);
-            descriptionLabel.setStyle("-fx-control-inner-background: #f8f9fa; " +
-                    "-fx-border-color: #e0e0e0; " +
+            descriptionLabel.setStyle("-fx-control-inner-background: #A59090; " +
+                    "-fx-border-color: #4C4F54; " +
                     "-fx-border-radius: 5px; " +
+                    "-fx-font-size: 18px; " +
                     "-fx-padding: 10px;");
         }
     }
@@ -198,7 +199,7 @@ public class HotelDetailsController implements Initializable {
 
         if (hotel.getServices() == null || hotel.getServices().isEmpty()) {
             Label noServices = new Label("No services information available");
-            noServices.setStyle("-fx-text-fill: #7f8c8d; -fx-font-style: italic;");
+            noServices.setStyle("-fx-text-fill: #4C4F54; -fx-font-style: italic;");
             servicesContainer.getChildren().add(noServices);
             return;
         }
@@ -206,8 +207,8 @@ public class HotelDetailsController implements Initializable {
         for (String service : hotel.getServices()) {
             if (service != null && !service.trim().isEmpty()) {
                 Label serviceLabel = new Label(service);
-                serviceLabel.setStyle("-fx-background-color: #3498db; " +
-                        "-fx-text-fill: white; " +
+                serviceLabel.setStyle("-fx-background-color: #380F17; " +
+                        "-fx-text-fill: #EFDFC5; " +
                         "-fx-font-weight: bold; " +
                         "-fx-padding: 8px 15px; " +
                         "-fx-border-radius: 20px; " +
@@ -222,7 +223,7 @@ public class HotelDetailsController implements Initializable {
 
         if (hotel.getChambres() == null || hotel.getChambres().isEmpty()) {
             Label noRoomsLabel = new Label("No rooms available at the moment");
-            noRoomsLabel.setStyle("-fx-text-fill: #7f8c8d; -fx-font-size: 16px; -fx-font-style: italic;");
+            noRoomsLabel.setStyle("-fx-text-fill: #4C4F54; -fx-font-size: 16px; -fx-font-style: italic;");
             roomsContainer.getChildren().add(noRoomsLabel);
             return;
         }
@@ -236,8 +237,8 @@ public class HotelDetailsController implements Initializable {
 
     private HBox createRoomCard(Chambre chambre) {
         HBox card = new HBox(20);
-        card.setStyle("-fx-background-color: white; " +
-                "-fx-border-color: #e0e0e0; " +
+        card.setStyle("-fx-background-color: #A59090; " +
+                "-fx-border-color: #4C4F54; " +
                 "-fx-border-width: 1px; " +
                 "-fx-border-radius: 10px; " +
                 "-fx-padding: 20px; " +
@@ -255,23 +256,23 @@ public class HotelDetailsController implements Initializable {
         Label typeLabel = new Label(chambre.getType() + " - Room #" + chambre.getNumchambre());
         typeLabel.setStyle("-fx-font-size: 20px; " +
                 "-fx-font-weight: bold; " +
-                "-fx-text-fill: #2c3e50;");
+                "-fx-text-fill: #380F17;");
 
         // Prix
         Label priceLabel = new Label("$" + String.format("%.2f", chambre.getPrix_nuit()) + " / night");
         priceLabel.setStyle("-fx-font-size: 18px; " +
                 "-fx-font-weight: bold; " +
-                "-fx-text-fill: #f1c40f;");
+                "-fx-text-fill: #380F17;");
 
         // Détails
         HBox roomDetails = new HBox(20);
         roomDetails.setAlignment(Pos.CENTER_LEFT);
 
         Label capacityLabel = new Label("👥 " + chambre.getCapacity() + " people");
-        capacityLabel.setStyle("-fx-text-fill: #7f8c8d; -fx-font-size: 14px;");
+        capacityLabel.setStyle("-fx-text-fill: #4C4F54; -fx-font-size: 14px;");
 
         Label surfaceLabel = new Label("📏 " + chambre.getSurface() + " m²");
-        surfaceLabel.setStyle("-fx-text-fill: #7f8c8d; -fx-font-size: 14px;");
+        surfaceLabel.setStyle("-fx-text-fill: #4C4F54; -fx-font-size: 14px;");
 
         roomDetails.getChildren().addAll(capacityLabel, surfaceLabel);
 
@@ -284,7 +285,7 @@ public class HotelDetailsController implements Initializable {
 
         Label descLabel = new Label(description);
         descLabel.setWrapText(true);
-        descLabel.setStyle("-fx-text-fill: #34495e; -fx-font-size: 14px;");
+        descLabel.setStyle("-fx-text-fill: #4C4F54; -fx-font-size: 14px;");
         descLabel.setMaxWidth(350);
         descLabel.setPrefHeight(60);
 
@@ -295,8 +296,8 @@ public class HotelDetailsController implements Initializable {
 
         // Bouton Réserver cette chambre
         Button bookRoomButton = new Button("Réserver");
-        bookRoomButton.setStyle("-fx-background-color: #27ae60; " +
-                "-fx-text-fill: white; " +
+        bookRoomButton.setStyle("-fx-background-color: #380F17; " +
+                "-fx-text-fill: #EFDFC5; " +
                 "-fx-font-weight: bold; " +
                 "-fx-pref-width: 150px; " +
                 "-fx-pref-height: 40px; " +
@@ -306,8 +307,8 @@ public class HotelDetailsController implements Initializable {
 
         // Effet hover
         bookRoomButton.setOnMouseEntered(e -> {
-            bookRoomButton.setStyle("-fx-background-color: #219653; " +
-                    "-fx-text-fill: white; " +
+            bookRoomButton.setStyle("-fx-background-color: #4C4F54; " +
+                    "-fx-text-fill: #EFDFC5; " +
                     "-fx-font-weight: bold; " +
                     "-fx-pref-width: 150px; " +
                     "-fx-pref-height: 40px; " +
@@ -316,8 +317,8 @@ public class HotelDetailsController implements Initializable {
         });
 
         bookRoomButton.setOnMouseExited(e -> {
-            bookRoomButton.setStyle("-fx-background-color: #27ae60; " +
-                    "-fx-text-fill: white; " +
+            bookRoomButton.setStyle("-fx-background-color: #380F17; " +
+                    "-fx-text-fill: #EFDFC5; " +
                     "-fx-font-weight: bold; " +
                     "-fx-pref-width: 150px; " +
                     "-fx-pref-height: 40px; " +
@@ -332,9 +333,9 @@ public class HotelDetailsController implements Initializable {
 
     private String getStatusColor(com.roomy.ENUMS.Statut_technique_Chambre statut) {
         switch (statut) {
-            case disponible: return "#27ae60"; // Vert
+            case disponible: return "#380F17"; // Bordeaux au lieu de vert
             case en_maintenance: return "#f39c12"; // Orange
-            case en_netoyage: return "#3498db"; // Bleu
+            case en_netoyage: return "#4C4F54"; // Gris foncé au lieu de bleu
             case hors_service: return "#e74c3c"; // Rouge
             default: return "#7f8c8d"; // Gris
         }

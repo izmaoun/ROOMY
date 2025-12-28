@@ -432,20 +432,22 @@ public class ReservationsController {
 
     @FXML
     private void handleNouvelleReservation() {
-        // Aller vers landing page sans boutons sign in/up
+        // Utiliser la même logique que "Voir hôtels" du dashboard
         try {
-            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/landing-page.fxml"));
-            Parent root = fxmlLoader.load();
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/landing-page.fxml"));
+            Parent root = loader.load();
             
-            // Obtenir le contrôleur et masquer les boutons de connexion
-            LandingPageController controller = fxmlLoader.getController();
+            LandingPageController controller = loader.getController();
             controller.hideAuthButtons();
-
-            Stage currentStage = (Stage) upcomingReservationsContainer.getScene().getWindow();
-            currentStage.setScene(new Scene(root, 1200, 800));
-            currentStage.setTitle("Roomy - Nouvelle Réservation");
-            currentStage.centerOnScreen();
-        } catch (IOException e) {
+            controller.showBackToAccountButton();
+            
+            Stage stage = (Stage) upcomingReservationsContainer.getScene().getWindow();
+            Scene scene = new Scene(root);
+            stage.setScene(scene);
+            stage.setTitle("ROOMY - Hôtels");
+            stage.setMaximized(true);
+            
+        } catch (Exception e) {
             e.printStackTrace();
             showAlert("Erreur", "Impossible d'ouvrir la page de réservation", Alert.AlertType.ERROR);
         }
