@@ -20,13 +20,11 @@ public class WelcomeController {
     }
 
     @FXML
-<<<<<<< HEAD
     private void goToLandingPage(ActionEvent event) {
-        switchScene(event, "landingPage.fxml");
+        switchScene(event, "landing-page.fxml");
     }
 
-
-=======
+    @FXML
     private void goBack(ActionEvent event) {
         try {
             Parent root = FXMLLoader.load(getClass().getResource("/fxml/landing-page.fxml"));
@@ -41,7 +39,6 @@ public class WelcomeController {
         }
     }
 
->>>>>>> 146ddc43664c4b11e5d3f96cac87047998ebacd1
     private void switchScene(ActionEvent event, String fxmlName) {
         try {
             Parent root = FXMLLoader.load(getClass().getResource("/fxml/" + fxmlName));

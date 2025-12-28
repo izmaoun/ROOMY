@@ -170,15 +170,12 @@ public class SignupController {
         alert.setContentText(message);
         alert.showAndWait();
     }
-<<<<<<< HEAD
 
     private static String generateOTP(){
         int OTP = (int)(Math.random() * 900000) + 100000;
         return String.valueOf(OTP);
     }
 
-=======
-    
     private void redirectToBookingForm(ActionEvent event) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/booking_form.fxml"));
@@ -201,5 +198,4 @@ public class SignupController {
             goToLogin(event);
         }
     }
->>>>>>> 146ddc43664c4b11e5d3f96cac87047998ebacd1
 }

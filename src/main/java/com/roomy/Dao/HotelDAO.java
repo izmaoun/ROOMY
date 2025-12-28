@@ -1,19 +1,13 @@
 package com.roomy.Dao;
 
 import com.roomy.entities.Hotel;
-<<<<<<< HEAD
 import com.roomy.entities.Hotelier;
-import com.roomy.entities.Adresse;
-import com.roomy.entities.Chambre;
-import com.roomy.entities.Image_hotel;
-=======
 import com.roomy.entities.Adresse;
 import com.roomy.entities.Image_hotel;
 import com.roomy.entities.Chambre;
 import com.roomy.entities.Image_chambre;
 import com.roomy.ENUMS.TypeChambre;
 import com.roomy.ENUMS.Statut_technique_Chambre;
->>>>>>> 146ddc43664c4b11e5d3f96cac87047998ebacd1
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -21,7 +15,8 @@ import java.util.List;
 
 public class HotelDAO {
 
-<<<<<<< HEAD
+    // ANCIENNES MÉTHODES (conservées pour compatibilité)
+
     public Hotel findById(int id) {
         String sql = "SELECT * FROM hotels WHERE id_hotel = ?";
 
@@ -67,24 +62,32 @@ public class HotelDAO {
         return hotel;
     }
 
+    // 1. RÉCUPÉRER TOUS LES HÔTELS
     public List<Hotel> findAll() {
-        List<Hotel> list = new ArrayList<>();
-        String sql = "SELECT * FROM hotels";
+        List<Hotel> hotels = new ArrayList<>();
+        String sql = "SELECT h.*, a.rue, a.ville, a.codepostal, a.pays " +
+                "FROM hotels h " +
+                "LEFT JOIN adresses a ON h.id_adresse = a.id_adresse " +
+                "ORDER BY h.nom_hotel";
 
-        try (Connection c = DBConnection.getConnection();
-             Statement st = c.createStatement();
-             ResultSet rs = st.executeQuery(sql)) {
+        try (Connection conn = DBConnection.getConnection();
+             Statement stmt = conn.createStatement();
+             ResultSet rs = stmt.executeQuery(sql)) {
 
             while (rs.next()) {
-                list.add(mapToHotel(rs));
+                Hotel hotel = extractHotel(rs);
+                loadHotelImages(hotel);
+                loadHotelServices(hotel);
+                loadHotelChambres(hotel);
+                hotels.add(hotel);
             }
 
         } catch (SQLException e) {
-            System.err.println("Erreur Hotel findAll : " + e.getMessage());
+            System.err.println("Erreur dans findAll(): " + e.getMessage());
             e.printStackTrace();
         }
 
-        return list;
+        return hotels;
     }
 
     public boolean ajouterHotel(Hotel hotel) {
@@ -200,41 +203,17 @@ public class HotelDAO {
                 Hotel hotel = mapToHotel(rs);
                 List<Image_hotel> images = loadHotelImages(hotel.getIdhotel());
                 hotel.setImgs(images);
-=======
-    // 1. RÉCUPÉRER TOUS LES HÔTELS
-    public List<Hotel> findAll() {
-        List<Hotel> hotels = new ArrayList<>();
-        String sql = "SELECT h.*, a.rue, a.ville, a.codepostal, a.pays " +
-                "FROM hotels h " +
-                "LEFT JOIN adresses a ON h.id_adresse = a.id_adresse " +
-                "ORDER BY h.nom_hotel";
-
-        try (Connection conn = DBConnection.getConnection();
-             Statement stmt = conn.createStatement();
-             ResultSet rs = stmt.executeQuery(sql)) {
-
-            while (rs.next()) {
-                Hotel hotel = extractHotel(rs);
-                loadHotelImages(hotel);
-                loadHotelServices(hotel);
-                loadHotelChambres(hotel);
->>>>>>> 146ddc43664c4b11e5d3f96cac87047998ebacd1
                 hotels.add(hotel);
             }
 
         } catch (SQLException e) {
-<<<<<<< HEAD
-            System.err.println("Erreur getHotelsByHotelier : " + e.getMessage());
-=======
-            System.err.println("❌ Erreur dans findAll(): " + e.getMessage());
+            System.err.println("Erreur dans getHotelsByHotelier(): " + e.getMessage());
             e.printStackTrace();
->>>>>>> 146ddc43664c4b11e5d3f96cac87047998ebacd1
         }
 
         return hotels;
     }
 
-<<<<<<< HEAD
     public List<Image_hotel> loadHotelImages(int idHotel) {
         List<Image_hotel> images = new ArrayList<>();
         String sql = "SELECT * FROM hotel_images WHERE id_hotel = ?";
@@ -244,7 +223,22 @@ public class HotelDAO {
 
             ps.setInt(1, idHotel);
             ResultSet rs = ps.executeQuery();
-=======
+
+            while (rs.next()) {
+                Image_hotel img = new Image_hotel();
+                img.setId(rs.getInt("id_image"));
+                img.setUrl(rs.getString("url"));
+                img.setDescription(rs.getString("description"));
+                images.add(img);
+            }
+
+        } catch (SQLException e) {
+            System.err.println("Erreur loadHotelImages : " + e.getMessage());
+        }
+
+        return images;
+    }
+
     // 2. MÉTHODE DE DÉBOGAGE POUR VOIR LES PRIX
     public void debugHotelPrices() {
         System.out.println("\n═══════════════════════════════════════════════════════");
@@ -297,7 +291,6 @@ public class HotelDAO {
                                              List<String> services, String roomType) {
         List<Hotel> hotels = new ArrayList<>();
 
-        // Construction de la requête
         StringBuilder sql = new StringBuilder(
                 "SELECT DISTINCT h.*, a.rue, a.ville, a.codepostal, a.pays " +
                         "FROM hotels h " +
@@ -307,7 +300,6 @@ public class HotelDAO {
 
         List<Object> params = new ArrayList<>();
 
-        // DEBUG: Afficher les paramètres
         System.out.println("\n=== PARAMÈTRES DU FILTRE STRICT ===");
         System.out.println("MinPrice: " + minPrice);
         System.out.println("MaxPrice: " + maxPrice);
@@ -317,20 +309,17 @@ public class HotelDAO {
         System.out.println("Stars: " + stars);
         System.out.println("Services: " + services);
 
-        // Filtre recherche
         if (search != null && !search.isEmpty()) {
             sql.append(" AND (LOWER(h.nom_hotel) LIKE LOWER(?) OR LOWER(a.ville) LIKE LOWER(?))");
             params.add("%" + search + "%");
             params.add("%" + search + "%");
         }
 
-        // Filtre ville
         if (city != null && !city.isEmpty() && !"All".equals(city)) {
             sql.append(" AND LOWER(a.ville) = LOWER(?)");
             params.add(city);
         }
 
-        // Filtre étoiles
         if (stars != null && !stars.isEmpty()) {
             sql.append(" AND h.etoiles IN (");
             for (int i = 0; i < stars.size(); i++) {
@@ -340,15 +329,12 @@ public class HotelDAO {
             sql.append(")");
         }
 
-        // CORRECTION CRITIQUE: Filtre par prix STRICT
-        // On vérifie que le prix MINIMUM de l'hôtel est dans l'intervalle
         if (minPrice != null || maxPrice != null) {
             sql.append(" AND EXISTS (");
             sql.append("   SELECT 1 FROM chambres c ");
             sql.append("   WHERE c.id_hotel = h.id_hotel ");
             sql.append("   AND c.statut = 'disponible' ");
 
-            // Condition pour le prix minimum
             if (minPrice != null) {
                 sql.append("   AND c.prix_nuit >= ?");
                 params.add(minPrice);
@@ -359,7 +345,6 @@ public class HotelDAO {
                 params.add(maxPrice);
             }
 
-            // Vérifier que c'est le prix MINIMUM de l'hôtel
             sql.append("   AND c.prix_nuit = (");
             sql.append("     SELECT MIN(c2.prix_nuit) FROM chambres c2 ");
             sql.append("     WHERE c2.id_hotel = h.id_hotel ");
@@ -369,22 +354,18 @@ public class HotelDAO {
             sql.append(")");
         }
 
-        // Filtre type de chambre
         if (roomType != null && !roomType.isEmpty() && !"All".equals(roomType)) {
             sql.append(" AND EXISTS (SELECT 1 FROM chambres c WHERE c.id_hotel = h.id_hotel AND c.type = ?)");
             params.add(roomType);
         }
 
-        // Filtre services
         if (services != null && !services.isEmpty()) {
-            // Pour chaque service, vérifier qu'il existe
             for (int i = 0; i < services.size(); i++) {
                 sql.append(" AND EXISTS (SELECT 1 FROM hotel_services hs WHERE hs.id_hotel = h.id_hotel AND hs.service_name = ?)");
                 params.add(services.get(i));
             }
         }
 
-        // Trier par prix minimum
         sql.append(" ORDER BY (SELECT MIN(c3.prix_nuit) FROM chambres c3 WHERE c3.id_hotel = h.id_hotel AND c3.statut = 'disponible')");
 
         System.out.println("Requête SQL STRICTE: " + sql.toString());
@@ -393,7 +374,6 @@ public class HotelDAO {
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql.toString())) {
 
-            // Définir les paramètres
             for (int i = 0; i < params.size(); i++) {
                 stmt.setObject(i + 1, params.get(i));
             }
@@ -422,7 +402,6 @@ public class HotelDAO {
     public List<Hotel> findWithFilters(String search, String city, Double minPrice,
                                        Double maxPrice, List<Integer> stars,
                                        List<String> services, String roomType) {
-        // Appeler la version stricte par défaut
         return findWithFiltersStrict(search, city, minPrice, maxPrice, stars, services, roomType);
     }
 
@@ -477,25 +456,12 @@ public class HotelDAO {
         System.out.println("              TESTS D'INTERVALLES DE PRIX");
         System.out.println("═══════════════════════════════════════════════════════");
 
-        // Test 1: Large intervalle
         testInterval(0, 10000, "Large (0-10000)");
-
-        // Test 2: Intervalle moyen
         testInterval(100, 500, "Moyen (100-500)");
-
-        // Test 3: Petit intervalle
         testInterval(200, 300, "Petit (200-300)");
-
-        // Test 4: Intervalle spécifique
         testInterval(300, 450, "Spécifique (300-450)");
-
-        // Test 5: Intervalle bas
         testInterval(0, 200, "Bas (0-200)");
-
-        // Test 6: Intervalle haut
         testInterval(500, 1000, "Haut (500-1000)");
-
-        // Test 7: Intervalle 2000-3000 (PROBLÈME)
         testInterval(2000, 3000, "PROBLÈME (2000-3000)");
     }
 
@@ -565,35 +531,6 @@ public class HotelDAO {
         return hotels;
     }
 
-    // 9. TROUVER PAR ID
-    public Hotel findById(int hotelId) {
-        String sql = "SELECT h.*, a.rue, a.ville, a.codepostal, a.pays " +
-                "FROM hotels h " +
-                "LEFT JOIN adresses a ON h.id_adresse = a.id_adresse " +
-                "WHERE h.id_hotel = ?";
-
-        try (Connection conn = DBConnection.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
-
-            stmt.setInt(1, hotelId);
-            ResultSet rs = stmt.executeQuery();
-
-            if (rs.next()) {
-                Hotel hotel = extractHotel(rs);
-                loadHotelImages(hotel);
-                loadHotelServices(hotel);
-                loadHotelChambres(hotel);
-                return hotel;
-            }
-
-        } catch (SQLException e) {
-            System.err.println("❌ Erreur dans findById(): " + e.getMessage());
-            e.printStackTrace();
-        }
-
-        return null;
-    }
-
     // 10. EXTRACTION HÔTEL
     private Hotel extractHotel(ResultSet rs) throws SQLException {
         Hotel hotel = new Hotel();
@@ -601,14 +538,12 @@ public class HotelDAO {
         hotel.setNomHotel(rs.getString("nom_hotel"));
         hotel.setEtoiles(rs.getInt("etoiles"));
 
-        // Description (vérifie si la colonne existe)
         try {
             hotel.setDescription(rs.getString("description"));
         } catch (SQLException e) {
             hotel.setDescription("Hôtel de qualité avec services premium.");
         }
 
-        // Adresse
         Adresse adresse = new Adresse();
         adresse.setRue(rs.getString("rue"));
         adresse.setVille(rs.getString("ville"));
@@ -628,72 +563,13 @@ public class HotelDAO {
 
             stmt.setInt(1, hotel.getIdhotel());
             ResultSet rs = stmt.executeQuery();
->>>>>>> 146ddc43664c4b11e5d3f96cac87047998ebacd1
 
             while (rs.next()) {
                 Image_hotel img = new Image_hotel();
                 img.setId(rs.getInt("id_image"));
                 img.setUrl(rs.getString("url"));
                 img.setDescription(rs.getString("description"));
-<<<<<<< HEAD
-                images.add(img);
-            }
-
-        } catch (SQLException e) {
-            System.err.println("Erreur loadHotelImages : " + e.getMessage());
-        }
-
-        return images;
-    }
-
-    public boolean ajouterChambre(Chambre c) {
-        String sql = "INSERT INTO chambres (num_chambre, type, prix_nuit, capacity, surface, statut, description, id_hotel) " +
-                "VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
-        try (Connection conn = DBConnection.getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
-
-            ps.setInt(1, c.getNumchambre());
-            ps.setString(2, c.getType().name());
-            ps.setDouble(3, c.getPrix_nuit());
-            ps.setInt(4, c.getCapacity());
-            ps.setInt(5, c.getSurface());
-            ps.setString(6, c.getStatut().name());
-            ps.setString(7, c.getDescription());
-            ps.setInt(8, c.getHotel().getIdhotel());
-
-            return ps.executeUpdate() > 0;
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return false;
-        }
-    }
-
-    public boolean supprimerChambre(int idChambre) {
-        String sql = "DELETE FROM chambres WHERE id_chambre = ?";
-        try (Connection conn = DBConnection.getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
-
-            ps.setInt(1, idChambre);
-            return ps.executeUpdate() > 0;
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return false;
-        }
-    }
-
-    public int getNombreChambres(int idHotel) {
-        String sql = "SELECT COUNT(*) FROM chambres WHERE id_hotel = ?";
-        try (Connection conn = DBConnection.getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
-            ps.setInt(1, idHotel);
-            ResultSet rs = ps.executeQuery();
-            return rs.next() ? rs.getInt(1) : 0;
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return 0;
-        }
-=======
-                hotel.addImg(img);
+                hotel.getImgs().add(img);
             }
         }
     }
@@ -715,7 +591,6 @@ public class HotelDAO {
                 }
             }
         } catch (SQLException e) {
-            // Services par défaut si pas de table
             hotel.getServices().addAll(List.of("Wi-Fi", "Parking", "Petit déjeuner"));
         }
     }
@@ -745,7 +620,6 @@ public class HotelDAO {
         chambre.setId(rs.getInt("id_chambre"));
         chambre.setNumchambre(rs.getInt("num_chambre"));
 
-        // TypeChambre
         String typeStr = rs.getString("type");
         if (typeStr != null) {
             try {
@@ -759,11 +633,9 @@ public class HotelDAO {
         chambre.setCapacity(rs.getInt("capacity"));
         chambre.setSurface(rs.getInt("surface"));
 
-        // Statut
         String statutStr = rs.getString("statut");
         if (statutStr != null) {
             try {
-                // Convertir en minuscules pour votre enum
                 statutStr = statutStr.toLowerCase();
                 chambre.setStatut(Statut_technique_Chambre.valueOf(statutStr));
             } catch (IllegalArgumentException e) {
@@ -816,7 +688,6 @@ public class HotelDAO {
 
         } catch (SQLException e) {
             System.err.println("❌ Erreur dans getDistinctCities(): " + e.getMessage());
-            // Villes par défaut
             cities.addAll(List.of("Paris", "Lyon", "Marseille", "Nice", "Bordeaux", "Toulouse", "Strasbourg"));
         }
 
@@ -845,6 +716,18 @@ public class HotelDAO {
         }
 
         return types;
->>>>>>> 146ddc43664c4b11e5d3f96cac87047998ebacd1
+    }
+
+    public int getNombreChambres(int idHotel) {
+        String sql = "SELECT COUNT(*) FROM chambres WHERE id_hotel = ?";
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, idHotel);
+            ResultSet rs = ps.executeQuery();
+            return rs.next() ? rs.getInt(1) : 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return 0;
+        }
     }
 }

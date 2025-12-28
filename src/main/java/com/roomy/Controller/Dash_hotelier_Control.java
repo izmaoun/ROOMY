@@ -9,11 +9,14 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import javafx.event.ActionEvent;
+
 
 public class Dash_hotelier_Control {
     private static int currentHotelierId = 0;
@@ -25,6 +28,12 @@ public class Dash_hotelier_Control {
     @FXML private Text txtNbChambresTotal;
     @FXML private Text txtNbChambresDispo;
     @FXML private Text txtNbChambresOccupees;
+    @FXML private Button btnToggleMenu;
+    @FXML private Button btnDashboard;
+    @FXML private Button btnHotels;
+    @FXML private Button btnChambres;
+    @FXML private Button btnStats;
+    @FXML private Button btnProfile;
 
     private final HotelDAO hotelDAO = new HotelDAO();
     private final ChambreDAO chambreDAO = new ChambreDAO();
@@ -41,6 +50,7 @@ public class Dash_hotelier_Control {
     private void initialize() {
         instance = this;
         refreshDashboard();
+        setActiveButton(btnDashboard); //dashboard katban lwla duh
     }
     public static Dash_hotelier_Control getInstance() {
         return instance;
@@ -48,6 +58,32 @@ public class Dash_hotelier_Control {
 
     public BorderPane getMainBorderPane() {
         return mainBorderPane;
+    }
+
+    @FXML
+    private void toggleMenu(ActionEvent e) {
+        boolean hidden = leftMenu.getTranslateX() < 0;
+
+        if (hidden) {
+            leftMenu.setTranslateX(0);        // montrer
+        } else {
+            leftMenu.setTranslateX(-220);     // cacher
+        }
+    }
+    private void updateButtonStyles() {
+        // Style par défaut (non actif)
+        String inactiveStyle = "-fx-background-color: transparent; -fx-text-fill: #EFDFC5; -fx-font-size: 13px; -fx-background-radius: 12; -fx-cursor: hand;";
+
+        // Réinitialiser tous les boutons
+        btnDashboard.setStyle(inactiveStyle);
+        btnHotels.setStyle(inactiveStyle);
+        btnChambres.setStyle(inactiveStyle);
+        btnStats.setStyle(inactiveStyle);
+        btnProfile.setStyle(inactiveStyle);
+    }
+    private void setActiveButton(Button activeButton) {
+        updateButtonStyles();
+        activeButton.setStyle("-fx-background-color: #A59090; -fx-text-fill: #380F17; -fx-font-size: 13px; -fx-font-weight: bold; -fx-background-radius: 12; -fx-cursor: hand;");
     }
 
     public void refreshDashboard() {
@@ -84,39 +120,34 @@ public class Dash_hotelier_Control {
 
 
     public void goToDashboard() {
+
         refreshDashboard();
     }
 
     @FXML
     public void goToMesHotels() {
+        setActiveButton(btnHotels);
         loadCenter("mes_hotels.fxml");
     }
 
     @FXML
     public void goToChambres() {
+        setActiveButton(btnChambres);
         loadCenter("chambres.fxml");
     }
 
     @FXML
     public void goToStatistiques() {
+        setActiveButton(btnStats);
         loadCenter("statistiques.fxml");
     }
 
     @FXML
     public void goToProfil() {
+        setActiveButton(btnProfile);
         loadCenter("profile.fxml");
     }
 
-    @FXML
-    private void toggleMenu() {
-        if (leftMenu.isVisible()) {
-            leftMenu.setVisible(false);
-            leftMenu.setManaged(false);
-        } else {
-            leftMenu.setVisible(true);
-            leftMenu.setManaged(true);
-        }
-    }
 
     @FXML
     private void handleDeconnexion() {

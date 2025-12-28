@@ -1,23 +1,19 @@
 package com.roomy.Dao;
 
-<<<<<<< HEAD
+
 import com.roomy.entities.Reservation;
 import com.roomy.entities.Chambre;
 import com.roomy.ENUMS.StatutReservation;
 import com.roomy.ENUMS.TypeChambre; // Assure-toi d'avoir cet import
 
-import java.sql.*;
-=======
 import com.roomy.entities.*;
 import com.roomy.ENUMS.StatutReservation;
 import java.sql.*;
 import java.time.LocalDateTime;
->>>>>>> 146ddc43664c4b11e5d3f96cac87047998ebacd1
 import java.util.ArrayList;
 import java.util.List;
 
 public class ReservationDAO {
-<<<<<<< HEAD
 
     // Tes autres méthodes (ajouter, update...) restent ici...
 
@@ -89,8 +85,8 @@ public class ReservationDAO {
         r.setChambre(ch);
 
         return r;
-=======
-    
+    }
+
     public boolean createReservation(Reservation reservation) {
         String sql = "INSERT INTO reservations (id_client, id_chambre, date_debut_sejour, date_fin_sejour, nombre_personnes, montant_total, statut) VALUES (?, ?, ?, ?, ?, ?, ?)";
         
@@ -203,6 +199,6 @@ public class ReservationDAO {
             System.err.println("Erreur annulation réservation: " + e.getMessage());
             return false;
         }
->>>>>>> 146ddc43664c4b11e5d3f96cac87047998ebacd1
+
     }
 }

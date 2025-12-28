@@ -42,36 +42,42 @@
 
     <!-- ==================== MENU GAUCHE ==================== -->
     <left>
-        <VBox fx:id="leftMenu" style="-fx-background-color: #2d0c13; -fx-padding: 40 25;" spacing="20">
-            <Button text="Tableau de bord" onAction="#goToDashboard"
-                    prefWidth="240.0" prefHeight="55.0"
-                    style="-fx-background-color: #A59090; -fx-text-fill: #380F17; -fx-font-size: 17px;
-                           -fx-font-weight: bold; -fx-background-radius: 15; -fx-cursor: hand;"/>
+        <VBox fx:id="leftMenu"
+              prefWidth="220"
+              minWidth="220"
+              maxWidth="220"
+              style="-fx-background-color: #2d0c13; -fx-padding: 25 15;"
+              spacing="12">
 
-            <Button text="Mes hôtels" onAction="#goToMesHotels"
-                    prefWidth="240.0" prefHeight="55.0"
-                    style="-fx-background-color: transparent; -fx-text-fill: #EFDFC5; -fx-font-size: 16px;
-                           -fx-background-radius: 15; -fx-cursor: hand;"/>
+            <Button fx:id="btnDashboard" text="Tableau de bord" onAction="#goToDashboard"
+                    prefWidth="200.0" prefHeight="45.0"
+                    style="-fx-background-color: #A59090; -fx-text-fill: #380F17; -fx-font-size: 13px;
+                           -fx-font-weight: bold; -fx-background-radius: 12; -fx-cursor: hand;"/>
 
-            <Button text="Chambres" onAction="#goToChambres"
-                    prefWidth="240.0" prefHeight="55.0"
-                    style="-fx-background-color: transparent; -fx-text-fill: #EFDFC5; -fx-font-size: 16px;
-                           -fx-background-radius: 15; -fx-cursor: hand;"/>
+            <Button fx:id="btnHotels" text="Mes hôtels" onAction="#goToMesHotels"
+                    prefWidth="200.0" prefHeight="45.0"
+                    style="-fx-background-color: transparent; -fx-text-fill: #EFDFC5; -fx-font-size: 13px;
+                           -fx-background-radius: 12; -fx-cursor: hand;"/>
 
-            <Button text="Statistiques" onAction="#goToStatistiques"
-                    prefWidth="240.0" prefHeight="55.0"
-                    style="-fx-background-color: transparent; -fx-text-fill: #EFDFC5; -fx-font-size: 16px;
-                           -fx-background-radius: 15; -fx-cursor: hand;"/>
+            <Button fx:id="btnChambres" text="Chambres" onAction="#goToChambres"
+                    prefWidth="200.0" prefHeight="45.0"
+                    style="-fx-background-color: transparent; -fx-text-fill: #EFDFC5; -fx-font-size: 13px;
+                           -fx-background-radius: 12; -fx-cursor: hand;"/>
 
-            <Button text="Profil" onAction="#goToProfil"
-                    prefWidth="240.0" prefHeight="55.0"
-                    style="-fx-background-color: transparent; -fx-text-fill: #EFDFC5; -fx-font-size: 16px;
-                           -fx-background-radius: 15; -fx-cursor: hand;"/>
+            <Button fx:id="btnStats" text="Statistiques" onAction="#goToStatistiques"
+                    prefWidth="200.0" prefHeight="45.0"
+                    style="-fx-background-color: transparent; -fx-text-fill: #EFDFC5; -fx-font-size: 13px;
+                           -fx-background-radius: 12; -fx-cursor: hand;"/>
+
+            <Button fx:id="btnProfile" text="Profil" onAction="#goToProfil"
+                    prefWidth="200.0" prefHeight="45.0"
+                    style="-fx-background-color: transparent; -fx-text-fill: #EFDFC5; -fx-font-size: 13px;
+                           -fx-background-radius: 12; -fx-cursor: hand;"/>
 
             <Region VBox.vgrow="ALWAYS"/>
 
             <Text text="Roomy Hotel Manager"
-                  style="-fx-fill: #A59090; -fx-font-size: 13px;"/>
+                  style="-fx-fill: #A59090; -fx-font-size: 11px;"/>
         </VBox>
     </left>
 

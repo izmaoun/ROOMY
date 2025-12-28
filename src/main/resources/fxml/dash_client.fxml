@@ -6,6 +6,7 @@
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.image.Image?>
 
+<?import javafx.scene.text.Text?>
 <BorderPane xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
             fx:controller="com.roomy.Controller.DashClientController"
@@ -45,58 +46,44 @@
 
     <!-- ======================== MENU GAUCHE (Left) ======================== -->
     <left>
-        <VBox spacing="0"
-              style="-fx-background-color: #2C3E50; -fx-min-width: 200px;"
-              alignment="TOP_CENTER">
-            <padding>
-                <Insets top="30" right="0" bottom="30" left="0"/>
-            </padding>
+        <VBox fx:id="leftMenu"
+              prefWidth="220"
+              minWidth="220"
+              maxWidth="220"
+              style="-fx-background-color: #2d0c13; -fx-padding: 25 15;"
+              spacing="12">
 
             <!-- Bouton Mes réservations -->
             <Button fx:id="btnReservations"
                     text="Mes réservations"
                     onAction="#loadReservationsPage"
-                    prefWidth="180"
-                    prefHeight="45"
-                    styleClass="menu-button"
-                    style="-fx-background-color: #A59090; -fx-text-fill: white;
-                           -fx-font-size: 14px; -fx-cursor: hand;
-                           -fx-background-radius: 5; -fx-border-radius: 5;">
-                <VBox.margin>
-                    <Insets bottom="10"/>
-                </VBox.margin>
-            </Button>
+                    prefWidth="200.0" prefHeight="45.0"
+                    style="-fx-background-color: #A59090; -fx-text-fill: #380F17; -fx-font-size: 13px;
+                           -fx-font-weight: bold; -fx-background-radius: 12; -fx-cursor: hand;"/>
 
             <!-- Bouton Mon profil -->
             <Button fx:id="btnProfile"
                     text="Mon profil"
                     onAction="#loadProfilePage"
-                    prefWidth="180"
-                    prefHeight="45"
-                    styleClass="menu-button"
-                    style="-fx-background-color: #A59090; -fx-text-fill: white;
-                           -fx-font-size: 14px; -fx-cursor: hand;
-                           -fx-background-radius: 5; -fx-border-radius: 5;">
-                <VBox.margin>
-                    <Insets bottom="10"/>
-                </VBox.margin>
-            </Button>
+                    prefWidth="200.0" prefHeight="45.0"
+                    style="-fx-background-color: transparent; -fx-text-fill: #EFDFC5; -fx-font-size: 13px;
+                           -fx-background-radius: 12; -fx-cursor: hand;"/>
 
             <!-- Bouton Voir hôtels -->
             <Button fx:id="btnHotels"
                     text="Voir hôtels"
                     onAction="#loadHotelsPage"
-                    prefWidth="180"
-                    prefHeight="45"
-                    styleClass="menu-button"
-                    style="-fx-background-color: #A59090; -fx-text-fill: white;
-                           -fx-font-size: 14px; -fx-cursor: hand;
-                           -fx-background-radius: 5; -fx-border-radius: 5;">
-            </Button>
+                    prefWidth="200.0" prefHeight="45.0"
+                    style="-fx-background-color: transparent; -fx-text-fill: #EFDFC5; -fx-font-size: 13px;
+                           -fx-background-radius: 12; -fx-cursor: hand;"/>
+
+            <Region VBox.vgrow="ALWAYS"/>
+
+            <Text text="Roomy Client"
+                  style="-fx-fill: #A59090; -fx-font-size: 11px;"/>
         </VBox>
     </left>
 
-    <!-- ======================== ZONE CENTRALE (Center) ======================== -->
     <center>
         <StackPane fx:id="centerStack"
                    style="-fx-background-color: #EFDFC5;">

@@ -13,11 +13,11 @@ public class HelloApplication extends Application {
     public void start(Stage stage) throws IOException {
         DataInit.init();
 
-        FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("/fxml/welcome.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("/fxml/landing-page.fxml"));
         // Taille initiale optimale
-        Scene scene = new Scene(fxmlLoader.load(), 1300, 750);
+        Scene scene = new Scene(fxmlLoader.load());
 
-        stage.setTitle("Roomy - Dashboard Admin");
+        stage.setTitle("ROOMY - Accueil");
         stage.setResizable(true);
 
         // Limites minimales pour ne pas casser l'UI

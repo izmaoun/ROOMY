@@ -5,42 +5,10 @@ import java.sql.*;
 import java.util.List;
 import java.util.Optional;
 
-<<<<<<< HEAD
-    public class ClientDAO {
-        public Client findById(int id) {
-            String sql = "SELECT * FROM clients WHERE id_client = ?";
 
-            try (Connection c = DBConnection.getConnection();
-                 PreparedStatement ps = c.prepareStatement(sql)) {
-
-                ps.setInt(1, id);
-                ResultSet rs = ps.executeQuery();
-
-                if (rs.next()) {
-                    Client client = new Client();
-                    client.setIdClient(rs.getInt("id_client"));
-                    client.setNom(rs.getString("nom"));
-                    client.setPrenom(rs.getString("prenom"));
-                    client.setEmail(rs.getString("email"));
-                    client.setTelephone(rs.getString("telephone"));
-                    client.setPassword(rs.getString("password"));
-                    client.setDateInscription(rs.getTimestamp("date_inscription").toLocalDateTime());
-                    client.setEstBloque(rs.getBoolean("est_bloque"));
-                    return client;
-                }
-            } catch (SQLException e) {
-                System.err.println("Erreur lors du findById Client : " + e.getMessage());
-            }
-
-            return null;
-        }
-
-=======
 public class ClientDAO {
     public Client findById(int id) {
         String sql = "SELECT * FROM clients WHERE id_client = ?";
->>>>>>> 146ddc43664c4b11e5d3f96cac87047998ebacd1
-
         try (Connection c = DBConnection.getConnection();
              PreparedStatement ps = c.prepareStatement(sql)) {
 
@@ -55,13 +23,13 @@ public class ClientDAO {
                 client.setEmail(rs.getString("email"));
                 client.setTelephone(rs.getString("telephone"));
                 client.setPassword(rs.getString("password"));
-                
+
                 // Gérer le cas où date_inscription peut être NULL
                 Timestamp dateInscription = rs.getTimestamp("date_inscription");
                 if (dateInscription != null) {
                     client.setDateInscription(dateInscription.toLocalDateTime());
                 }
-                
+
                 client.setEstBloque(rs.getBoolean("est_bloque"));
                 return client;
             }
@@ -90,13 +58,13 @@ public class ClientDAO {
                 client.setEmail(rs.getString("email"));
                 client.setTelephone(rs.getString("telephone"));
                 client.setPassword(rs.getString("password"));
-                
+
                 // Gérer le cas où date_inscription peut être NULL
                 Timestamp dateInscription = rs.getTimestamp("date_inscription");
                 if (dateInscription != null) {
                     client.setDateInscription(dateInscription.toLocalDateTime());
                 }
-                
+
                 client.setEstBloque(rs.getBoolean("est_bloque"));
                 return client;
             }
@@ -107,7 +75,6 @@ public class ClientDAO {
         return null;
     }
 
-    // Inscription client
     // Inscription client - CORRIGÉ
     public boolean signup(Client client) {
         if (findByEmail(client.getEmail()) != null) {
@@ -226,19 +193,47 @@ public class ClientDAO {
             e.printStackTrace();
             return false;
         }
-        public boolean updatePassword(String email, String hashedPassword) {
-            try (Connection conn = DBConnection.getConnection()) {
-                String sql = "UPDATE client SET password = ? WHERE email = ?";
-                PreparedStatement stmt = conn.prepareStatement(sql);
-                stmt.setString(1, hashedPassword);
-                stmt.setString(2, email);
-                stmt.executeUpdate();
-                return true;
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+    }
+
+    // Met à jour le mot de passe d'un client (version avec email)
+    public boolean updatePassword(String email, String hashedPassword) {
+        try (Connection conn = DBConnection.getConnection()) {
+            String sql = "UPDATE clients SET password = ? WHERE email = ?";
+            PreparedStatement stmt = conn.prepareStatement(sql);
+            stmt.setString(1, hashedPassword);
+            stmt.setString(2, email);
+            stmt.executeUpdate();
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    // Met à jour le mot de passe d'un client (version avec ID)
+    public boolean updatePassword(int clientId, String hashedPassword) {
+        System.out.println("=== ClientDAO.updatePassword() ===");
+        System.out.println("Client ID: " + clientId);
+
+        String sql = "UPDATE clients SET password = ? WHERE id_client = ?";
+
+        try (Connection c = DBConnection.getConnection();
+             PreparedStatement ps = c.prepareStatement(sql)) {
+
+            ps.setString(1, hashedPassword);
+            ps.setInt(2, clientId);
+
+            int affectedRows = ps.executeUpdate();
+            System.out.println("Lignes affectées: " + affectedRows);
+
+            return affectedRows > 0;
+
+        } catch (SQLException e) {
+            System.err.println("Erreur SQL updatePassword: " + e.getMessage());
+            e.printStackTrace();
             return false;
         }
+    }
 
     /**
      * Retourne tous les clients (pour dashboard admin)
@@ -257,7 +252,12 @@ public class ClientDAO {
                 client.setEmail(rs.getString("email"));
                 client.setTelephone(rs.getString("telephone"));
                 client.setPassword(rs.getString("password"));
-                client.setDateInscription(rs.getTimestamp("date_inscription").toLocalDateTime());
+
+                Timestamp dateInscription = rs.getTimestamp("date_inscription");
+                if (dateInscription != null) {
+                    client.setDateInscription(dateInscription.toLocalDateTime());
+                }
+
                 client.setEstBloque(rs.getBoolean("est_bloque"));
                 clients.add(client);
             }
@@ -268,7 +268,6 @@ public class ClientDAO {
         return clients;
     }
 
-<<<<<<< HEAD
     /**
      * Met à jour le statut bloqué d'un client
      */
@@ -317,9 +316,9 @@ public class ClientDAO {
         }
 
         String sql = "SELECT MONTH(date_inscription) as mois, COUNT(*) as total " +
-                     "FROM clients " +
-                     "WHERE YEAR(date_inscription) = ? " +
-                     "GROUP BY MONTH(date_inscription)";
+                "FROM clients " +
+                "WHERE YEAR(date_inscription) = ? " +
+                "GROUP BY MONTH(date_inscription)";
 
         try (Connection c = DBConnection.getConnection();
              PreparedStatement ps = c.prepareStatement(sql)) {
@@ -335,32 +334,3 @@ public class ClientDAO {
         return result;
     }
 }
-=======
-
-    // Met à jour le mot de passe d'un client
-
-    public boolean updatePassword(int clientId, String hashedPassword) {
-        System.out.println("=== ClientDAO.updatePassword() ===");
-        System.out.println("Client ID: " + clientId);
-
-        String sql = "UPDATE clients SET password = ? WHERE id_client = ?";
-
-        try (Connection c = DBConnection.getConnection();
-             PreparedStatement ps = c.prepareStatement(sql)) {
-
-            ps.setString(1, hashedPassword);
-            ps.setInt(2, clientId);
-
-            int affectedRows = ps.executeUpdate();
-            System.out.println("Lignes affectées: " + affectedRows);
-
-            return affectedRows > 0;
-
-        } catch (SQLException e) {
-            System.err.println("Erreur SQL updatePassword: " + e.getMessage());
-            e.printStackTrace();
-            return false;
-        }
-    }
-}
->>>>>>> 146ddc43664c4b11e5d3f96cac87047998ebacd1

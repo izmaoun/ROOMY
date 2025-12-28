@@ -16,7 +16,6 @@ public class Image_hotel {
     public int getId() { return id; }
     public void setId(int id) { this.id = id; }
 
-<<<<<<< HEAD
     public String getUrl() { return url; }
     public void setUrl(String url) { this.url = url; }
 
@@ -26,17 +25,7 @@ public class Image_hotel {
     public Hotel getHotel() { return hotel; }
     public void setHotel(Hotel hotel) {
         this.hotel = hotel;
-=======
-    public String getUrl() { return url; }           // ✅ GETTER MANQUANT
-    public void setUrl(String url) { this.url = url; } // ✅ SETTER MANQUANT
 
-    public String getDescription() { return description; } // ✅ GETTER MANQUANT
-    public void setDescription(String description) { this.description = description; } // ✅ SETTER MANQUANT
-
-    public Hotel getHotel() { return hotel; }
-    public void setHotel (Hotel hotel){
-        this.hotel=hotel;
->>>>>>> 146ddc43664c4b11e5d3f96cac87047998ebacd1
     }
 
     @Override

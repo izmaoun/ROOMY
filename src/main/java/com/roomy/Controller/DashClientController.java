@@ -1,6 +1,7 @@
 package com.roomy.Controller;
 
 import com.roomy.service.Session;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -8,6 +9,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -20,6 +22,8 @@ public class DashClientController {
     @FXML private Button btnProfile;
     @FXML private Button btnHotels;
     @FXML private StackPane centerStack;
+    @FXML private VBox leftMenu;
+    @FXML private Button btnToggleMenu;
 
     @FXML
     public void initialize() {
@@ -27,7 +31,9 @@ public class DashClientController {
         if (Session.getCurrentClient() != null) {
             lblClientName.setText(Session.getCurrentClient().getPrenom() + " " +
                     Session.getCurrentClient().getNom());
+
         }
+        setActiveButton(btnReservations);
 
         // Configuration des boutons du menu
         btnReservations.setOnAction(e -> loadReservationsPage());
@@ -41,6 +47,32 @@ public class DashClientController {
         loadReservations();
     }
 
+    @FXML
+    private void toggleMenu(ActionEvent e) {
+        boolean hidden = leftMenu.getTranslateX() < 0;
+
+        if (hidden) {
+            leftMenu.setTranslateX(0);        // montrer
+        } else {
+            leftMenu.setTranslateX(-220);     // cacher
+        }
+    }
+    private void updateButtonStyles() {
+        // Style par défaut (non actif)
+        String inactiveStyle = "-fx-background-color: transparent; -fx-text-fill: #EFDFC5; -fx-font-size: 13px; -fx-background-radius: 12; -fx-cursor: hand;";
+
+        // Réinitialiser tous les boutons
+        btnReservations.setStyle(inactiveStyle);
+        btnProfile.setStyle(inactiveStyle);
+        btnHotels.setStyle(inactiveStyle);
+    }
+    private void setActiveButton(Button activeButton) {
+        updateButtonStyles();
+        activeButton.setStyle("-fx-background-color: #A59090; -fx-text-fill: #380F17; -fx-font-size: 13px; -fx-font-weight: bold; -fx-background-radius: 12; -fx-cursor: hand;");
+    }
+
+
+
     private void loadReservations() {
         loadReservationsPage();
     }
@@ -48,6 +80,7 @@ public class DashClientController {
 
     @FXML
     private void loadReservationsPage() {
+        setActiveButton(btnReservations);
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/client_reservations.fxml"));
             Parent reservationsContent = loader.load();
@@ -66,6 +99,7 @@ public class DashClientController {
 
     @FXML
     private void loadProfilePage() {
+        setActiveButton(btnProfile);
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/client_profile.fxml"));
             Parent profileContent = loader.load();
@@ -84,6 +118,7 @@ public class DashClientController {
 
     @FXML
     private void loadHotelsPage() {
+
         // Afficher un indicateur de chargement
         System.out.println("Chargement de la page hôtels...");
         
