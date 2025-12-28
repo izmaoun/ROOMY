@@ -6,11 +6,13 @@ public class Client extends Utilisateur {
     private boolean estBloque;
 
     // Constructeur vide (obligatoire pour JDBC)
-    public Client() {}
+    public Client() {
+        super();
+    }
 
     // Constructeur pour l'inscription
     public Client(String nom, String prenom, String email, String telephone, String motDePasseHash) {
-        super(nom, prenom, email, motDePasseHash, telephone, LocalDateTime.now());
+        super(0, nom, prenom, email, motDePasseHash, telephone, LocalDateTime.now());
         this.estBloque = false;
     }
 

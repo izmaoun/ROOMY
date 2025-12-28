@@ -6,6 +6,7 @@ import com.roomy.entities.Adresse;
 import com.roomy.entities.Image_hotel;
 import com.roomy.entities.Chambre;
 import com.roomy.ENUMS.TypeChambre;
+import com.roomy.util.WindowUtil;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -29,7 +30,9 @@ public class LandingPageController {
     @FXML private TextField minPriceField;
     @FXML private TextField maxPriceField;
     @FXML private Slider priceSlider;
+    @FXML private Slider minPriceSlider;
     @FXML private Label priceRangeLabel;
+    @FXML private Label minPriceRangeLabel;
     @FXML private ComboBox<String> cityComboBox;
     @FXML private ComboBox<String> roomTypeComboBox;
     @FXML private CheckBox star5, star4, star3;
@@ -63,32 +66,57 @@ public class LandingPageController {
 
     // CONFIGURATION AMÉLIORÉE DES FILTRES
     private void setupFilters() {
-        // Configurer le slider
+        // Configurer le slider max
         priceSlider.setMin(0);
-        priceSlider.setMax(10000);
-        priceSlider.setValue(3000);
+        priceSlider.setMax(4000);
+        priceSlider.setValue(4000);
         priceSlider.setBlockIncrement(100);
         priceSlider.setMajorTickUnit(1000);
         priceSlider.setMinorTickCount(5);
         priceSlider.setShowTickLabels(true);
         priceSlider.setShowTickMarks(true);
 
-        // Listener pour le slider
+        // Configurer le slider min
+        minPriceSlider.setMin(0);
+        minPriceSlider.setMax(4000);
+        minPriceSlider.setValue(0);
+        minPriceSlider.setBlockIncrement(100);
+        minPriceSlider.setMajorTickUnit(1000);
+        minPriceSlider.setMinorTickCount(5);
+        minPriceSlider.setShowTickLabels(true);
+        minPriceSlider.setShowTickMarks(true);
+
+        // Listener pour le slider max
         priceSlider.valueProperty().addListener((obs, oldVal, newVal) -> {
             int value = newVal.intValue();
-            priceRangeLabel.setText("Jusqu'à $" + value + " / nuit");
+            priceRangeLabel.setText("Up to $" + value + " / night");
             maxPriceField.setText(String.valueOf(value));
+        });
+
+        // Listener pour le slider min
+        minPriceSlider.valueProperty().addListener((obs, oldVal, newVal) -> {
+            int value = newVal.intValue();
+            minPriceRangeLabel.setText("From $" + value + " / night");
+            minPriceField.setText(String.valueOf(value));
         });
 
         // Valeurs par défaut
         minPriceField.setText("0");
-        maxPriceField.setText("3000");
-        priceRangeLabel.setText("Jusqu'à $3000 / nuit");
+        maxPriceField.setText("4000");
+        priceRangeLabel.setText("Up to $4000 / night");
+        minPriceRangeLabel.setText("From $0 / night");
 
         // Listener pour les champs de prix
         minPriceField.textProperty().addListener((obs, oldVal, newVal) -> {
             if (!newVal.matches("\\d*(\\.\\d*)?")) {
                 minPriceField.setText(oldVal);
+            } else if (!newVal.isEmpty()) {
+                try {
+                    double value = Double.parseDouble(newVal);
+                    minPriceSlider.setValue(value);
+                } catch (NumberFormatException e) {
+                    // Ignorer
+                }
             }
         });
 
@@ -193,35 +221,43 @@ public class LandingPageController {
 
     private VBox createHotelCard(Hotel hotel) {
         VBox card = new VBox();
-        card.setStyle("-fx-background-color: white; " +
-                "-fx-border-color: #e0e0e0; " +
+        card.setStyle("-fx-background-color: #EFDFC5; " +
+                "-fx-border-color: #4C4F54; " +
                 "-fx-border-width: 1px; " +
                 "-fx-border-radius: 10px; " +
                 "-fx-background-radius: 10px; " +
                 "-fx-padding: 0px; " +
                 "-fx-spacing: 0px; " +
-                "-fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 10, 0, 0, 0);" +
-                "-fx-cursor: hand;");
+                "-fx-effect: dropshadow(three-pass-box, rgba(56,15,23,0.2), 10, 0, 0, 0);" +
+                "-fx-cursor: hand;" +
+                "-fx-alignment: top-center;");
 
-        // Taille fixe pour que FlowPane les aligne bien
-        card.setPrefSize(380, 400);
-        card.setMaxSize(380, 400);
+        // Fixed size for consistent 3-per-line layout
+        card.setPrefSize(350, 400);
+        card.setMinSize(350, 400);
+        card.setMaxSize(350, 400);
 
-        // Image
         ImageView imageView = new ImageView();
         String imageUrl = getHotelImageUrl(hotel);
 
         try {
-            Image image = new Image(imageUrl, 380, 220, false, true);
+            Image image = new Image(imageUrl, 350, 220, false, true);
             imageView.setImage(image);
         } catch (Exception e) {
             imageView.setImage(new Image("https://images.unsplash.com/photo-1564501049412-61c2a3083791?w=600",
-                    380, 220, false, true));
+                    350, 220, false, true));
         }
 
-        imageView.setFitWidth(380);
+        imageView.setFitWidth(350);
         imageView.setFitHeight(220);
-        imageView.setStyle("-fx-border-radius: 10px 10px 0 0;");
+        imageView.setPreserveRatio(false);
+        imageView.setSmooth(true);
+        
+        // Add clipping for rounded corners
+        javafx.scene.shape.Rectangle clip = new javafx.scene.shape.Rectangle(350, 220);
+        clip.setArcWidth(20);
+        clip.setArcHeight(20);
+        imageView.setClip(clip);
 
         // Détails
         VBox content = new VBox(10);
@@ -234,11 +270,11 @@ public class LandingPageController {
         titleBox.setAlignment(Pos.CENTER_LEFT);
 
         Label nameLabel = new Label(hotel.getNomHotel());
-        nameLabel.setStyle("-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #2c3e50;");
+        nameLabel.setStyle("-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #380F17;");
         nameLabel.setWrapText(true);
         nameLabel.setMaxWidth(250);
 
-        String stars = "★".repeat(hotel.getEtoiles()) + "☆".repeat(5 - hotel.getEtoiles());
+        String stars = "★".repeat(Math.max(0, Math.min(5, hotel.getEtoiles())));
         Label starsLabel = new Label(stars);
         starsLabel.setStyle("-fx-text-fill: #FFD700; -fx-font-size: 16px;");
 
@@ -248,24 +284,24 @@ public class LandingPageController {
         Adresse adresse = hotel.getAdresse();
         String ville = (adresse != null && adresse.getVille() != null) ? adresse.getVille() : "Ville inconnue";
         Label cityLabel = new Label("📍 " + ville);
-        cityLabel.setStyle("-fx-text-fill: #7f8c8d; -fx-font-size: 14px;");
+        cityLabel.setStyle("-fx-text-fill: #4C4F54; -fx-font-size: 14px;");
 
         // Prix (calculé localement)
         double minPrice = calculateHotelMinPrice(hotel);
         Label priceLabel = new Label("À partir de $" + String.format("%.2f", minPrice) + " / nuit");
-        priceLabel.setStyle("-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: #f1c40f;");
+        priceLabel.setStyle("-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: #8F0B13;");
 
         // Boutons
         HBox buttonBox = new HBox(10);
         buttonBox.setAlignment(Pos.CENTER);
 
         Button detailsBtn = new Button("Voir détails");
-        detailsBtn.setStyle("-fx-background-color: #3498db; -fx-text-fill: white; " +
+        detailsBtn.setStyle("-fx-background-color: #252B2B; -fx-text-fill: #EFDFC5; " +
                 "-fx-font-weight: bold; -fx-pref-width: 120px; -fx-pref-height: 35px;");
         detailsBtn.setOnAction(e -> showHotelDetails(hotel));
 
         Button bookBtn = new Button("Réserver");
-        bookBtn.setStyle("-fx-background-color: #f1c40f; -fx-text-fill: #2c3e50; " +
+        bookBtn.setStyle("-fx-background-color: #8F0B13; -fx-text-fill: #EFDFC5; " +
                 "-fx-font-weight: bold; -fx-pref-width: 120px; -fx-pref-height: 35px;");
         bookBtn.setOnAction(e -> handleReservation(hotel));
 
@@ -276,26 +312,26 @@ public class LandingPageController {
 
         // Effet hover sur la carte
         card.setOnMouseEntered(e -> {
-            card.setStyle("-fx-background-color: #f8f9fa; " +
-                    "-fx-border-color: #3498db; " +
+            card.setStyle("-fx-background-color: #EFDFC5; " +
+                    "-fx-border-color: #8F0B13; " +
                     "-fx-border-width: 2px; " +
                     "-fx-border-radius: 10px; " +
                     "-fx-background-radius: 10px; " +
                     "-fx-padding: 0px; " +
                     "-fx-spacing: 0px; " +
-                    "-fx-effect: dropshadow(three-pass-box, rgba(52,152,219,0.2), 15, 0, 0, 0);" +
+                    "-fx-effect: dropshadow(three-pass-box, rgba(143,11,19,0.3), 15, 0, 0, 0);" +
                     "-fx-cursor: hand;");
         });
 
         card.setOnMouseExited(e -> {
-            card.setStyle("-fx-background-color: white; " +
-                    "-fx-border-color: #e0e0e0; " +
+            card.setStyle("-fx-background-color: #EFDFC5; " +
+                    "-fx-border-color: #4C4F54; " +
                     "-fx-border-width: 1px; " +
                     "-fx-border-radius: 10px; " +
                     "-fx-background-radius: 10px; " +
                     "-fx-padding: 0px; " +
                     "-fx-spacing: 0px; " +
-                    "-fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 10, 0, 0, 0);" +
+                    "-fx-effect: dropshadow(three-pass-box, rgba(56,15,23,0.2), 10, 0, 0, 0);" +
                     "-fx-cursor: hand;");
         });
 
@@ -740,8 +776,9 @@ public class LandingPageController {
         searchField.clear();
         searchField2.clear();
         minPriceField.setText("0");
-        maxPriceField.setText("3000");
-        priceSlider.setValue(3000);
+        maxPriceField.setText("4000");
+        priceSlider.setValue(4000);
+        minPriceSlider.setValue(0);
 
         if (cityComboBox.getSelectionModel() != null) {
             cityComboBox.getSelectionModel().clearSelection();
@@ -774,12 +811,20 @@ public class LandingPageController {
             controller.setHotel(hotel);
 
             Stage stage = new Stage();
-            stage.setScene(new Scene(root, 1000, 700));
-            stage.setTitle(hotel.getNomHotel() + " - Détails");
+            stage.setScene(new Scene(root, 1200, 800));
+            stage.setTitle("Roomy: " + hotel.getNomHotel() + " - Details");
+            stage.setResizable(true);
+            try {
+                javafx.scene.image.Image icon = new javafx.scene.image.Image(getClass().getResourceAsStream("/images/Logo_favicon.png"));
+                stage.getIcons().add(icon);
+            } catch (Exception e) {
+                System.err.println("Could not load favicon: " + e.getMessage());
+            }
             stage.show();
 
         } catch (Exception e) {
             e.printStackTrace();
+            System.err.println("Error details: " + e.getMessage());
             showAlert("Erreur", "Impossible d'afficher les détails: " + e.getMessage());
         }
     }
@@ -791,8 +836,16 @@ public class LandingPageController {
             Parent root = loader.load();
 
             Stage stage = (Stage) hotelsContainer.getScene().getWindow();
-            stage.setScene(new Scene(root));
-            stage.setTitle("Inscription - ROOMY");
+            stage.setScene(new Scene(root, WindowUtil.getCurrentWidth(stage), WindowUtil.getCurrentHeight(stage)));
+            stage.setResizable(true);
+            stage.setTitle("Roomy: Client Sign Up");
+            try {
+                javafx.scene.image.Image icon = new javafx.scene.image.Image(getClass().getResourceAsStream("/images/Logo_favicon.png"));
+                stage.getIcons().add(icon);
+            } catch (Exception e) {
+                System.err.println("Could not load favicon: " + e.getMessage());
+            }
+            stage.show();
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -807,8 +860,16 @@ public class LandingPageController {
             Parent root = loader.load();
 
             Stage stage = (Stage) hotelsContainer.getScene().getWindow();
-            stage.setScene(new Scene(root));
-            stage.setTitle("Connexion - ROOMY");
+            stage.setScene(new Scene(root, WindowUtil.getCurrentWidth(stage), WindowUtil.getCurrentHeight(stage)));
+            stage.setResizable(true);
+            stage.setTitle("Roomy: Login");
+            try {
+                javafx.scene.image.Image icon = new javafx.scene.image.Image(getClass().getResourceAsStream("/images/Logo_favicon.png"));
+                stage.getIcons().add(icon);
+            } catch (Exception e) {
+                System.err.println("Could not load favicon: " + e.getMessage());
+            }
+            stage.show();
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -823,8 +884,16 @@ public class LandingPageController {
             Parent root = loader.load();
 
             Stage stage = (Stage) hotelsContainer.getScene().getWindow();
-            stage.setScene(new Scene(root));
-            stage.setTitle("Inscription - ROOMY");
+            stage.setScene(new Scene(root, WindowUtil.getCurrentWidth(stage), WindowUtil.getCurrentHeight(stage)));
+            stage.setResizable(true);
+            stage.setTitle("Roomy: Client Sign Up");
+            try {
+                javafx.scene.image.Image icon = new javafx.scene.image.Image(getClass().getResourceAsStream("/images/Logo_favicon.png"));
+                stage.getIcons().add(icon);
+            } catch (Exception e) {
+                System.err.println("Could not load favicon: " + e.getMessage());
+            }
+            stage.show();
 
         } catch (Exception e) {
             e.printStackTrace();

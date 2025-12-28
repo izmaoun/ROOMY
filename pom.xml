@@ -112,7 +112,7 @@
                 <artifactId>javafx-maven-plugin</artifactId>
                 <version>0.0.8</version>
                 <configuration>
-                    <mainClass>com.roomy.service.HelloApplication</mainClass>
+                    <mainClass>com.roomy.HelloApplication</mainClass>
                 </configuration>
             </plugin>
         </plugins>

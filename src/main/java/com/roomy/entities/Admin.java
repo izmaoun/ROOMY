@@ -6,10 +6,12 @@ public class Admin extends Utilisateur {
     private String username;
 
     // Constructeurs
-    public Admin() {}
+    public Admin() {
+        super();
+    }
 
     public Admin(String nom, String prenom, String email, String motDePasseHash, String username, String telephone, LocalDateTime dateInscription) {
-        super(nom, prenom, email, telephone, motDePasseHash, dateInscription);
+        super(0, nom, prenom, email, motDePasseHash, telephone, dateInscription);
         this.username = username;
     }
 

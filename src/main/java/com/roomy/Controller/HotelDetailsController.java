@@ -28,7 +28,7 @@ public class HotelDetailsController implements Initializable {
     @FXML private Label starsLabel;
     @FXML private Label locationLabel;
     @FXML private Label priceRangeLabel;
-    @FXML private TextArea descriptionLabel;
+    @FXML private Label descriptionLabel;
     @FXML private FlowPane imagesContainer;
     @FXML private FlowPane servicesContainer;
     @FXML private VBox roomsContainer;
@@ -39,12 +39,14 @@ public class HotelDetailsController implements Initializable {
     private HotelDAO hotelDAO = new HotelDAO();
 
     public void setHotel(Hotel hotel) {
+        System.out.println("Setting hotel: " + (hotel != null ? hotel.getNomHotel() : "null"));
         this.hotel = hotel;
         updateUI();
     }
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        System.out.println("HotelDetailsController initialized");
         // Configuration initiale
         setupStyle();
     }
@@ -67,14 +69,8 @@ public class HotelDetailsController implements Initializable {
             roomsContainer.setPadding(new Insets(10));
         }
 
-        // Style du TextArea
         if (descriptionLabel != null) {
             descriptionLabel.setWrapText(true);
-            descriptionLabel.setEditable(false);
-            descriptionLabel.setStyle("-fx-control-inner-background: #f8f9fa; " +
-                    "-fx-border-color: #e0e0e0; " +
-                    "-fx-border-radius: 5px; " +
-                    "-fx-padding: 10px;");
         }
     }
 
@@ -143,7 +139,7 @@ public class HotelDetailsController implements Initializable {
             // Image par défaut
             ImageView defaultImg = createImageView(
                     "https://images.unsplash.com/photo-1564501049412-61c2a3083791?w=600",
-                    300, 200
+                    320, 220
             );
             imagesContainer.getChildren().add(defaultImg);
             return;
@@ -153,7 +149,7 @@ public class HotelDetailsController implements Initializable {
         for (Image_hotel img : hotel.getImgs()) {
             String imageUrl = img.getUrl();
             if (imageUrl != null && !imageUrl.trim().isEmpty()) {
-                ImageView imageView = createImageView(imageUrl, 300, 200);
+                ImageView imageView = createImageView(imageUrl, 320, 220);
                 imagesContainer.getChildren().add(imageView);
             }
         }
@@ -162,7 +158,7 @@ public class HotelDetailsController implements Initializable {
         if (imagesContainer.getChildren().isEmpty()) {
             ImageView defaultImg = createImageView(
                     "https://images.unsplash.com/photo-1564501049412-61c2a3083791?w=600",
-                    300, 200
+                    320, 220
             );
             imagesContainer.getChildren().add(defaultImg);
         }
@@ -185,8 +181,15 @@ public class HotelDetailsController implements Initializable {
         imageView.setFitWidth(width);
         imageView.setFitHeight(height);
         imageView.setPreserveRatio(false);
-        imageView.setStyle("-fx-border-radius: 10px; " +
-                "-fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 10, 0, 0, 0);");
+        imageView.setStyle("-fx-border-radius: 15px; " +
+                "-fx-background-radius: 15px; " +
+                "-fx-effect: dropshadow(three-pass-box, rgba(56,15,23,0.2), 10, 0, 0, 2);");
+
+        // Add clipping for rounded corners
+        javafx.scene.shape.Rectangle clip = new javafx.scene.shape.Rectangle(width, height);
+        clip.setArcWidth(30);
+        clip.setArcHeight(30);
+        imageView.setClip(clip);
 
         return imageView;
     }
@@ -204,12 +207,38 @@ public class HotelDetailsController implements Initializable {
         for (String service : hotel.getServices()) {
             if (service != null && !service.trim().isEmpty()) {
                 Label serviceLabel = new Label(service);
-                serviceLabel.setStyle("-fx-background-color: #3498db; " +
-                        "-fx-text-fill: white; " +
+                serviceLabel.setStyle("-fx-background-color: #8F0B13; " +
+                        "-fx-text-fill: #EFDFC5; " +
                         "-fx-font-weight: bold; " +
-                        "-fx-padding: 8px 15px; " +
-                        "-fx-border-radius: 20px; " +
-                        "-fx-background-radius: 20px;");
+                        "-fx-padding: 10px 18px; " +
+                        "-fx-border-radius: 25px; " +
+                        "-fx-background-radius: 25px; " +
+                        "-fx-effect: dropshadow(three-pass-box, rgba(56,15,23,0.3), 5, 0, 0, 1); " +
+                        "-fx-cursor: hand;");
+                
+                // Hover effects
+                serviceLabel.setOnMouseEntered(e -> {
+                    serviceLabel.setStyle("-fx-background-color: #A50C15; " +
+                            "-fx-text-fill: #EFDFC5; " +
+                            "-fx-font-weight: bold; " +
+                            "-fx-padding: 10px 18px; " +
+                            "-fx-border-radius: 25px; " +
+                            "-fx-background-radius: 25px; " +
+                            "-fx-effect: dropshadow(three-pass-box, rgba(143,11,19,0.5), 8, 0, 0, 2); " +
+                            "-fx-cursor: hand; -fx-scale-x: 1.05; -fx-scale-y: 1.05;");
+                });
+                
+                serviceLabel.setOnMouseExited(e -> {
+                    serviceLabel.setStyle("-fx-background-color: #8F0B13; " +
+                            "-fx-text-fill: #EFDFC5; " +
+                            "-fx-font-weight: bold; " +
+                            "-fx-padding: 10px 18px; " +
+                            "-fx-border-radius: 25px; " +
+                            "-fx-background-radius: 25px; " +
+                            "-fx-effect: dropshadow(three-pass-box, rgba(56,15,23,0.3), 5, 0, 0, 1); " +
+                            "-fx-cursor: hand;");
+                });
+                
                 servicesContainer.getChildren().add(serviceLabel);
             }
         }
@@ -234,13 +263,38 @@ public class HotelDetailsController implements Initializable {
 
     private HBox createRoomCard(Chambre chambre) {
         HBox card = new HBox(20);
-        card.setStyle("-fx-background-color: white; " +
-                "-fx-border-color: #e0e0e0; " +
+        card.setStyle("-fx-background-color: #EFDFC5; " +
+                "-fx-border-color: #4C4F54; " +
                 "-fx-border-width: 1px; " +
-                "-fx-border-radius: 10px; " +
+                "-fx-border-radius: 15px; " +
+                "-fx-background-radius: 15px; " +
                 "-fx-padding: 20px; " +
-                "-fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.05), 10, 0, 0, 0);");
+                "-fx-effect: dropshadow(three-pass-box, rgba(56,15,23,0.15), 8, 0, 0, 2); " +
+                "-fx-cursor: hand;");
         card.setAlignment(Pos.CENTER_LEFT);
+        
+        // Hover effects for room cards
+        card.setOnMouseEntered(e -> {
+            card.setStyle("-fx-background-color: #EFDFC5; " +
+                    "-fx-border-color: #8F0B13; " +
+                    "-fx-border-width: 2px; " +
+                    "-fx-border-radius: 15px; " +
+                    "-fx-background-radius: 15px; " +
+                    "-fx-padding: 19px; " +
+                    "-fx-effect: dropshadow(three-pass-box, rgba(143,11,19,0.3), 12, 0, 0, 3); " +
+                    "-fx-cursor: hand; -fx-scale-x: 1.02; -fx-scale-y: 1.02;");
+        });
+        
+        card.setOnMouseExited(e -> {
+            card.setStyle("-fx-background-color: #EFDFC5; " +
+                    "-fx-border-color: #4C4F54; " +
+                    "-fx-border-width: 1px; " +
+                    "-fx-border-radius: 15px; " +
+                    "-fx-background-radius: 15px; " +
+                    "-fx-padding: 20px; " +
+                    "-fx-effect: dropshadow(three-pass-box, rgba(56,15,23,0.15), 8, 0, 0, 2); " +
+                    "-fx-cursor: hand;");
+        });
 
         // Image de la chambre
         ImageView roomImage = createRoomImage(chambre);
@@ -253,23 +307,23 @@ public class HotelDetailsController implements Initializable {
         Label typeLabel = new Label(chambre.getType() + " - Room #" + chambre.getNumchambre());
         typeLabel.setStyle("-fx-font-size: 20px; " +
                 "-fx-font-weight: bold; " +
-                "-fx-text-fill: #2c3e50;");
+                "-fx-text-fill: #380F17;");
 
         // Prix
         Label priceLabel = new Label("$" + String.format("%.2f", chambre.getPrix_nuit()) + " / night");
         priceLabel.setStyle("-fx-font-size: 18px; " +
                 "-fx-font-weight: bold; " +
-                "-fx-text-fill: #f1c40f;");
+                "-fx-text-fill: #8F0B13;");
 
         // Détails
         HBox roomDetails = new HBox(20);
         roomDetails.setAlignment(Pos.CENTER_LEFT);
 
         Label capacityLabel = new Label("👥 " + chambre.getCapacity() + " people");
-        capacityLabel.setStyle("-fx-text-fill: #7f8c8d; -fx-font-size: 14px;");
+        capacityLabel.setStyle("-fx-text-fill: #4C4F54; -fx-font-size: 14px;");
 
         Label surfaceLabel = new Label("📏 " + chambre.getSurface() + " m²");
-        surfaceLabel.setStyle("-fx-text-fill: #7f8c8d; -fx-font-size: 14px;");
+        surfaceLabel.setStyle("-fx-text-fill: #4C4F54; -fx-font-size: 14px;");
 
         roomDetails.getChildren().addAll(capacityLabel, surfaceLabel);
 
@@ -282,7 +336,7 @@ public class HotelDetailsController implements Initializable {
 
         Label descLabel = new Label(description);
         descLabel.setWrapText(true);
-        descLabel.setStyle("-fx-text-fill: #34495e; -fx-font-size: 14px;");
+        descLabel.setStyle("-fx-text-fill: #252B2B; -fx-font-size: 14px;");
         descLabel.setMaxWidth(350);
         descLabel.setPrefHeight(60);
 
@@ -293,33 +347,34 @@ public class HotelDetailsController implements Initializable {
 
         // Bouton Réserver cette chambre
         Button bookRoomButton = new Button("Book This Room");
-        bookRoomButton.setStyle("-fx-background-color: #27ae60; " +
-                "-fx-text-fill: white; " +
+        bookRoomButton.setStyle("-fx-background-color: #8F0B13; " +
+                "-fx-text-fill: #EFDFC5; " +
                 "-fx-font-weight: bold; " +
                 "-fx-pref-width: 150px; " +
                 "-fx-pref-height: 40px; " +
-                "-fx-background-radius: 5px; " +
+                "-fx-background-radius: 15px; " +
                 "-fx-cursor: hand;");
         bookRoomButton.setOnAction(e -> bookRoom(chambre));
 
         // Effet hover
         bookRoomButton.setOnMouseEntered(e -> {
-            bookRoomButton.setStyle("-fx-background-color: #219653; " +
-                    "-fx-text-fill: white; " +
+            bookRoomButton.setStyle("-fx-background-color: #A50C15; " +
+                    "-fx-text-fill: #EFDFC5; " +
                     "-fx-font-weight: bold; " +
                     "-fx-pref-width: 150px; " +
                     "-fx-pref-height: 40px; " +
-                    "-fx-background-radius: 5px; " +
-                    "-fx-cursor: hand;");
+                    "-fx-background-radius: 15px; " +
+                    "-fx-cursor: hand; " +
+                    "-fx-effect: dropshadow(three-pass-box, rgba(143,11,19,0.4), 8, 0, 0, 2);");
         });
 
         bookRoomButton.setOnMouseExited(e -> {
-            bookRoomButton.setStyle("-fx-background-color: #27ae60; " +
-                    "-fx-text-fill: white; " +
+            bookRoomButton.setStyle("-fx-background-color: #8F0B13; " +
+                    "-fx-text-fill: #EFDFC5; " +
                     "-fx-font-weight: bold; " +
                     "-fx-pref-width: 150px; " +
                     "-fx-pref-height: 40px; " +
-                    "-fx-background-radius: 5px; " +
+                    "-fx-background-radius: 15px; " +
                     "-fx-cursor: hand;");
         });
 
@@ -330,11 +385,11 @@ public class HotelDetailsController implements Initializable {
 
     private String getStatusColor(com.roomy.ENUMS.Statut_technique_Chambre statut) {
         switch (statut) {
-            case disponible: return "#27ae60"; // Vert
-            case en_maintenance: return "#f39c12"; // Orange
-            case en_netoyage: return "#3498db"; // Bleu
-            case hors_service: return "#e74c3c"; // Rouge
-            default: return "#7f8c8d"; // Gris
+            case disponible: return "#8F0B13"; // Brand red
+            case en_maintenance: return "#FF8C00"; // Orange
+            case en_netoyage: return "#4C4F54"; // Dark gray
+            case hors_service: return "#DC143C"; // Crimson
+            default: return "#4C4F54"; // Default gray
         }
     }
 
@@ -343,7 +398,13 @@ public class HotelDetailsController implements Initializable {
         imageView.setFitWidth(250);
         imageView.setFitHeight(180);
         imageView.setPreserveRatio(false);
-        imageView.setStyle("-fx-border-radius: 5px;");
+        imageView.setStyle("-fx-border-radius: 10px; -fx-background-radius: 10px;");
+
+        // Add clipping for rounded corners
+        javafx.scene.shape.Rectangle clip = new javafx.scene.shape.Rectangle(250, 180);
+        clip.setArcWidth(20);
+        clip.setArcHeight(20);
+        imageView.setClip(clip);
 
         // Vérifier si la chambre a des images
         if (chambre.getImgs() != null && !chambre.getImgs().isEmpty()) {

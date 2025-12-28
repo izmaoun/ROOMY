@@ -2,6 +2,7 @@ package com.roomy.Controller;
 
 import com.roomy.Dao.ClientDAO;
 import com.roomy.entities.Client;
+import com.roomy.util.WindowUtil;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -29,9 +30,16 @@ public class SignupController {
         try {
             Parent root = FXMLLoader.load(getClass().getResource("/fxml/welcome.fxml"));
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-            Scene scene = new Scene(root);
+            Scene scene = new Scene(root, WindowUtil.getCurrentWidth(stage), WindowUtil.getCurrentHeight(stage));
             stage.setScene(scene);
-            stage.setMaximized(false);
+            stage.setResizable(true);
+            stage.setTitle("Roomy: Welcome");
+            try {
+                javafx.scene.image.Image icon = new javafx.scene.image.Image(getClass().getResourceAsStream("/images/Logo_favicon.png"));
+                stage.getIcons().add(icon);
+            } catch (Exception e) {
+                System.err.println("Could not load favicon: " + e.getMessage());
+            }
             stage.show();
         } catch (Exception e) {
             showAlert("Erreur", "Erreur lors du retour: " + e.getMessage());
@@ -83,7 +91,15 @@ public class SignupController {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/login.fxml"));
             Parent root = loader.load();
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-            stage.setScene(new Scene(root, 800, 600));
+            stage.setScene(new Scene(root, WindowUtil.getCurrentWidth(stage), WindowUtil.getCurrentHeight(stage)));
+            stage.setResizable(true);
+            stage.setTitle("Roomy: Login");
+            try {
+                javafx.scene.image.Image icon = new javafx.scene.image.Image(getClass().getResourceAsStream("/images/Logo_favicon.png"));
+                stage.getIcons().add(icon);
+            } catch (Exception e) {
+                System.err.println("Could not load favicon: " + e.getMessage());
+            }
             stage.show();
         } catch (Exception e) {
             showAlert("Erreur", "Erreur lors de la navigation: " + e.getMessage());

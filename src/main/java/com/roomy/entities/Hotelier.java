@@ -14,20 +14,17 @@ public class Hotelier extends Utilisateur {
     private List<Hotel> Hotels;
 
     // Constructeurs
-    public Hotelier() {}
+    public Hotelier() {
+        super();
+    }
 
     public Hotelier(String nomEtablissement, String nomGerant, String prenomGerant,
                     String ville, String emailGerant, String telephone,
                     String password, String ice) {
+        super(0, nomGerant, prenomGerant, emailGerant, password, telephone, LocalDateTime.now());
         this.nomEtablissement = nomEtablissement;
-        this.nom = nomGerant;
-        this.prenom = prenomGerant;
         this.ville = ville;
-        this.email = emailGerant;
-        this.telephone = telephone;
-        this.motDePasseHash = password;
         this.ice = ice;
-        this.dateInscription = LocalDateTime.now();
         this.statutVerification = StatutVerification.en_attente;
         this.Hotels = new ArrayList<>();
     }

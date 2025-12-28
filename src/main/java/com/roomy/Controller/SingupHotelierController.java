@@ -37,6 +37,13 @@ public class SingupHotelierController {
                 Scene scene = new Scene(root);
                 stage.setScene(scene);
                 stage.setMaximized(false);
+                stage.setTitle("Roomy: Welcome");
+                try {
+                    javafx.scene.image.Image icon = new javafx.scene.image.Image(getClass().getResourceAsStream("/images/Logo_favicon.png"));
+                    stage.getIcons().add(icon);
+                } catch (Exception e) {
+                    System.err.println("Could not load favicon: " + e.getMessage());
+                }
                 stage.show();
             } catch (Exception e) {
                 showAlert("Erreur", "Erreur lors du retour: " + e.getMessage());
@@ -99,6 +106,13 @@ public class SingupHotelierController {
                 Parent root = loader.load();
                 Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
                 stage.setScene(new Scene(root, 800, 600));
+                stage.setTitle("Roomy: Login");
+                try {
+                    javafx.scene.image.Image icon = new javafx.scene.image.Image(getClass().getResourceAsStream("/images/Logo_favicon.png"));
+                    stage.getIcons().add(icon);
+                } catch (Exception e) {
+                    System.err.println("Could not load favicon: " + e.getMessage());
+                }
                 stage.show();
             } catch (Exception e) {
                 showAlert("Erreur", "Erreur lors de la navigation: " + e.getMessage());

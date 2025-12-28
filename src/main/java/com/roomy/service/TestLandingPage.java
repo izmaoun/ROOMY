@@ -26,13 +26,21 @@ public class TestLandingPage extends Application {
         }
 
         // Load landing page
-        System.out.println("Loading FXML from: /com/roomy/fxml/landing-page.fxml");
+        System.out.println("Loading FXML from: /fxml/landing-page.fxml");
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/landing-page.fxml"));
 
-        Scene scene = new Scene(loader.load(), 1200, 800);
+        Scene scene = new Scene(loader.load(), 1600, 1000);
 
-        primaryStage.setTitle("ROOMY - Test Landing Page");
+        // Set icon and title
+        try {
+            javafx.scene.image.Image icon = new javafx.scene.image.Image(getClass().getResourceAsStream("/images/Logo_favicon.png"));
+            primaryStage.getIcons().add(icon);
+        } catch (Exception e) {
+            System.err.println("Could not load favicon: " + e.getMessage());
+        }
+        primaryStage.setTitle("Roomy: Landing Page");
         primaryStage.setScene(scene);
+        primaryStage.setResizable(true);
         primaryStage.centerOnScreen();
         primaryStage.show();
 

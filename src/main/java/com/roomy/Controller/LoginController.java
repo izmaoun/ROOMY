@@ -1,5 +1,6 @@
 package com.roomy.Controller;
 
+import com.roomy.util.WindowUtil;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -91,7 +92,13 @@ public class LoginController {
                     Scene scene = new Scene(root);
                     stage.setScene(scene);
                     stage.setMaximized(true);
-                    stage.setTitle("Dashboard Admin");
+                    stage.setTitle("Roomy: Dashboard Admin");
+                    try {
+                        javafx.scene.image.Image icon = new javafx.scene.image.Image(getClass().getResourceAsStream("/images/Logo_favicon.png"));
+                        stage.getIcons().add(icon);
+                    } catch (Exception e) {
+                        System.err.println("Could not load favicon: " + e.getMessage());
+                    }
                     stage.show();
                 } catch (IOException e) {
                     logError(e, "Erreur lors du chargement du fichier FXML dash_admin.fxml");
@@ -117,9 +124,21 @@ public class LoginController {
         try {
             Parent root = FXMLLoader.load(getClass().getResource("/fxml/welcome.fxml"));
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-            Scene scene = new Scene(root);
+            
+            // Capture current window size
+            double currentWidth = stage.getWidth();
+            double currentHeight = stage.getHeight();
+            
+            Scene scene = new Scene(root, currentWidth, currentHeight);
             stage.setScene(scene);
-            stage.setMaximized(false);
+            stage.setResizable(true);
+            stage.setTitle("Roomy: Welcome");
+            try {
+                javafx.scene.image.Image icon = new javafx.scene.image.Image(getClass().getResourceAsStream("/images/Logo_favicon.png"));
+                stage.getIcons().add(icon);
+            } catch (Exception e) {
+                System.err.println("Could not load favicon: " + e.getMessage());
+            }
             stage.show();
         } catch (Exception e) {
             e.printStackTrace();
@@ -136,9 +155,21 @@ public class LoginController {
         try {
             Parent root = FXMLLoader.load(getClass().getResource("/fxml/welcome.fxml"));
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-            Scene scene = new Scene(root);
+            
+            // Capture current window size
+            double currentWidth = stage.getWidth();
+            double currentHeight = stage.getHeight();
+            
+            Scene scene = new Scene(root, currentWidth, currentHeight);
             stage.setScene(scene);
-            stage.setMaximized(false);
+            stage.setResizable(true);
+            stage.setTitle("Roomy: Welcome");
+            try {
+                javafx.scene.image.Image icon = new javafx.scene.image.Image(getClass().getResourceAsStream("/images/Logo_favicon.png"));
+                stage.getIcons().add(icon);
+            } catch (Exception e) {
+                System.err.println("Could not load favicon: " + e.getMessage());
+            }
             stage.show();
         } catch (Exception e) {
             e.printStackTrace();
@@ -147,13 +178,28 @@ public class LoginController {
 
     private void openDashboard(ActionEvent event, String fxmlFile, String userType) {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/" + fxmlFile));
+            // For clients, go to landing page instead of empty dashboard
+            String targetFxml = userType.equals("Client") ? "landing-page.fxml" : fxmlFile;
+            
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/" + targetFxml));
             Parent root = loader.load();
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-            Scene scene = new Scene(root);
+            
+            // Capture current window size
+            double currentWidth = stage.getWidth();
+            double currentHeight = stage.getHeight();
+            
+            Scene scene = new Scene(root, currentWidth, currentHeight);
             stage.setScene(scene);
-            stage.setMaximized(true);
-            stage.setTitle("Dashboard " + userType);
+            stage.setResizable(true);
+            String title = userType.equals("Client") ? "Roomy: Landing Page" : "Roomy: Dashboard " + userType;
+            stage.setTitle(title);
+            try {
+                javafx.scene.image.Image icon = new javafx.scene.image.Image(getClass().getResourceAsStream("/images/Logo_favicon.png"));
+                stage.getIcons().add(icon);
+            } catch (Exception e) {
+                System.err.println("Could not load favicon: " + e.getMessage());
+            }
             stage.show();
         } catch (Exception e) {
             e.printStackTrace();

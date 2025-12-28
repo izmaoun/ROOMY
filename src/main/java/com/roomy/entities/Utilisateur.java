@@ -1,19 +1,7 @@
 package com.roomy.entities;
 
-import lombok.Getter;
-import lombok.Setter;
-
 import java.time.LocalDateTime;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-
-import java.time.LocalDateTime;
-
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
 public abstract class Utilisateur {
     protected int id;
     protected String nom;
@@ -23,14 +11,39 @@ public abstract class Utilisateur {
     protected String telephone;
     protected LocalDateTime dateInscription;
 
-    public Utilisateur (String nom, String prenom, String email, String motDePasseHash, String telephone, LocalDateTime dateInscription){
+    // No-args constructor
+    public Utilisateur() {}
+
+    // All-args constructor
+    public Utilisateur(int id, String nom, String prenom, String email, String motDePasseHash, String telephone, LocalDateTime dateInscription) {
+        this.id = id;
         this.nom = nom;
         this.prenom = prenom;
         this.email = email;
         this.motDePasseHash = motDePasseHash;
         this.telephone = telephone;
-        this.dateInscription = LocalDateTime.now();
+        this.dateInscription = dateInscription;
     }
 
+    // Getters and Setters
+    public int getId() { return id; }
+    public void setId(int id) { this.id = id; }
 
+    public String getNom() { return nom; }
+    public void setNom(String nom) { this.nom = nom; }
+
+    public String getPrenom() { return prenom; }
+    public void setPrenom(String prenom) { this.prenom = prenom; }
+
+    public String getEmail() { return email; }
+    public void setEmail(String email) { this.email = email; }
+
+    public String getMotDePasseHash() { return motDePasseHash; }
+    public void setMotDePasseHash(String motDePasseHash) { this.motDePasseHash = motDePasseHash; }
+
+    public String getTelephone() { return telephone; }
+    public void setTelephone(String telephone) { this.telephone = telephone; }
+
+    public LocalDateTime getDateInscription() { return dateInscription; }
+    public void setDateInscription(LocalDateTime dateInscription) { this.dateInscription = dateInscription; }
 }
