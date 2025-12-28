@@ -28,12 +28,12 @@ public class SignupController {
     @FXML
     private void goBack(ActionEvent event) {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/landing-page.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/welcome.fxml"));
             Parent root = loader.load();
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-            Scene scene = new Scene(root, 1200, 800);
+            Scene scene = new Scene(root, 800, 600);
             stage.setScene(scene);
-            stage.setTitle("ROOMY - Accueil");
+            stage.setTitle("ROOMY - Choix du type de compte");
             stage.centerOnScreen();
             stage.show();
         } catch (Exception e) {

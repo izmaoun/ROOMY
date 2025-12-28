@@ -892,18 +892,18 @@ public class LandingPageController {
     @FXML
     private void openRegister() {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/client_signup.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/welcome.fxml"));
             Parent root = loader.load();
 
             Stage stage = (Stage) hotelsContainer.getScene().getWindow();
             Scene scene = new Scene(root);
             stage.setScene(scene);
-            stage.setTitle("Inscription - ROOMY");
+            stage.setTitle("ROOMY - Choix du type de compte");
             stage.setMaximized(true);
 
         } catch (Exception e) {
             e.printStackTrace();
-            showAlert("Erreur", "Impossible d'ouvrir l'inscription: " + e.getMessage());
+            showAlert("Erreur", "Impossible d'ouvrir la page de choix: " + e.getMessage());
         }
     }
 

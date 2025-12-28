@@ -19,6 +19,21 @@ public class WelcomeController {
         switchScene(event, "collab_signup.fxml");
     }
 
+    @FXML
+    private void goBack(ActionEvent event) {
+        try {
+            Parent root = FXMLLoader.load(getClass().getResource("/fxml/landing-page.fxml"));
+            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            Scene scene = new Scene(root, 1200, 800);
+            stage.setScene(scene);
+            stage.setTitle("ROOMY - Accueil");
+            stage.setMaximized(true);
+            stage.show();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     private void switchScene(ActionEvent event, String fxmlName) {
         try {
             Parent root = FXMLLoader.load(getClass().getResource("/fxml/" + fxmlName));

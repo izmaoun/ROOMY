@@ -142,12 +142,12 @@ public class LoginController {
     @FXML
     private void handleSignupNav(ActionEvent event) {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/client_signup.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/welcome.fxml"));
             Parent root = loader.load();
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
             Scene scene = new Scene(root);
             stage.setScene(scene);
-            stage.setTitle("ROOMY - Inscription");
+            stage.setTitle("ROOMY - Choix du type de compte");
             stage.centerOnScreen();
             stage.show();
         } catch (Exception e) {
