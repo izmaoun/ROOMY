@@ -127,7 +127,6 @@
             </content>
         </ScrollPane>
     </left>
-
     <!-- CENTER: Liste des hôtels avec SCROLL fonctionnel -->
     <center>
         <ScrollPane fitToWidth="true"
@@ -148,5 +147,4 @@
             </content>
         </ScrollPane>
     </center>
-
 </BorderPane>
