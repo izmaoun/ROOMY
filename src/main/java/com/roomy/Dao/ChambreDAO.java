@@ -198,4 +198,39 @@ public class ChambreDAO {
             return 0;
         }
     }
+    /**
+     * Retourne le nombre de chambres DISPONIBLES pour un hôtel spécifique
+     */
+    public int getNombreChambresDisponiblesByHotel(int idHotel) {
+        String sql = "SELECT COUNT(*) FROM chambres WHERE id_hotel = ? AND statut = ?";
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, idHotel);
+            ps.setString(2, Statut_technique_Chambre.disponible.name());
+            ResultSet rs = ps.executeQuery();
+            return rs.next() ? rs.getInt(1) : 0;
+        } catch (SQLException e) {
+            System.err.println("Erreur getNombreChambresDisponiblesByHotel: " + e.getMessage());
+            e.printStackTrace();
+            return 0;
+        }
+    }
+
+    /**
+     * Retourne le nombre de chambres OCCUPÉES pour un hôtel spécifique
+     */
+    public int getNombreChambresOccupeesByHotel(int idHotel) {
+        String sql = "SELECT COUNT(*) FROM chambres WHERE id_hotel = ? AND statut = ?";
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, idHotel);
+            ps.setString(2, Statut_technique_Chambre.occupee.name());
+            ResultSet rs = ps.executeQuery();
+            return rs.next() ? rs.getInt(1) : 0;
+        } catch (SQLException e) {
+            System.err.println("Erreur getNombreChambresOccupeesByHotel: " + e.getMessage());
+            e.printStackTrace();
+            return 0;
+        }
+    }
 }

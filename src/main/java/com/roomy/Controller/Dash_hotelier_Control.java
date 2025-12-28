@@ -1,175 +1,134 @@
-package com.roomy. Controller;
+package com.roomy.Controller;
 
-import com.roomy.service.StatistiquesService;
+import com.roomy.Dao.ChambreDAO;
 import com.roomy.Dao.HotelDAO;
 import com.roomy.Dao.HotelierDAO;
-import com.roomy.dto.HotelStats;
+import com.roomy.entities.Hotelier;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
 import javafx.scene.Parent;
-import javafx.scene.control. Label;
+import javafx.scene.Scene;
+import javafx.scene.control.Label;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout. VBox;
+import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
-
-import java.io.IOException;
+import javafx.stage.Stage;
 
 public class Dash_hotelier_Control {
-
-    // ID de l'hôtelier connecté (Partagé avec les autres contrôleurs)
     private static int currentHotelierId = 0;
-
-    public static int getCurrentHotelierId() {
-        return currentHotelierId;
-    }
-
-    public static void setCurrentHotelierId(int id) {
-        currentHotelierId = id;
-    }
-
-    // Éléments FXML
+    private static Dash_hotelier_Control instance;
     @FXML private BorderPane mainBorderPane;
-    @FXML private Label lblwelcome;
     @FXML private VBox leftMenu;
-
-    // Statistiques
+    @FXML private Label lblwelcome;
     @FXML private Text txtNbHotels;
     @FXML private Text txtNbChambresTotal;
     @FXML private Text txtNbChambresDispo;
     @FXML private Text txtNbChambresOccupees;
 
-    // Services
-    private final StatistiquesService statistiquesService = new StatistiquesService();
+    private final HotelDAO hotelDAO = new HotelDAO();
+    private final ChambreDAO chambreDAO = new ChambreDAO();
+    private final HotelierDAO hotelierDAO = new HotelierDAO();
+    public static void setCurrentHotelierId(int id) {
+        currentHotelierId = id;
+    }
+
+    public static int getCurrentHotelierId() {
+        return currentHotelierId;
+    }
 
     @FXML
     private void initialize() {
-        if (currentHotelierId > 0) {
-            // Récupère et affiche le nom de l'hôtelier
-            updateWelcomeLabel();
-            // Charge les statistiques
-            refreshStats();
-            // Charge le contenu du dashboard par défaut
-            loadDashboardContent();
-        }
+        instance = this;
+        refreshDashboard();
+    }
+    public static Dash_hotelier_Control getInstance() {
+        return instance;
     }
 
-    /**
-     * Met à jour le label de bienvenue avec le nom réel de l'hôtelier
-     */
-    private void updateWelcomeLabel() {
+    public BorderPane getMainBorderPane() {
+        return mainBorderPane;
+    }
+
+    public void refreshDashboard() {
+        if (currentHotelierId <= 0) return;
+        // Récupérer le nom du hôtelier
+        Hotelier hotelier = hotelierDAO.findById(currentHotelierId);
+        String nomHotelier = (hotelier != null) ? hotelier.getNomGerant() : "Utilisateur";
+        lblwelcome.setText("Bienvenue, " + nomHotelier);
+        // Charger les stats du dashboard
+        int nbHotels = hotelDAO.getNombreHotels(currentHotelierId);
+        int nbChambresTotal = chambreDAO.getNombreChambresTotal(currentHotelierId);
+        int nbChambresDisponibles = chambreDAO.getNombreChambresDisponibles(currentHotelierId);
+        int nbChambresOccupees = nbChambresTotal - nbChambresDisponibles;
+
+        txtNbHotels.setText(String.valueOf(nbHotels));
+        txtNbChambresTotal.setText(String.valueOf(nbChambresTotal));
+        txtNbChambresDispo.setText(String.valueOf(nbChambresDisponibles));
+        txtNbChambresOccupees.setText(String.valueOf(nbChambresOccupees));
+
+        // Charger le centre avec le dashboard initial
+        loadCenter("dash_hotelier_dashboard.fxml");
+    }
+
+    private void loadCenter(String fxmlFile) {
         try {
-            if (currentHotelierId > 0) {
-                HotelierDAO hotelierDAO = new HotelierDAO();
-                String nomComplet = hotelierDAO.getNomComplet(currentHotelierId);
-                if (lblwelcome != null) {
-                    lblwelcome.setText("Bienvenue, " + (nomComplet != null ? nomComplet : "Utilisateur"));
-                }
-            } else {
-                if (lblwelcome != null) {
-                    lblwelcome.setText("Bienvenue, Utilisateur");
-                }
-            }
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/" + fxmlFile));
+            Node center = loader.load();
+            mainBorderPane.setCenter(center);
         } catch (Exception e) {
-            e.printStackTrace();
-            if (lblwelcome != null) {
-                lblwelcome.setText("Bienvenue, Utilisateur");
-            }
-        }
-    }
-
-    /**
-     * Rafraîchit les statistiques globales dans les cartes du dashboard
-     * Utilise un DTO pour minimiser les appels BD
-     */
-    public void refreshStats() {
-        try {
-            HotelStats stats = statistiquesService.getGlobalStats(currentHotelierId);
-
-            if (txtNbHotels != null) txtNbHotels.setText(String.valueOf(stats.getNbHotels()));
-            if (txtNbChambresTotal != null) txtNbChambresTotal.setText(String.valueOf(stats.getNbChambresTotal()));
-            if (txtNbChambresDispo != null) txtNbChambresDispo. setText(String.valueOf(stats. getNbChambresDispo()));
-            if (txtNbChambresOccupees != null) txtNbChambresOccupees.setText(String. valueOf(stats.getNbChambresOccupees()));
-        } catch (Exception e) {
+            System.err.println("Erreur chargement " + fxmlFile + " : " + e.getMessage());
             e.printStackTrace();
         }
     }
 
-    /**
-     * Charge le contenu du dashboard (cartes de stats)
-     */
-    private void loadDashboardContent() {
-        refreshStats();
-        // Optionnel : charger un FXML spécifique si nécessaire
-        // loadCenter("accueil_dashboard.fxml");
-    }
 
-    /**
-     * Charge un fichier FXML dans la zone centrale du BorderPane
-     */
-    private void loadCenter(String fxmlFileName) {
-        try {
-            Parent page = FXMLLoader. load(getClass().getResource("/fxml/" + fxmlFileName));
-            mainBorderPane.setCenter(page);
-        } catch (IOException e) {
-            System.err.println("Erreur chargement FXML: " + fxmlFileName);
-            e.printStackTrace();
-            if (lblwelcome != null) {
-                lblwelcome.setText("Erreur : page non trouvée (" + fxmlFileName + ")");
-            }
-        }
-    }
-
-    /**
-     * Bascule la visibilité du menu latéral
-     */
-    @FXML
-    private void toggleMenu() {
-        if (leftMenu != null) {
-            if (leftMenu.isVisible()) {
-                leftMenu.setVisible(false);
-                leftMenu.setManaged(false);
-                leftMenu.setPrefWidth(0);
-            } else {
-                leftMenu.setVisible(true);
-                leftMenu.setManaged(true);
-                leftMenu.setPrefWidth(240);
-            }
-        }
-    }
-
-    // ==================== NAVIGATION ====================
-
-    @FXML
-    private void goToDashboard() {
-        refreshStats();
-        // Recharge le dashboard si nécessaire
+    public void goToDashboard() {
+        refreshDashboard();
     }
 
     @FXML
-    private void goToMesHotels() {
+    public void goToMesHotels() {
         loadCenter("mes_hotels.fxml");
     }
 
     @FXML
-    private void goToChambres() {
+    public void goToChambres() {
         loadCenter("chambres.fxml");
     }
 
     @FXML
-    private void goToStatistiques() {
+    public void goToStatistiques() {
         loadCenter("statistiques.fxml");
     }
 
     @FXML
-    private void goToProfil() {
+    public void goToProfil() {
         loadCenter("profile.fxml");
+    }
+
+    @FXML
+    private void toggleMenu() {
+        if (leftMenu.isVisible()) {
+            leftMenu.setVisible(false);
+            leftMenu.setManaged(false);
+        } else {
+            leftMenu.setVisible(true);
+            leftMenu.setManaged(true);
+        }
     }
 
     @FXML
     private void handleDeconnexion() {
         try {
-            Parent login = FXMLLoader.load(getClass().getResource("/fxml/login.fxml"));
-            mainBorderPane.getScene().setRoot(login);
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/login.fxml"));
+            Parent root = loader.load();
+            Stage stage = (Stage) mainBorderPane.getScene().getWindow();
+            Scene scene = new Scene(root);
+            stage.setScene(scene);
+            stage.setMaximized(false);
+            stage.setTitle("Connexion");
+            stage.show();
         } catch (Exception e) {
             e.printStackTrace();
         }

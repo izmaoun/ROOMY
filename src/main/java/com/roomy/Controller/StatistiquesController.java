@@ -1,5 +1,6 @@
 package com.roomy.Controller;
 
+import com.roomy.Dao.ChambreDAO;
 import com.roomy.dto.HotelStats;
 import com.roomy.entities.Hotel;
 import com.roomy.service.StatistiquesService;
@@ -15,30 +16,25 @@ import javafx.util.StringConverter;
 
 import java.net.URL;
 import java.util.List;
-import java.util.Map;
 import java.util.ResourceBundle;
 
 public class StatistiquesController implements Initializable {
 
     @FXML private ComboBox<Hotel> comboHotels;
-
-    // Textes
     @FXML private Text txtTotalReservations;
     @FXML private Text txtChambresDispo;
     @FXML private Text txtChambresOccupees;
-
-    // Graphes
     @FXML private BarChart<String, Number> chartMois;
     @FXML private BarChart<String, Number> chartAnnee;
     @FXML private PieChart chartType;
 
     private final StatistiquesService statsService = new StatistiquesService();
+    private final ChambreDAO chambreDAO = new ChambreDAO();
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         chargerListeHotels();
 
-        // Ecouteur : changement d'hôtel -> mise à jour
         comboHotels.getSelectionModel().selectedItemProperty().addListener((obs, oldVal, newVal) -> {
             if (newVal != null) {
                 afficherStats(newVal.getIdhotel());
@@ -47,12 +43,9 @@ public class StatistiquesController implements Initializable {
     }
 
     private void chargerListeHotels() {
-        // Récupère l'ID depuis le contrôleur principal
         int idHotelier = Dash_hotelier_Control.getCurrentHotelierId();
-
         List<Hotel> hotels = statsService.getHotelsByHotelier(idHotelier);
 
-        // Afficher le nom dans la ComboBox
         comboHotels.setConverter(new StringConverter<Hotel>() {
             @Override public String toString(Hotel h) { return (h != null) ? h.getNomHotel() : ""; }
             @Override public Hotel fromString(String s) { return null; }
@@ -62,36 +55,65 @@ public class StatistiquesController implements Initializable {
 
         if (!hotels.isEmpty()) {
             comboHotels.getSelectionModel().selectFirst();
+            afficherStats(hotels.get(0).getIdhotel());
         }
     }
 
     private void afficherStats(int idHotel) {
         HotelStats stats = statsService.getDetailedStats(idHotel);
 
-        // 1. Textes
-        txtTotalReservations.setText(String.valueOf(stats.getNbReservationsTotal()));
-        txtChambresDispo.setText(String.valueOf(stats.getNbChambresDispo()));
-        txtChambresOccupees.setText(String.valueOf(stats.getNbChambresOccupees()));
+        if (stats == null) {
+            System.err.println("Erreur: stats NULL pour l'hôtel " + idHotel);
+            return;
+        }
 
-        // 2. BarChart MOIS
+        txtTotalReservations.setText(String.valueOf(stats.getNbReservationsTotal()));
+
+        // Charger les statistiques des chambres depuis la base de données
+        chargerStatsChambres(idHotel);
+
+        // Charger les graphiques
+        chargerGraphiques(stats);
+    }
+
+    private void chargerStatsChambres(int idHotel) {
+        int nbChambresDispo = chambreDAO.getNombreChambresDisponiblesByHotel(idHotel);
+        int nbChambresOccupees = chambreDAO.getNombreChambresOccupeesByHotel(idHotel);
+
+        txtChambresDispo.setText(String.valueOf(nbChambresDispo));
+        txtChambresOccupees.setText(String.valueOf(nbChambresOccupees));
+    }
+
+    private void chargerGraphiques(HotelStats stats) {
+        // Graphique par mois
         chartMois.getData().clear();
         XYChart.Series<String, Number> sMois = new XYChart.Series<>();
         sMois.setName("Réservations");
-        stats.getReservationsParMois().forEach((k, v) -> sMois.getData().add(new XYChart.Data<>(k, v)));
+        if (stats.getReservationsParMois() != null) {
+            stats.getReservationsParMois().forEach((k, v) ->
+                sMois.getData().add(new XYChart.Data<>(k, v))
+            );
+        }
         chartMois.getData().add(sMois);
 
-        // 3. BarChart ANNEE
+        // Graphique par année
         chartAnnee.getData().clear();
         XYChart.Series<String, Number> sAnnee = new XYChart.Series<>();
         sAnnee.setName("Annuel");
-        stats.getReservationsParAnnee().forEach((k, v) -> sAnnee.getData().add(new XYChart.Data<>(String.valueOf(k), v)));
+        if (stats.getReservationsParAnnee() != null) {
+            stats.getReservationsParAnnee().forEach((k, v) ->
+                sAnnee.getData().add(new XYChart.Data<>(String.valueOf(k), v))
+            );
+        }
         chartAnnee.getData().add(sAnnee);
 
-        // 4. PieChart TYPE
+        // Pie chart par type de chambre
         chartType.getData().clear();
-        stats.getReservationsParType().forEach((type, count) -> {
-            chartType.getData().add(new PieChart.Data(type + " (" + count + ")", count));
-        });
+        if (stats.getReservationsParType() != null) {
+            stats.getReservationsParType().forEach((type, count) -> {
+                chartType.getData().add(new PieChart.Data(type + " (" + count + ")", count));
+            });
+        }
         chartType.setLabelsVisible(true);
     }
 }

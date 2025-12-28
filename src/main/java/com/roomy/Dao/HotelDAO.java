@@ -236,6 +236,7 @@ public class HotelDAO {
 
         return images;
     }
+
     public boolean ajouterChambre(Chambre c) {
         String sql = "INSERT INTO chambres (num_chambre, type, prix_nuit, capacity, surface, statut, description, id_hotel) " +
                 "VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
@@ -268,6 +269,18 @@ public class HotelDAO {
         } catch (SQLException e) {
             e.printStackTrace();
             return false;
+        }
+    }
+    public int getNombreChambres(int idHotel) {
+        String sql = "SELECT COUNT(*) FROM chambres WHERE id_hotel = ?";
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, idHotel);
+            ResultSet rs = ps.executeQuery();
+            return rs.next() ? rs.getInt(1) : 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return 0;
         }
     }
 

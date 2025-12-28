@@ -55,7 +55,7 @@ CREATE TABLE chambres (
                           prix_nuit DECIMAL(10,2) NOT NULL,
                           capacity INT NOT NULL,
                           surface INT,
-                          statut ENUM('disponible', 'en_maintenance', 'hors_service', 'en_netoyage') DEFAULT 'disponible',
+                          statut ENUM('disponible', 'en_maintenance', 'hors_service', 'en_netoyage', 'occupee') DEFAULT 'disponible',
                           description TEXT,
                           id_hotel INT NOT NULL,
                           FOREIGN KEY (id_hotel) REFERENCES hotels(id_hotel)

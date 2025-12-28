@@ -104,8 +104,11 @@ public class Profile_control {
         Text nomHotel = new Text(hotel.getNomHotel());
         nomHotel.setStyle("-fx-font-size: 14px; -fx-font-weight: bold;");
 
+        // Utiliser la méthode getNombreChambres() de HotelDAO
+        int nbChambres = hotelDAO.getNombreChambres(hotel.getIdhotel());
+
         Text detailsHotel = new Text(hotel.getEtoiles() + " étoiles | " +
-                hotel.getNombreDeChambres() + " chambre" + (hotel.getNombreDeChambres() > 1 ? "s" : ""));
+                nbChambres + " chambre" + (nbChambres > 1 ? "s" : ""));
         detailsHotel.setStyle("-fx-font-size: 11px; -fx-fill: #666;");
 
         info.getChildren().addAll(nomHotel, detailsHotel);

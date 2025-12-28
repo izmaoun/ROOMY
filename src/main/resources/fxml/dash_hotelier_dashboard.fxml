@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Text?>
+
+<BorderPane xmlns="http://javafx.com/javafx/17.0.8"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.roomy.Controller.DashHotelierDashboardControl">
+
+    <!-- ==================== MENU GAUCHE ==================== -->
+
+    <!-- ==================== CONTENU CENTRAL ==================== -->
+    <center>
+        <VBox spacing="40" alignment="TOP_CENTER"
+              style="-fx-padding: 60; -fx-background-color: #F5F0E6;">
+
+            <!-- Titre -->
+            <Text text="Tableau de bord"
+                  style="-fx-fill: #380F17; -fx-font-size: 42px; -fx-font-weight: bold;"/>
+
+            <!-- 4 cartes statistiques -->
+            <HBox spacing="40" alignment="CENTER">
+
+                <!-- Hôtels -->
+                <VBox alignment="CENTER" spacing="15"
+                      style="-fx-background-color: white; -fx-background-radius: 25; -fx-padding: 35; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.15), 15, 0, 0, 8);"
+                      prefWidth="230" prefHeight="190">
+                    <Text fx:id="dashNbHotels" text="0"
+                          style="-fx-fill: #A59090; -fx-font-size: 65px; -fx-font-weight: bold;"/>
+                    <Text text="Hôtels" style="-fx-fill: #380F17; -fx-font-size: 20px;"/>
+                </VBox>
+
+                <!-- Chambres total -->
+                <VBox alignment="CENTER" spacing="15"
+                      style="-fx-background-color: white; -fx-background-radius: 25; -fx-padding: 35; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.15), 15, 0, 0, 8);"
+                      prefWidth="230" prefHeight="190">
+                    <Text fx:id="dashNbChambresTotal" text="0"
+                          style="-fx-fill: #A59090; -fx-font-size: 65px; -fx-font-weight: bold;"/>
+                    <Text text="Chambres total" style="-fx-fill: #380F17; -fx-font-size: 19px;"/>
+                </VBox>
+
+                <!-- Disponibles -->
+                <VBox alignment="CENTER" spacing="15"
+                      style="-fx-background-color: white; -fx-background-radius: 25; -fx-padding: 35; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.15), 15, 0, 0, 8);"
+                      prefWidth="230" prefHeight="190">
+                    <Text fx:id="dashNbChambresDispo" text="0"
+                          style="-fx-fill: #2d9cdb; -fx-font-size: 65px; -fx-font-weight: bold;"/>
+                    <Text text="Disponibles" style="-fx-fill: #380F17; -fx-font-size: 19px;"/>
+                </VBox>
+
+                <!-- Occupées -->
+                <VBox alignment="CENTER" spacing="15"
+                      style="-fx-background-color: white; -fx-background-radius: 25; -fx-padding: 35; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.15), 15, 0, 0, 8);"
+                      prefWidth="230" prefHeight="190">
+                    <Text fx:id="dashNbChambresOccupees" text="0"
+                          style="-fx-fill: #e74c3c; -fx-font-size: 65px; -fx-font-weight: bold;"/>
+                    <Text text="Occupées" style="-fx-fill: #380F17; -fx-font-size: 19px;"/>
+                </VBox>
+            </HBox>
+
+            <!-- Bouton ajouter hôtel -->
+            <Button text="+ Ajouter un nouvel hôtel" onAction="#goToMesHotels"
+                            prefWidth="350.0" prefHeight="65.0"
+                            style="-fx-background-color: #A59090; -fx-text-fill: #380F17; -fx-font-size: 19px; -fx-font-weight: bold; -fx-background-radius: 20; -fx-cursor: hand; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.2), 12, 0, 0, 5);"/>
+        </VBox>
+    </center>
+</BorderPane>

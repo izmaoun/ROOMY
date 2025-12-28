@@ -16,7 +16,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
-
+import javafx.application.Platform;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
