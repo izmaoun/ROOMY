@@ -185,7 +185,6 @@ public class HotelDAO {
             return 0;
         }
     }
-
     public List<Hotel> getHotelsByHotelier(int idHotelier) {
         List<Hotel> hotels = new ArrayList<>();
         String sql = "SELECT * FROM hotels WHERE id_hotelier = ?";
@@ -237,4 +236,39 @@ public class HotelDAO {
 
         return images;
     }
+    public boolean ajouterChambre(Chambre c) {
+        String sql = "INSERT INTO chambres (num_chambre, type, prix_nuit, capacity, surface, statut, description, id_hotel) " +
+                "VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setInt(1, c.getNumchambre());
+            ps.setString(2, c.getType().name()); // Enum -> String
+            ps.setDouble(3, c.getPrix_nuit());
+            ps.setInt(4, c.getCapacity());
+            ps.setInt(5, c.getSurface());
+            ps.setString(6, c.getStatut().name()); // Enum -> String
+            ps.setString(7, c.getDescription());
+            ps.setInt(8, c.getHotel().getIdhotel()); // ID Hotel
+
+            return ps.executeUpdate() > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+    // SUPPRIMER UNE CHAMBRE
+    public boolean supprimerChambre(int idChambre) {
+        String sql = "DELETE FROM chambres WHERE id_chambre = ?";
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setInt(1, idChambre);
+            return ps.executeUpdate() > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
 }

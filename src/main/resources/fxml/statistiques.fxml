@@ -1,14 +1,68 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
+<?import javafx.scene.chart.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
 
-<AnchorPane xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml"
-            fx:controller="CONTROLLER_NAME"
-            prefHeight="400.0" prefWidth="600.0">
+<ScrollPane fitToWidth="true" style="-fx-background-color: #F5F0E6;" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.roomy.Controller.StatistiquesController">
+    <content>
+        <VBox spacing="30" style="-fx-padding: 40; -fx-background-color: #F5F0E6;">
 
-</AnchorPane>
+            <Label text="Statistiques Détaillées" style="-fx-font-size: 32px; -fx-font-weight: bold; -fx-text-fill: #380F17;" />
+            <Separator />
+
+            <!-- FILTRE -->
+            <HBox alignment="CENTER_LEFT" spacing="20">
+                <Label style="-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #380F17;" text="Sélectionner un hôtel :" />
+                <ComboBox fx:id="comboHotels" prefHeight="40.0" prefWidth="300.0" promptText="-- Choisir un hôtel --" style="-fx-font-size: 14px; -fx-background-color: white; -fx-border-color: #A59090; -fx-border-radius: 5;" />
+            </HBox>
+
+            <!-- CARTES KPI -->
+            <HBox alignment="CENTER" spacing="30">
+                <VBox alignment="CENTER" prefHeight="120" prefWidth="250" spacing="10" style="-fx-background-color: white; -fx-background-radius: 15; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 10, 0, 0, 5);">
+                    <Text fx:id="txtTotalReservations" style="-fx-fill: #380F17; -fx-font-size: 36px; -fx-font-weight: bold;" text="0" />
+                    <Text style="-fx-fill: #777;" text="Réservations Totales" />
+                </VBox>
+                <VBox alignment="CENTER" prefHeight="120" prefWidth="250" spacing="10" style="-fx-background-color: white; -fx-background-radius: 15; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 10, 0, 0, 5);">
+                    <Text fx:id="txtChambresDispo" style="-fx-fill: #2d9cdb; -fx-font-size: 36px; -fx-font-weight: bold;" text="0" />
+                    <Text style="-fx-fill: #777;" text="Disponibles" />
+                </VBox>
+                <VBox alignment="CENTER" prefHeight="120" prefWidth="250" spacing="10" style="-fx-background-color: white; -fx-background-radius: 15; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 10, 0, 0, 5);">
+                    <Text fx:id="txtChambresOccupees" style="-fx-fill: #e74c3c; -fx-font-size: 36px; -fx-font-weight: bold;" text="0" />
+                    <Text style="-fx-fill: #777;" text="Occupées" />
+                </VBox>
+            </HBox>
+
+            <!-- GRAPHIQUES -->
+            <HBox alignment="CENTER" spacing="20">
+                <!-- Mois -->
+                <VBox style="-fx-background-color: white; -fx-padding: 15; -fx-background-radius: 15;" HBox.hgrow="ALWAYS">
+                    <Label style="-fx-font-size: 16px; -fx-font-weight: bold;" text="Par Mois" />
+                    <BarChart fx:id="chartMois" prefHeight="250.0">
+                        <xAxis> <CategoryAxis label="Mois" /> </xAxis>
+                        <yAxis> <NumberAxis label="Nombre" /> </yAxis>
+                    </BarChart>
+                </VBox>
+
+                <!-- Année -->
+                <VBox style="-fx-background-color: white; -fx-padding: 15; -fx-background-radius: 15;" HBox.hgrow="ALWAYS">
+                    <Label style="-fx-font-size: 16px; -fx-font-weight: bold;" text="Par Année" />
+                    <BarChart fx:id="chartAnnee" prefHeight="250.0">
+                        <xAxis> <CategoryAxis label="Année" /> </xAxis>
+                        <yAxis> <NumberAxis label="Nombre" /> </yAxis>
+                    </BarChart>
+                </VBox>
+            </HBox>
+
+            <!-- PIE CHART (TYPES) -->
+            <HBox alignment="CENTER" spacing="20">
+                <VBox style="-fx-background-color: white; -fx-padding: 15; -fx-background-radius: 15;" HBox.hgrow="ALWAYS" alignment="CENTER">
+                    <Label style="-fx-font-size: 16px; -fx-font-weight: bold;" text="Répartition par Type de Chambre" />
+                    <PieChart fx:id="chartType" prefHeight="300.0" prefWidth="500.0" />
+                </VBox>
+            </HBox>
+
+        </VBox>
+    </content>
+</ScrollPane>
