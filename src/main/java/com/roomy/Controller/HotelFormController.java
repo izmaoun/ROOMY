@@ -16,7 +16,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
-import javafx.application.Platform;
+
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -33,6 +33,7 @@ public class HotelFormController {
     @FXML private TextField tfVille;
     @FXML private TextField tfCodepostal;
     @FXML private TextField tfPays;
+    @FXML private TextArea taDescription;
     @FXML private Label lblMessage;
     @FXML private Button btnSave;
     @FXML private Button btnCancel;
@@ -48,7 +49,6 @@ public class HotelFormController {
     private String selectedImagePath = null;
     private List<Image_hotel> imagesToAdd = new ArrayList<>();
 
-    // Injection des DAO
     private final HotelDAO hotelDAO;
     private final AdresseDAO adresseDAO;
     private final ImageHotelDAO imageHotelDAO;
@@ -78,7 +78,6 @@ public class HotelFormController {
         tfVille.setText(hotelier.getVille());
         tfPays.setText("Maroc");
 
-        // Afficher la section images pour l'ajout
         if (imagesContainer != null) {
             imagesContainer.setVisible(true);
             imagesContainer.setManaged(true);
@@ -94,13 +93,13 @@ public class HotelFormController {
         btnDelete.setManaged(true);
 
         tfNomHotel.setText(hotel.getNomHotel());
+        taDescription.setText(hotel.getDescription());
         cbEtoiles.setValue(hotel.getEtoiles());
         tfRue.setText(hotel.getAdresse().getRue());
         tfVille.setText(hotel.getAdresse().getVille());
         tfCodepostal.setText(hotel.getAdresse().getCodepostal());
         tfPays.setText(hotel.getAdresse().getPays());
 
-        // Afficher la section images pour la modification
         if (imagesContainer != null) {
             imagesContainer.setVisible(true);
             imagesContainer.setManaged(true);
@@ -108,9 +107,6 @@ public class HotelFormController {
         }
     }
 
-    /**
-     * Affiche les images déjà sauvegardées de l'hôtel en mode modification
-     */
     private void afficherImagesExistantes() {
         if (imagesContainer == null || hotelActuel == null) return;
 
@@ -128,9 +124,6 @@ public class HotelFormController {
         }
     }
 
-    /**
-     * Crée une boîte affichant une image avec bouton de suppression
-     */
     private VBox creerBoiteImage(Image_hotel img) {
         VBox imageBox = new VBox(5);
         imageBox.setStyle("-fx-border-color: #A59090; -fx-border-radius: 8; -fx-padding: 10; -fx-background-color: #f9f9f9;");
@@ -160,9 +153,6 @@ public class HotelFormController {
         return imageBox;
     }
 
-    /**
-     * Supprime une image existante de la base de données
-     */
     private void supprimerImage(Image_hotel img) {
         Alert confirmation = new Alert(Alert.AlertType.CONFIRMATION);
         confirmation.setTitle("Confirmation");
@@ -179,9 +169,6 @@ public class HotelFormController {
         }
     }
 
-    /**
-     * Ouvre le sélecteur de fichier pour choisir une image
-     */
     @FXML
     private void selectImage() {
         FileChooser fileChooser = new FileChooser();
@@ -199,9 +186,6 @@ public class HotelFormController {
         }
     }
 
-    /**
-     * Affiche l'aperçu de l'image sélectionnée
-     */
     private void afficherApercu(File imageFile) {
         try {
             Image image = new Image(imageFile.toURI().toString());
@@ -214,9 +198,6 @@ public class HotelFormController {
         }
     }
 
-    /**
-     * Sauvegarde l'hôtel et gère l'ajout d'images
-     */
     private void saveHotel() {
         if (tfNomHotel.getText().trim().isEmpty() ||
             cbEtoiles.getValue() == null ||
@@ -240,9 +221,6 @@ public class HotelFormController {
         }
     }
 
-    /**
-     * Ajoute un nouvel hôtel avec image optionnelle
-     */
     private void ajouterHotel() {
         Adresse adresse = new Adresse();
         adresse.setRue(tfRue.getText().trim());
@@ -257,12 +235,12 @@ public class HotelFormController {
 
         Hotel hotel = new Hotel();
         hotel.setNomHotel(tfNomHotel.getText().trim());
+        hotel.setDescription(taDescription.getText().trim());
         hotel.setEtoiles(cbEtoiles.getValue());
         hotel.setAdresse(adresse);
         hotel.setHotelier(hotelierActuel);
 
         if (hotelDAO.ajouterHotel(hotel)) {
-            // Ajouter l'image si une est sélectionnée
             if (selectedImagePath != null && !selectedImagePath.isEmpty()) {
                 ajouterImageHotel(hotel.getIdhotel());
             }
@@ -273,13 +251,9 @@ public class HotelFormController {
         }
     }
 
-    /**
-     * Modifie un hôtel existant et ajoute une nouvelle image si sélectionnée
-     */
     private void modifierHotel() {
         Adresse adresse = hotelActuel.getAdresse();
 
-        // Vérifier que l'adresse a un ID valide
         if (adresse == null || adresse.getIdAdresse() <= 0) {
             afficherErreur("Erreur : adresse invalide");
             return;
@@ -296,10 +270,10 @@ public class HotelFormController {
         }
 
         hotelActuel.setNomHotel(tfNomHotel.getText().trim());
+        hotelActuel.setDescription(taDescription.getText().trim());
         hotelActuel.setEtoiles(cbEtoiles.getValue());
 
         if (hotelDAO.updateHotel(hotelActuel)) {
-            // Ajouter une nouvelle image si sélectionnée
             if (selectedImagePath != null && !selectedImagePath.isEmpty()) {
                 ajouterImageHotel(hotelActuel.getIdhotel());
             }
@@ -310,9 +284,6 @@ public class HotelFormController {
         }
     }
 
-    /**
-     * Ajoute une image à l'hôtel depuis le fichier local
-     */
     private void ajouterImageHotel(int idHotel) {
         try {
             File sourceFile = new File(selectedImagePath);
@@ -321,22 +292,18 @@ public class HotelFormController {
                 return;
             }
 
-            // Créer le dossier de destination s'il n'existe pas
             String uploadDir = "uploads/hotels/";
             File uploadFolder = new File(uploadDir);
             if (!uploadFolder.exists()) {
                 uploadFolder.mkdirs();
             }
 
-            // Générer un nom unique pour l'image
             String imageName = System.currentTimeMillis() + "_" + sourceFile.getName();
             File destinationFile = new File(uploadDir + imageName);
 
-            // Copier l'image
             Files.copy(sourceFile.toPath(), destinationFile.toPath(),
                     StandardCopyOption.REPLACE_EXISTING);
 
-            // Créer l'objet Image_hotel et le sauvegarder en BD
             Image_hotel image = new Image_hotel();
             image.setUrl(uploadDir + imageName);
             image.setDescription("Image de l'hôtel");
@@ -346,10 +313,10 @@ public class HotelFormController {
             image.setHotel(hotel);
 
             if (imageHotelDAO.addImage(image)) {
-                selectedImagePath = null; // Réinitialiser après succès
+                selectedImagePath = null;
                 lblImageStatus.setText("✓ Image sauvegardée avec succès");
                 imgPreview.setImage(null);
-                afficherImagesExistantes(); // Rafraîchir l'affichage
+                afficherImagesExistantes();
             } else {
                 afficherErreur("Erreur lors de la sauvegarde de l'image en base");
             }
@@ -360,9 +327,6 @@ public class HotelFormController {
         }
     }
 
-    /**
-     * Supprime l'hôtel avec confirmation
-     */
     private void deleteHotel() {
         Alert confirmDialog = new Alert(Alert.AlertType.CONFIRMATION);
         confirmDialog.setTitle("Confirmation de suppression");
@@ -379,33 +343,21 @@ public class HotelFormController {
         }
     }
 
-    /**
-     * Ferme la fenêtre du formulaire
-     */
     private void cancelForm() {
         Stage stage = (Stage) btnCancel.getScene().getWindow();
         stage.close();
     }
 
-    /**
-     * Affiche un message de succès
-     */
     private void afficherSucces(String message) {
         lblMessage.setStyle("-fx-text-fill: #4CAF50; -fx-font-weight: bold;");
         lblMessage.setText(message);
     }
 
-    /**
-     * Affiche un message d'erreur
-     */
     private void afficherErreur(String message) {
         lblMessage.setStyle("-fx-text-fill: #f44336; -fx-font-weight: bold;");
         lblMessage.setText(message);
     }
 
-    /**
-     * Ferme la fenêtre après un délai donné
-     */
     private void fermerApres(long delai) {
         new Thread(() -> {
             try {

@@ -7,6 +7,7 @@ import java.util.Objects;
 public class Hotel {
     private int idhotel;
     private String nomHotel;
+    private String description;
     private Adresse adresse;
     private int etoiles;
     private Hotelier hotelier;
@@ -18,17 +19,17 @@ public class Hotel {
         this.imgs = new ArrayList<>();
     }
 
-    public Hotel(int idhotel, String nomHotel, Adresse adresse, int etoiles, Hotelier hotelier) {
+    public Hotel(int idhotel, String nomHotel, String description, Adresse adresse, int etoiles, Hotelier hotelier) {
         this.idhotel = idhotel;
         this.nomHotel = nomHotel;
+        this.description = description;
         this.adresse = adresse;
-        setEtoiles(etoiles); // Utilise le setter pour valider
-        setHotelier(hotelier); // idem
+        setEtoiles(etoiles);
+        setHotelier(hotelier);
         this.chambres = new ArrayList<>();
         this.imgs = new ArrayList<>();
     }
 
-    // Getters et setters
     public int getIdhotel() {
         return idhotel;
     }
@@ -43,6 +44,14 @@ public class Hotel {
 
     public void setNomHotel(String nomHotel) {
         this.nomHotel = nomHotel;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public Adresse getAdresse() {
@@ -88,7 +97,6 @@ public class Hotel {
         this.imgs = imgs == null ? new ArrayList<>() : new ArrayList<>(imgs);
     }
 
-    // Méthodes pour gérer chambres
     public void addChambre(Chambre ch) {
         if (ch == null) return;
         if (chambres == null) chambres = new ArrayList<>();
@@ -104,7 +112,6 @@ public class Hotel {
         }
     }
 
-    // Méthodes pour gérer images
     public void addImg(Image_hotel img) {
         if (img == null) return;
         if (imgs == null) imgs = new ArrayList<>();
@@ -129,6 +136,7 @@ public class Hotel {
         return "Hotel {" +
                 "\nid: " + idhotel +
                 ", \nnom: '" + nomHotel + '\'' +
+                ", \ndescription: '" + description + '\'' +
                 ", \nadresse: " + adresse +
                 ", \netoiles: " + etoiles +
                 ", \nhotelier: " + hotelier +

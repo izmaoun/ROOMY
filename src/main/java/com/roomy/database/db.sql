@@ -41,6 +41,7 @@ CREATE TABLE adresses (
 CREATE TABLE hotels (
                         id_hotel INT AUTO_INCREMENT PRIMARY KEY,
                         nom_hotel VARCHAR(100) NOT NULL,
+                        description TEXT,
                         id_adresse INT,
                         etoiles INT,
                         id_hotelier INT,

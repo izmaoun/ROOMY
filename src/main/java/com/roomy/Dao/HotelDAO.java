@@ -1,7 +1,5 @@
 package com.roomy.Dao;
 
-import com.roomy.ENUMS.Statut_technique_Chambre;
-import com.roomy.ENUMS.TypeChambre;
 import com.roomy.entities.Hotel;
 import com.roomy.entities.Hotelier;
 import com.roomy.entities.Adresse;
@@ -14,7 +12,6 @@ import java.util.List;
 
 public class HotelDAO {
 
-    // ===================== TROUVER PAR ID =====================
     public Hotel findById(int id) {
         String sql = "SELECT * FROM hotels WHERE id_hotel = ?";
 
@@ -35,15 +32,14 @@ public class HotelDAO {
         return null;
     }
 
-    // ===================== MAPPER RESULTSET → OBJET HOTEL =====================
     private Hotel mapToHotel(ResultSet rs) throws SQLException {
         Hotel hotel = new Hotel();
 
         hotel.setIdhotel(rs.getInt("id_hotel"));
         hotel.setNomHotel(rs.getString("nom_hotel"));
+        hotel.setDescription(rs.getString("description"));
         hotel.setEtoiles(rs.getInt("etoiles"));
 
-        // Adresse
         int idAdresse = rs.getInt("id_adresse");
         if (idAdresse > 0) {
             AdresseDAO adresseDAO = new AdresseDAO();
@@ -51,7 +47,6 @@ public class HotelDAO {
             if (adresse != null) hotel.setAdresse(adresse);
         }
 
-        // Hotelier
         int idHotelier = rs.getInt("id_hotelier");
         if (idHotelier > 0) {
             HotelierDAO hotelierDAO = new HotelierDAO();
@@ -59,11 +54,9 @@ public class HotelDAO {
             if (hotelier != null) hotel.setHotelier(hotelier);
         }
 
-        // NE PAS charger images/chambres ici
         return hotel;
     }
 
-    // ===================== TROUVER TOUS LES HOTELS =====================
     public List<Hotel> findAll() {
         List<Hotel> list = new ArrayList<>();
         String sql = "SELECT * FROM hotels";
@@ -84,17 +77,17 @@ public class HotelDAO {
         return list;
     }
 
-    // ===================== AJOUTER UN HOTEL =====================
     public boolean ajouterHotel(Hotel hotel) {
-        String sql = "INSERT INTO hotels (nom_hotel, etoiles, id_adresse, id_hotelier) VALUES (?, ?, ?, ?)";
+        String sql = "INSERT INTO hotels (nom_hotel, description, etoiles, id_adresse, id_hotelier) VALUES (?, ?, ?, ?, ?)";
 
         try (Connection c = DBConnection.getConnection();
              PreparedStatement ps = c.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
 
             ps.setString(1, hotel.getNomHotel());
-            ps.setInt(2, hotel.getEtoiles());
-            ps.setInt(3, hotel.getAdresse().getIdAdresse());
-            ps.setInt(4, hotel.getHotelier().getIdHotelier());
+            ps.setString(2, hotel.getDescription());
+            ps.setInt(3, hotel.getEtoiles());
+            ps.setInt(4, hotel.getAdresse().getIdAdresse());
+            ps.setInt(5, hotel.getHotelier().getIdHotelier());
 
             int rows = ps.executeUpdate();
             if (rows > 0) {
@@ -103,7 +96,6 @@ public class HotelDAO {
                     hotel.setIdhotel(keys.getInt(1));
                 }
 
-                // Ajouter les images
                 ImageHotelDAO imageHotelDAO = new ImageHotelDAO();
                 for (Image_hotel img : hotel.getImgs()) {
                     img.setHotel(hotel);
@@ -121,28 +113,27 @@ public class HotelDAO {
         return false;
     }
 
-    // ===================== METTRE À JOUR UN HOTEL =====================
     public boolean updateHotel(Hotel hotel) {
-        String sql = "UPDATE hotels SET nom_hotel=?, etoiles=?, id_adresse=?, id_hotelier=? WHERE id_hotel=?";
+        String sql = "UPDATE hotels SET nom_hotel=?, description=?, etoiles=?, id_adresse=?, id_hotelier=? WHERE id_hotel=?";
 
         try (Connection c = DBConnection.getConnection();
              PreparedStatement ps = c.prepareStatement(sql)) {
 
             ps.setString(1, hotel.getNomHotel());
-            ps.setInt(2, hotel.getEtoiles());
-            ps.setInt(3, hotel.getAdresse().getIdAdresse());
-            ps.setInt(4, hotel.getHotelier().getIdHotelier());
-            ps.setInt(5, hotel.getIdhotel());
+            ps.setString(2, hotel.getDescription());
+            ps.setInt(3, hotel.getEtoiles());
+            ps.setInt(4, hotel.getAdresse().getIdAdresse());
+            ps.setInt(5, hotel.getHotelier().getIdHotelier());
+            ps.setInt(6, hotel.getIdhotel());
 
             boolean updated = ps.executeUpdate() > 0;
 
-            // Mettre à jour les images
             ImageHotelDAO imageHotelDAO = new ImageHotelDAO();
             for (Image_hotel img : hotel.getImgs()) {
                 if (img.getId() == 0) {
                     img.setHotel(hotel);
                     imageHotelDAO.addImage(img);
-                } // sinon tu peux ajouter updateImage si besoin
+                }
             }
 
             return updated;
@@ -155,7 +146,6 @@ public class HotelDAO {
         return false;
     }
 
-    // ===================== SUPPRIMER UN HOTEL =====================
     public boolean deleteHotel(int idHotel) {
         String sql = "DELETE FROM hotels WHERE id_hotel=?";
 
@@ -172,7 +162,7 @@ public class HotelDAO {
 
         return false;
     }
-    //nombre utilisé en dash et en stats
+
     public int getNombreHotels(int idHotelier) {
         String sql = "SELECT COUNT(*) FROM hotels WHERE id_hotelier = ?";
         try (Connection conn = DBConnection.getConnection();
@@ -185,6 +175,7 @@ public class HotelDAO {
             return 0;
         }
     }
+
     public List<Hotel> getHotelsByHotelier(int idHotelier) {
         List<Hotel> hotels = new ArrayList<>();
         String sql = "SELECT * FROM hotels WHERE id_hotelier = ?";
@@ -197,11 +188,8 @@ public class HotelDAO {
 
             while (rs.next()) {
                 Hotel hotel = mapToHotel(rs);
-
-                // Charger les images SEULEMENT pour l'affichage
                 List<Image_hotel> images = loadHotelImages(hotel.getIdhotel());
                 hotel.setImgs(images);
-
                 hotels.add(hotel);
             }
 
@@ -244,13 +232,13 @@ public class HotelDAO {
              PreparedStatement ps = conn.prepareStatement(sql)) {
 
             ps.setInt(1, c.getNumchambre());
-            ps.setString(2, c.getType().name()); // Enum -> String
+            ps.setString(2, c.getType().name());
             ps.setDouble(3, c.getPrix_nuit());
             ps.setInt(4, c.getCapacity());
             ps.setInt(5, c.getSurface());
-            ps.setString(6, c.getStatut().name()); // Enum -> String
+            ps.setString(6, c.getStatut().name());
             ps.setString(7, c.getDescription());
-            ps.setInt(8, c.getHotel().getIdhotel()); // ID Hotel
+            ps.setInt(8, c.getHotel().getIdhotel());
 
             return ps.executeUpdate() > 0;
         } catch (SQLException e) {
@@ -258,7 +246,7 @@ public class HotelDAO {
             return false;
         }
     }
-    // SUPPRIMER UNE CHAMBRE
+
     public boolean supprimerChambre(int idChambre) {
         String sql = "DELETE FROM chambres WHERE id_chambre = ?";
         try (Connection conn = DBConnection.getConnection();
@@ -271,6 +259,7 @@ public class HotelDAO {
             return false;
         }
     }
+
     public int getNombreChambres(int idHotel) {
         String sql = "SELECT COUNT(*) FROM chambres WHERE id_hotel = ?";
         try (Connection conn = DBConnection.getConnection();
@@ -283,5 +272,4 @@ public class HotelDAO {
             return 0;
         }
     }
-
 }
