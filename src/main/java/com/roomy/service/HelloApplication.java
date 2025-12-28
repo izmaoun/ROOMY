@@ -13,6 +13,9 @@ public class HelloApplication extends Application {
     public void start(Stage stage) throws IOException {
         DataInit.init();
 
+        stage.setWidth(900);
+        stage.setHeight(600);
+
         FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("/fxml/landing-page.fxml"));
         // Taille initiale optimale
         Scene scene = new Scene(fxmlLoader.load());
@@ -21,7 +24,7 @@ public class HelloApplication extends Application {
         stage.setResizable(true);
 
         // Limites minimales pour ne pas casser l'UI
-        stage.setMinWidth(1100);
+        stage.setMinWidth(900);
         stage.setMinHeight(650);
 
         stage.setScene(scene);
