@@ -29,7 +29,13 @@ public class TestLandingPage extends Application {
         System.out.println("Loading FXML from: /fxml/landing-page.fxml");
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/landing-page.fxml"));
 
-        Scene scene = new Scene(loader.load(), 1600, 1000);
+        // Get screen dimensions and set window to 80% of screen size
+        javafx.stage.Screen screen = javafx.stage.Screen.getPrimary();
+        javafx.geometry.Rectangle2D bounds = screen.getVisualBounds();
+        double width = bounds.getWidth() * 0.8;
+        double height = bounds.getHeight() * 0.8;
+        
+        Scene scene = new Scene(loader.load(), width, height);
 
         // Set icon and title
         try {
