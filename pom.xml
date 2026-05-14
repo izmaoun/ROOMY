@@ -13,10 +13,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>
-
-        <!-- JavaFX version VALID -->
         <javafx.version>17.0.8</javafx.version>
-
         <junit.version>5.10.2</junit.version>
     </properties>
 
@@ -51,12 +48,10 @@
         </dependency>
 
         <dependency>
-        <groupId>com.sun.mail</groupId>
-        <artifactId>javax.mail</artifactId>
-        <version>1.6.2</version>
+            <groupId>com.sun.mail</groupId>
+            <artifactId>javax.mail</artifactId>
+            <version>1.6.2</version>
         </dependency>
-
-
 
         <!-- Lombok -->
         <dependency>
@@ -114,7 +109,7 @@
                 </configuration>
             </plugin>
 
-            <!-- JavaFX -->
+            <!-- JavaFX Maven Plugin -->
             <plugin>
                 <groupId>org.openjfx</groupId>
                 <artifactId>javafx-maven-plugin</artifactId>
@@ -122,6 +117,28 @@
                 <configuration>
                     <mainClass>com.roomy.service.HelloApplication</mainClass>
                 </configuration>
+            </plugin>
+
+            <!-- Shade Plugin pour créer un JAR exécutable -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-shade-plugin</artifactId>
+                <version>3.5.0</version>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>shade</goal>
+                        </goals>
+                        <configuration>
+                            <transformers>
+                                <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+                                    <mainClass>com.roomy.service.HelloApplication</mainClass>
+                                </transformer>
+                            </transformers>
+                        </configuration>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
     </build>
