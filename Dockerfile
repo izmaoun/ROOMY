@@ -9,5 +9,5 @@ RUN ./mvnw clean package -DskipTests
 
 EXPOSE 8080
 
-# Copier explicitement le JAR généré (adapte le nom si besoin)
-CMD ["sh", "-c", "java -jar target/$(ls target/*.jar | head -n 1)"]
+# Trouve et exécute le bon JAR
+CMD ["sh", "-c", "java -jar target/reservation_hotels-*.jar"]
