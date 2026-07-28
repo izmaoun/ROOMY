@@ -54,7 +54,7 @@
                                       -fx-border-radius: 10;
                                       -fx-font-size: 14;"/>
 
-                        <TextField fx:id="prenomField" promptText="nom"
+                        <TextField fx:id="prenomField" promptText="nom1"
                                    prefWidth="350" prefHeight="40"
                                    style="-fx-background-color: #EFDFC5;
                                       -fx-prompt-text-fill: #000000;
